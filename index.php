@@ -23,22 +23,30 @@ Add Timetable.js javascript plugin to create responsive timetable.
 <td><img src="uitmlogo.png" width="80px"/></td><td><h1>UiTM Timetable<br>Generator</h1></td>
 </tr>
 </table>
+<br><br>
 
 <form action="index.php" method="get">
-<h3>Number of subjects : 
+<font size='4'><b>Number of subjects : </b></font>&nbsp;
 <label><select name="numsub">
 <?php
 $sub = range(1,10);
 foreach($sub as $sub)
 {
-	echo "<option value='$sub'>{$sub}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+	if($sub == $_GET['numsub'])
+	{
+		echo "<option value='$sub' selected>{$sub}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+	}
+	else
+	{
+		echo "<option value='$sub'>{$sub}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+	}
+	
 }
  ?>
- </select></label></h3>
-&nbsp;
+ </select></label>
+&nbsp; &nbsp;
 <input type="submit" name="submit" class="myButton"><br><br>
 </form>
-
 <?php
 
 if(isset($_GET['submit']))
@@ -46,7 +54,19 @@ if(isset($_GET['submit']))
 	$numsub = $_GET['numsub'];
 	
 	echo "
-	<font color='red'>Note : Enter your subject code under the Subject column and your group under the Group column.</font><br><br>
+	
+	<table>
+		<tr>
+			<td><font color='red'><b>Note : </b></font></td>
+			<td>&#9679; Enter your subject code under the Subject column</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>&#9679; Enter your group under the Group column.</td>
+		</tr>
+	</table>
+	
+	<br>
 	
 	<form action='index.php?numsub=$numsub&submit=Submit' method='post'>
 	
@@ -65,7 +85,8 @@ if(isset($_GET['submit']))
 		echo "
 		<tr>
 		<td>$num.</td>
-		<td><input type='text' name='sub$i'></td><td><input type='text' name='group$i'></td>
+		<td><input type='text' name='sub$i' value='".(isset($_POST["sub$i"]) ? $_POST["sub$i"] : null)."'></td>
+		<td><input type='text' name='group$i' value='".(isset($_POST["group$i"]) ? $_POST["group$i"] : null)."'></td>
 		</tr>
 		";
 	}
@@ -114,11 +135,11 @@ if(isset($_GET['submit']))
 	<option value='SI'>SI-KAMPUS PERAK</option>
 	<option value='SP'>SP-Kampus Kedah</option>
 	<option value='SR'>SR-FAKULTI SAINS SUKAN DAN REKREASI</option>
-	 </select></label><br>
-	<br>
+	 </select></label>
+	  &nbsp; &nbsp;
 	<input type='submit' name='submit2' class='myButton'>
 	</form>
-	
+	<br>
 	</div>
 	";
 
