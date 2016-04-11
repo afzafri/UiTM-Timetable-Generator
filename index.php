@@ -91,65 +91,39 @@ if(isset($_GET['submit']))
 		";
 	}
 	
+	//get campus list
+	$getcon = file_get_contents("http://icress.uitm.edu.my/jadual/jadual/jadual.asp");
+	preg_match_all('#<option(.*?)<\/option>#',$getcon,$fcamp);
+	
 	echo "
 	</table>
 	<br><br>
 	<label>
 	<select name='fakulti'>
 	<option value=''>---SELECT FACULTY---</option>
-	<option value='AC'>AC-FAKULTI PERAKAUNAN</option>
-	<option value='AD'>AD-FAKULTI SENILUKIS DAN SENIREKA</option>
-	<option value='AG'>AG-KAMPUS MELAKA</option>
-	<option value='AM'>AM-FAKULTI SAINS PENTADBIRAN DAN PENGAJIAN POLISI</option>
-	<option value='AP'>AP-FAKULTI SENIBINA PERANCANGAN &amp; UKUR</option>
-	<option value='AR'>AR-PERLIS</option>
-	<option value='AS'>AS-FAKULTI SAINS GUNAAN</option>
-	<option value='AT'>AT-FAKULTI PERLADANGAN DAN AGROTEKNOLOGI</option>
-	<option value='BM'>BM-Fakulti Pengurusan Perniagaan Shah Alam</option>
-	<option value='BT'>BT-KAMPUS PULAU PINANG</option>
-	<option value='CS'>CS-FAKULTI TEKNOLOGI MAKLUMAT DAN SAINS KUANTITATIF</option>
-	<option value='CT'>CT-FAKULTI TEKNOLOGI KREATIF &amp; ARTISTIK</option>
-	<option value='DU'>DU-KAMPUS TERENGGANU</option>
-	<option value='EC'>EC-FAKULTI KEJURUTERAAN AWAM</option>
-	<option value='ED'>ED-FAKULTI PENDIDIKAN, UiTM KAMPUS SEKSYEN 17, SHAH ALAM</option>
-	<option value='EE'>EE-FAKULTI KEJURUTERAAN ELEKTRIKAL</option>
-	<option value='EH'>EH-FAKULTI KEJURUTERAAN KIMIA</option>
-	<option value='EM'>EM-FAKULTI KEJURUTERAAN MEKANIKAL</option>
-	<option value='HM'>HM-FAKULTI PENGURUSAN HOTEL DAN PELANCONGAN</option>
-	<option value='HP'>HP-HEP SHAH ALAM</option>
-	<option value='HS'>HS-FAKULTI SAINS KESIHATAN</option>
-	<option value='IS'>IS-FAKULTI PENGURUSAN MAKLUMAT</option>
-	<option value='JK'>JK-KAMPUS PAHANG</option>
-	<option value='KK'>KK-KAMPUS SABAH</option>
-	<option value='KP'>KP-Cawangan  N. Sembilan</option>
-	<option value='LW'>LW-FAKULTI UNDANG-UNDANG</option>
-	<option value='MA'>MA-(UiTM Kelantan [HEA/JW/05-2007)</option>
-	<option value='MC'>MC-FAKULTI KOMUNIKASI DAN PENGAJIAN MEDIA</option>
-	<option value='MU'>MU-FAKULTI MUZIK</option>
-	<option value='OM'>OM-FAKULTI PENGURUSAN DAN TEKNOLOGI PEJABAT</option>
-	<option value='PB'>PB-Kampus Shah Alam - Akademi Pengajian Bahasa</option>
-	<option value='PH'>PH-FAKULTI FARMASI</option>
-	<option value='PI'>PI-PUSAT PEMIKIRAN DAN KEFAHAMAN ISLAM (CITU)</option>
-	<option value='SA'>SA-Kampus Kota Samarahan, Sarawak</option>
-	<option value='SG'>SG-Kampus Johor</option>
-	<option value='SI'>SI-KAMPUS PERAK</option>
-	<option value='SP'>SP-Kampus Kedah</option>
-	<option value='SR'>SR-FAKULTI SAINS SUKAN DAN REKREASI</option>
+	";
+	
+	//display fetched campus list
+	foreach($fcamp[0] as $fcamp[0])
+	{
+		echo $fcamp[0];
+	}
+
+	echo "
 	 </select></label>
-	  &nbsp; &nbsp;
+	 &nbsp; &nbsp;
 	<input type='submit' name='submit2' class='myButton'>
 	</form>
 	<br>
 	</div>
 	";
 
-
 	if(isset($_POST['submit2']))
 	{
 		$subs = "";
 		$sub = "";
 		$group = "";
-		$fakulti = $_POST['fakulti'];
+		$fakulti = substr($_POST['fakulti'],0,2);
 
 		for($i=0;$i<$numsub;$i++)
 		{
