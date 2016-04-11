@@ -183,42 +183,45 @@ if(isset($_GET['submit']))
 			
 		}
 		
-	}
-	
-?>
-
-<!--Start Generate Timetable -->
-<div class='timetable'></div>
-    
-    <script src='./scripts/timetable.min.js'></script>
-
-		<script>
-		  var timetable = new Timetable();
-
-		  timetable.setScope(8,0)
-
-		 timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-
-		<?php
-		echo $subs;
+		
 		?>
 
-	  var renderer = new Timetable.Renderer(timetable);
-		  renderer.draw('.timetable');
-		</script>
+			<!--Start Generate Timetable -->
+			<div class='timetable'></div>
+			    
+			    <script src='./scripts/timetable.min.js'></script>
+			
+					<script>
+					  var timetable = new Timetable();
+			
+					  timetable.setScope(8,0)
+			
+					 timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+			
+					<?php
+					echo $subs;
+					?>
+			
+				  var renderer = new Timetable.Renderer(timetable);
+					  renderer.draw('.timetable');
+					</script>
+					
+			<!--End Generate Timetable -->
+			
+			//print button
+			<br><br>
+			<div class='noprint'>
+				<a href='javascript:window.print()'><button class='myButton'>Print</button></a>
+			</div>
+			<br><br>
+			
+		<?php
 		
-<!--End Generate Timetable -->
-	
-<?php
+	}
 }
 
 
 ?>
-  
-	
-<br><br>
-<div class='noprint'>
-		<a href='javascript:window.print()'><button class='myButton'>Print</button></a></div><br><br>
 		
 <br><br><br><br>
 <div class="noprint">
