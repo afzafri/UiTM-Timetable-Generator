@@ -208,7 +208,7 @@ if(isset($_GET['submit']))
 					
 			<!--End Generate Timetable -->
 			
-			//print button
+			<!--print button-->
 			<br><br>
 			<div class='noprint'>
 				<a href='javascript:window.print()'><button class='myButton'>Print</button></a>
