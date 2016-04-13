@@ -1,0 +1,76 @@
+<!--
+Project : UiTM Timetable Generator
+Description : Fetch and generate timetable from iCress
+Created by : Afif Zafri
+Credit : Mohd Shahril (regex code)
+Created Date : 24/1/16
+UPDATE 10/4/16
+Add Timetable.js javascript plugin to create responsive timetable.
+-->
+<html>
+<head>
+    <link href="uitmlogo.png" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="./styles/design.css">
+    <link rel="stylesheet" href="./styles/timetablejs.css">
+    <title>UiTM Timetable Generator</title>
+</head>
+<body>
+
+<div>
+
+    <table id="bannerapp">
+        <tr>
+            <td><img src="uitmlogo.png" width="80px"/></td>
+            <td><h1 id="project_title">UiTM Timetable<br>Generator</h1></td>
+        </tr>
+    </table>
+    <br><br>
+
+    <pre>Select faculty/campus from list below</pre>
+
+    <label>
+        <select name='fakulti' id="listfaculty">
+            <option value=''>---SELECT FACULTY---</option>
+            <!-- amek data kt icress -->
+            <!-- js akan automatik update data kt sini tiap2 kali run -->
+        </select>
+    </label>
+    <div id="select-table">
+        <table class='newtable'>
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Group</th>
+            </tr>
+            <!-- js akan automatik tmbah new row kt sini -->
+        </table>
+    </div>
+</div>
+
+<div class='timetable'></div>
+
+<footer>
+    <div class="noprint">
+        Afif Zafri &copy; 2016
+    </div>
+</footer>
+
+<div id="loadingBox" class="ontop">
+    <div class="popup">
+
+        <!-- amek kt sini ;) http://tobiasahlin.com/spinkit/ -->
+        <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div>
+    </div>
+</div>
+
+<script src='./scripts/alertify.min.js'></script>
+<script src='./scripts/timetable.min.js'></script>
+<script src='./scripts/script.js'></script>
+
+</body>
+</html>
