@@ -166,9 +166,6 @@ document.querySelector('.newtable').onchange = function (e) {
         var info = [];
         var minTime = 23.59, maxTime = 0.0;
 
-        var timetable = new Timetable();
-        timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-
         for(var k in datagroup) {
 
             // ignore drawing clashing data
@@ -194,15 +191,30 @@ document.querySelector('.newtable').onchange = function (e) {
                 var start = startTime.toString().split('.');
                 var end = endTime.toString().split('.');
 
-                timetable.addEvent(k, datagroup[k][j][3],
-                                   new Date(0,0,0,start[0],!start[1] ? 0 : parseFloat(start[1])),
-                                   new Date(0,0,0,end[0],!end[1] ? 0 : parseFloat(end[1])));
-            }
+                var endFirst = !start[1] ? 0 : parseFloat(start[1] + (start[1].length == 1 ? '0' : ''));
+                var endSecon = !end[1] ? 0 : parseFloat(end[1] + (end[1].length == 1 ? '0' : ''));
 
+                info.push({
+                    name  : k,
+                    loc   : datagroup[k][j][3],
+                    startH: start[0],
+                    startM: endFirst,
+                    endH  : end[0],
+                    endM  : endSecon
+                });
+            }
         }
 
-        //timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
-        timetable.setScope(8, 0);
+        var timetable = new Timetable();
+        timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
+        timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+
+        // add event
+        for(var i = 0; i < Object.keys(info).length; i++) {
+            timetable.addEvent(info[i].name, info[i].loc,
+                               new Date(0,0,0,info[i].startH,info[i].startM),
+                               new Date(0,0,0,info[i].endH,info[i].endM), '#');
+        }
 
         var renderer = new Timetable.Renderer(timetable);
 
