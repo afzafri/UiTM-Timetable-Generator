@@ -3,6 +3,10 @@
 define('URL', 'icress.uitm.edu.my');
 define('CACHE_TIMELEFT', 30);
 
+if (!file_exists('./cache')) {
+    mkdir('./cache', 0777, true);
+}
+
 if(isset($_GET['getlist'])) {
 
     $filename = './cache/jadual.dat';
