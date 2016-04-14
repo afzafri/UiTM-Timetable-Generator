@@ -13,8 +13,6 @@ if(isset($_GET['getlist'])) {
 
     if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT) {
 
-        echo "test\n";
-
         $get = file_get_contents('http://' . URL . '/jadual/jadual/jadual.asp');
         preg_match_all('/(?<=value=")(\w*)-(.[^"]*)/', $get, $out);
 
