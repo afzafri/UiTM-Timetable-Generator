@@ -38,9 +38,19 @@ a {
 }
 
 .timetable {
-    width: 80%;
+    display: flex;
+    justify-content: center;
+    width: 90%;
     margin: 0 auto;
     margin-bottom: 50px;
+}
+
+.timetable aside {
+    width: 8%;
+}
+
+.timetable section header li:not(:last-of-type) {
+    width: 80px;
 }
 
 .resulttable table {
@@ -197,6 +207,10 @@ label:after {
     body {
         background: #FFFFFF;
     }
+}
+
+.timetable section {
+    width: auto;
 }
 
 .ontop {
