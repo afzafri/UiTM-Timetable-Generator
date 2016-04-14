@@ -147,7 +147,7 @@ document.querySelector('.newtable').onchange = function (e) {
             if (groups[i].selectedIndex >= 0 && groups[i].value != '') {
 
                 var ssubj = parents(groups[i], '.row-select').querySelector('.select-subject');
-                datagroup[groups[i].value + ' - ' + ssubj.value] = group[ssubj.value][groups[i].value];
+                datagroup[ssubj.value] = group[ssubj.value][groups[i].value];
 
                 canuse.push(groups[i]);
             }
@@ -194,8 +194,12 @@ document.querySelector('.newtable').onchange = function (e) {
                 var endFirst = !start[1] ? 0 : parseFloat(start[1] + (start[1].length == 1 ? '0' : ''));
                 var endSecon = !end[1] ? 0 : parseFloat(end[1] + (end[1].length == 1 ? '0' : ''));
 
+                var name = '<h5>' + k + '</h5>' +
+                           '<i><small>' + datagroup[k][j][6] + '</small></i>' +
+                           '<span>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</span>';
+
                 info.push({
-                    name  : k,
+                    name  : name,
                     loc   : datagroup[k][j][3],
                     startH: start[0],
                     startM: endFirst,
