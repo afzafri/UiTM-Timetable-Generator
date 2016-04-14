@@ -153,57 +153,64 @@ document.querySelector('.newtable').onchange = function (e) {
             }
         }
 
+        var clashCheck = isClash(canuse);
+
         // check if group time is clashing
-        if(isClash(canuse) === false) {
+        if(clashCheck) {
+            alertify.error("Timetable clash! Please choose another groups.");
+        }
 
-            var places = [];
-            var info = [];
-            var minTime = 23.59, maxTime = 0.0;
+        console.log(datagroup);
 
-            var timetable = new Timetable();
-            timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+        var places = [];
+        var info = [];
+        var minTime = 23.59, maxTime = 0.0;
 
-            for(var k in datagroup) {
-                for(var j = 0; j < datagroup[k].length; j++) {
+        var timetable = new Timetable();
+        timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
 
-                    places.push(datagroup[k][j][6]);
+        for(var k in datagroup) {
 
-                    var startTime = convertDate(datagroup[k][j][1]);
-                    var endTime = convertDate(datagroup[k][j][2]);
-
-                    if(startTime < minTime) {
-                        minTime = startTime;
-                    }
-
-                    if(endTime > maxTime) {
-                        maxTime = endTime;
-                    }
-
-                    var start = startTime.toString().split('.');
-                    var end = endTime.toString().split('.');
-
-                    timetable.addEvent(k, datagroup[k][j][3],
-                                       new Date(0,0,0,start[0],!start[1] ? 0 : parseFloat(start[1])),
-                                       new Date(0,0,0,end[0],!end[1] ? 0 : parseFloat(end[1])));
-                }
-
+            // ignore drawing clashing data
+            if(clashCheck && Object.keys(datagroup).length > 1 && k.indexOf(e.target.value) >= 0) {
+                continue;
             }
 
-            //timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
-            timetable.setScope(8, 0);
+            for(var j = 0; j < datagroup[k].length; j++) {
 
-            var renderer = new Timetable.Renderer(timetable);
+                places.push(datagroup[k][j][6]);
 
-            // remove previous table before draw new one
-            document.querySelector('.timetable').innerHTML = '';
+                var startTime = convertDate(datagroup[k][j][1]);
+                var endTime = convertDate(datagroup[k][j][2]);
 
-            renderer.draw('.timetable'); // any css selector
+                if(startTime < minTime) {
+                    minTime = startTime;
+                }
 
+                if(endTime > maxTime) {
+                    maxTime = endTime;
+                }
 
-        } else {
+                var start = startTime.toString().split('.');
+                var end = endTime.toString().split('.');
 
-            alertify.error("Timetable clash! Please choose other groups.");
+                timetable.addEvent(k, datagroup[k][j][3],
+                                   new Date(0,0,0,start[0],!start[1] ? 0 : parseFloat(start[1])),
+                                   new Date(0,0,0,end[0],!end[1] ? 0 : parseFloat(end[1])));
+            }
+
         }
+
+        //timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
+        timetable.setScope(8, 0);
+
+        var renderer = new Timetable.Renderer(timetable);
+
+        // remove previous table before draw new one
+        document.querySelector('.timetable').innerHTML = '';
+
+        renderer.draw('.timetable'); // any css selector
+
     }
 };
 
