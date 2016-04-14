@@ -174,7 +174,6 @@ Timetable.Renderer = function(tt) {
                 var hasURL = event.url;
                 var elementType = hasURL ? 'a' : 'span';
                 var aNode = node.appendChild(document.createElement(elementType));
-                var smallNode = aNode.appendChild(document.createElement('small'));
                 aNode.title = event.name;
                 if (hasURL) {
                     aNode.href = event.url;
@@ -182,7 +181,7 @@ Timetable.Renderer = function(tt) {
                 aNode.className = 'time-entry';
                 aNode.style.width = computeEventBlockWidth(event);
                 aNode.style.left = computeEventBlockOffset(event);
-                smallNode.textContent = event.name;
+                aNode.innerHTML = event.name;
             }
             function computeEventBlockWidth(event) {
                 var start = event.startDate;
