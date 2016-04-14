@@ -350,6 +350,16 @@ label:after {
 }
 
 .room-timeline h5 {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 13px;
+    margin-bottom: 0;
+}
+
+.room-timeline small {
+    margin-bottom: 0;
+}
+
+.room-timeline p {
+    font-size: 13px;
+    margin-bottom: 0;
+    margin-top: 0;
 }

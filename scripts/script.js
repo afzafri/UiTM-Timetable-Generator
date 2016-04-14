@@ -195,8 +195,8 @@ document.querySelector('.newtable').onchange = function (e) {
                 var endSecon = !end[1] ? 0 : parseFloat(end[1] + (end[1].length == 1 ? '0' : ''));
 
                 var name = '<h5>' + k + '</h5>' +
-                           '<i><small>' + datagroup[k][j][6] + '</small></i>' +
-                           '<span>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</span>';
+                           '<p><i>' + datagroup[k][j][6] + '</i></p>' +
+                           '<p>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</p>';
 
                 info.push({
                     name  : name,
