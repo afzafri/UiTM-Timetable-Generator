@@ -374,7 +374,7 @@ function doRequest(url, postdata, async, func) {
                 if (this.responseText === '[]') {
                     alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
                 } else if(this.responseText === 'icress_timeout') {
-                    alertify.delay(10000).error("Can't connect to ICress server (timeout). Please try again later.");
+                    alertify.delay(10000).error("Can't connect to ICReSS server (timeout). Please try again later.");
                 } else {
                     alertify.delay(5000).success("Fetching data success!");
                     func(this.responseText)
