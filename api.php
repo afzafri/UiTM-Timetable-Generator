@@ -14,6 +14,11 @@ if(isset($_GET['getlist'])) {
     if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT) {
 
         $get = file_get_contents('http://' . URL . '/jadual/jadual/jadual.asp');
+
+        if($http_response_header == null) {
+            die("icress_timeout");
+        }
+
         preg_match_all('/(?<=value=")(\w*)-(.[^"]*)/', $get, $out);
 
         $collect = array();
@@ -36,6 +41,11 @@ if(isset($_GET['getsubject'])) {
         if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT) {
 
             $get = file_get_contents("http://" . URL . "/jadual/{$_POST['faculty']}/{$_POST['faculty']}.html");
+
+            if($http_response_header == null) {
+                die("icress_timeout");
+            }
+
             preg_match_all('/>(.*)<\//', $get, $out);
 
             file_put_contents($filename, json_encode($out[1]));
@@ -55,6 +65,11 @@ if(isset($_GET['getgroup'])) {
 
             //start fetch icress data
             $jadual = file_get_contents("http://" . URL . "/jadual/{$_POST['faculty']}/{$_POST['subject']}.html");
+
+            if($http_response_header == null) {
+                die("icress_timeout");
+            }
+
             $jadual = str_replace(array("\r", "\n"), '', $jadual);
 
             preg_match_all('#<td>(.*?)</td>#i', $jadual, $outs);

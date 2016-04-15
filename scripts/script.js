@@ -371,8 +371,10 @@ function doRequest(url, postdata, async, func) {
         if (this.readyState === 4) {
             if (this.status >= 200 && this.status < 400) {
 
-                if (this.responseText.length === 0) {
-                    alertify.delay(10000).error("Request return no data!\nNo internet connection?");
+                if (this.responseText === '[]') {
+                    alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
+                } else if(this.responseText === 'icress_timeout') {
+                    alertify.delay(10000).error("Can't connect to ICress server (timeout). Please try again later.");
                 } else {
                     alertify.delay(5000).success("Fetching data success!");
                     func(this.responseText)
@@ -384,7 +386,7 @@ function doRequest(url, postdata, async, func) {
     };
 
     http.ontimeout = function () {
-        alertify.delay(10000).error('Error request! No internet?');
+        alertify.delay(10000).error('Error request! No internet or server problem?');
     };
 
     if (postdata != '' && postdata != null) {
