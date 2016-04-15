@@ -60,6 +60,9 @@ document.querySelector('#listfaculty').onchange = function () {
         }
     });
 
+    // remove previous table before draw new one
+    document.querySelector('.timetable').innerHTML = '';
+
     // change property of select-table depend on user selected choice
     document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
 };
