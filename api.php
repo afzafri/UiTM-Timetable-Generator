@@ -1,7 +1,7 @@
 <?php
 
 define('URL', 'icress.uitm.edu.my');
-define('CACHE_TIMELEFT', 30);
+define('CACHE_TIMELEFT', 1); // in days
 
 if (!file_exists('./cache')) {
     mkdir('./cache', 0777, true);
