@@ -174,7 +174,6 @@ Timetable.Renderer = function(tt) {
                 var hasURL = event.url;
                 var elementType = hasURL ? 'a' : 'span';
                 var aNode = node.appendChild(document.createElement(elementType));
-                aNode.title = event.name;
                 if (hasURL) {
                     aNode.href = event.url;
                 }
