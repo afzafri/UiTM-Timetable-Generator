@@ -160,16 +160,16 @@ document.querySelector('.newtable').onchange = function (e) {
             alertify.error("Timetable clash! Please choose another groups.");
         }
 
-        console.log(datagroup);
-
         var places = [];
         var info = [];
         var minTime = 23.59, maxTime = 0.0;
 
+        var getSubject = parents(e.target, '.row-select').querySelector('.select-subject').value;
+
         for(var k in datagroup) {
 
             // ignore drawing clashing data
-            if(clashCheck && Object.keys(datagroup).length > 1 && k.indexOf(e.target.value) >= 0) {
+            if(clashCheck && Object.keys(datagroup).length > 1 && k.indexOf(getSubject) >= 0) {
                 continue;
             }
 
