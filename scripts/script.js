@@ -371,13 +371,18 @@ function doRequest(url, postdata, async, func) {
         if (this.readyState === 4) {
             if (this.status >= 200 && this.status < 400) {
 
-                if (this.responseText === '[]') {
-                    alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
-                } else if(this.responseText === 'icress_timeout') {
-                    alertify.delay(10000).error("Can't connect to ICReSS server (timeout). Please try again later.");
-                } else {
-                    alertify.delay(5000).success("Fetching data success!");
-                    func(this.responseText)
+                // using switch to make code looks not messy
+                switch(this.responseText) {
+                    case '[]':
+                        alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
+                        break;
+                    case 'icress_timeout':
+                        alertify.delay(10000).error("Can't connect to ICReSS server (timeout). Please try again later.");
+                        break;
+                    default:
+                        alertify.delay(5000).success("Fetching data success!");
+                        func(this.responseText)
+                    break;
                 }
             } else {
                 // Error :(
