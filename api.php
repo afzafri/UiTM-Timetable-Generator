@@ -1,7 +1,7 @@
 <?php
 
 define('URL', 'icress.uitm.edu.my');
-define('CACHE_TIMELEFT', 1); // in days
+define('CACHE_TIMELEFT', 1); // in hours
 
 if (!file_exists('./cache')) {
     mkdir('./cache', 0777, true);
@@ -47,9 +47,7 @@ if(isset($_GET['getsubject'])) {
             }
 
             preg_match_all('/>(.*)<\//', $get, $out);
-
             file_put_contents($filename, json_encode($out[1]));
-
         }
 
         die(file_get_contents($filename));
@@ -83,6 +81,7 @@ if(isset($_GET['getgroup'])) {
                     unset($each[0]);
                 }
             }
+
             //end fetch icress data
 
             file_put_contents($filename, json_encode($new));
@@ -93,6 +92,9 @@ if(isset($_GET['getgroup'])) {
     }
 }
 
+/**
+ * Return file age by hour(s)
+ */
 function getFileOld($file) {
-    return (time() - filemtime($file)) / 24 / 60 / 60;
+    return (time() - filemtime($file)) / 60 / 60;
 }
