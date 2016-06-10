@@ -384,8 +384,9 @@ function doRequest(url, postdata, async, func) {
                         func(this.responseText)
                     break;
                 }
+
             } else {
-                // Error :(
+                alertify.delay(10000).error("There is an error when doing an Ajax request!\nHTTP Error Code :" + this.status);
             }
         }
     };
