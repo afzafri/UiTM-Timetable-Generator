@@ -410,9 +410,7 @@ function doRequest(url, postdata, async, func) {
 
 function parents(nodeCur, parentMatch) {
 
-    var cur = nodeCur;
-    for (; !cur.matches(parentMatch); cur = cur.parentNode) {
-    }
-    return cur;
+    for (; !nodeCur.matches(parentMatch); nodeCur = nodeCur.parentNode) {}
+    return nodeCur;
 
 }
