@@ -1,16 +1,17 @@
+
 # UiTM-Timetable-Generator
 Fetch and generate Timetable from iCress UiTM
 
-## Created By : 
+## Created By :
 1. Afif Zafri & Mohd Shahril
 2. Created Date : 24/1/16
 3. UPDATE 1 : 10/4/16
 4. UPDATE 2 : 13/4/16 - Major code overhaul, updated by Shahril
-5. Contact Us : 
+5. Contact Us :
   - http://fb.me/afzafri
   - http://fb.me/mohdshahril.net
-  
-## Credit 
+
+## Credit
 1. Mohd Shahril - Regex code for fetching and sort data (1st version), Major code overhaul and improvement
 2. Timetable.js
    - Webpage : http://timetablejs.org/

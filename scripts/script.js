@@ -26,7 +26,7 @@ document.querySelector('#listfaculty').onchange = function () {
 
     var trelem = document.querySelectorAll('.newtable tr');
 
-    // remove existing row if user changed faculty/university
+    // remove existing row if user changes faculty/university
     for (var i = 1; i < trelem.length; i++) {
         trelem[i].parentNode.removeChild(trelem[i]);
     }
@@ -60,7 +60,7 @@ document.querySelector('#listfaculty').onchange = function () {
         }
     });
 
-    // remove previous table before draw new one
+    // remove previous table before drawing a new one
     document.querySelector('.timetable').innerHTML = '';
 
     // change property of select-table depend on user selected choice
