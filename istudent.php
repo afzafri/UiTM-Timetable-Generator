@@ -64,12 +64,12 @@ class IStudent {
         
         return $this->uitm;
     }
-    public static function getUITMCode($str) {
 
+    public function getUiTMCode() {
 
         foreach($referer as $refer => $kod) {
-            if(strpos($str, $refer) !== FALSE) {
-                return $refer;
+            if(strpos($this->getUiTMStr(), $refer) !== FALSE) {
+                return $kod;
             }
         }
 
@@ -96,5 +96,6 @@ class IStudent {
 
 $a = new IStudent("2014423424");
 var_dump($a->getCourses());
+var_dump($a->getUiTMCode());
 
 ?>
