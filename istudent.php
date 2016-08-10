@@ -6,11 +6,14 @@ require_once("./http.php");
 class IStudent {
 
     private $url = "http://i-learn.uitm.edu.my";
+
     private $cookie = null;
 
     // array containing list of courses
     private $courses = null;
 
+    // uitm campus string
+    private $uitm = null;
 
     // cache bottom.php's result
     private $data = null;
@@ -42,6 +45,20 @@ class IStudent {
         return $this->data;
     } 
 
+    private function getUiTMStr() {
+
+        if($this->uitm == null) {
+
+            // extract uitm campus location
+            preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#',
+                       $this->requestData(), $uitm); 
+
+            $this->uitm = $uitm[1];
+
+        }
+        
+        return $this->uitm;
+    }
     public static function getUITMCode($str) {
 
         $referer = array(
