@@ -18,6 +18,11 @@ class IStudent {
     // cache bottom.php's result
     private $data = null;
 
+    // traditional case matching way
+    private $referer = array(
+        "Arau" => "AR"
+    );
+
     function __construct($student_id) {
         $this->login($student_id);
     }
@@ -61,9 +66,6 @@ class IStudent {
     }
     public static function getUITMCode($str) {
 
-        $referer = array(
-            "Arau" => "AR"
-        );
 
         foreach($referer as $refer => $kod) {
             if(strpos($str, $refer) !== FALSE) {
