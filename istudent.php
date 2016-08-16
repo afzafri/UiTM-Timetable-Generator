@@ -68,12 +68,12 @@ class IStudent {
     public function getUiTMCode() {
 
         foreach($referer as $refer => $kod) {
-            if(strpos($this->getUiTMStr(), $refer) !== FALSE) {
+            if(strpos($this->getUiTMStr(), $refer) !== false) {
                 return $kod;
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     public function getCourses() {
