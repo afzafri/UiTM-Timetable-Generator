@@ -198,8 +198,8 @@ document.querySelector('.newtable').onchange = function (e) {
                 var endSecon = !end[1] ? 0 : parseFloat(end[1] + (end[1].length == 1 ? '0' : ''));
 
                 var name = '<h5>' + k + '</h5>' +
-                           '<p><i>' + datagroup[k][j][6] + '</i></p>' +
-                           '<p>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</p>';
+                    '<p><i>' + datagroup[k][j][6] + '</i></p>' +
+                    '<p>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</p>';
 
                 info.push({
                     name  : name,
@@ -219,8 +219,8 @@ document.querySelector('.newtable').onchange = function (e) {
         // add event
         for(var i = 0; i < Object.keys(info).length; i++) {
             timetable.addEvent(info[i].name, info[i].loc,
-                               new Date(0,0,0,info[i].startH,info[i].startM),
-                               new Date(0,0,0,info[i].endH,info[i].endM), '#');
+                    new Date(0,0,0,info[i].startH,info[i].startM),
+                    new Date(0,0,0,info[i].endH,info[i].endM), '#');
         }
 
         var renderer = new Timetable.Renderer(timetable);
@@ -243,9 +243,9 @@ function addNewRow() {
     // sorry huduh gila kot :(((
 
     elem.innerHTML = '\
-    <td width="50px">' + (elems.length + 1) + '</td>\
-    <td><select class="select-subject"></select></td>\
-    <td><select class="select-group"></select></td>';
+                     <td width="50px">' + (elems.length + 1) + '</td>\
+                     <td><select class="select-subject"></select></td>\
+                     <td><select class="select-group"></select></td>';
 
     document.querySelector('.newtable tbody').appendChild(elem);
 }
@@ -263,14 +263,14 @@ function isClash(canuse) {
             var datadst = group[ssubjdst.value][canuse[j].value];
 
             /*
-             Object
-             1 : "11:00am"
-             2 : "11:50am"
-             3 : "Monday"
-             4 : "Full Time"
-             5 : "First Timer and Repeater"
-             6 : "C303"
-             */
+               Object
+               1 : "11:00am"
+               2 : "11:50am"
+               3 : "Monday"
+               4 : "Full Time"
+               5 : "First Timer and Repeater"
+               6 : "C303"
+               */
 
             for (var z = 0; z < datasrc.length; z++) {
                 for (var x = 0; x < datadst.length; x++) {
@@ -298,7 +298,7 @@ function isClash(canuse) {
 
                            easy! we just negate `cond` to get the other one, example our current condition is true,
                            to get the other condition, just negate the `cond` using ! -> !cond
-                         */
+                           */
                         var cond = (stimesrc < stimedst && etimesrc <= stimedst) ||
                             (stimesrc >= etimedst && etimesrc > etimedst);
 
@@ -382,7 +382,7 @@ function doRequest(url, postdata, async, func) {
                     default:
                         alertify.delay(5000).success("Fetching data success!");
                         func(this.responseText)
-                    break;
+                            break;
                 }
 
             } else {
