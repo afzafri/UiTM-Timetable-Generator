@@ -437,7 +437,11 @@ function parents(nodeCur, parentMatch) {
 
 }
 
-var extend = function(out) {
+/*
+ * un-shamefully stole from youmightnotneedjquery.com
+ * ;)
+ */
+function extend(out) {
   out = out || {};
 
   for (var i = 1; i < arguments.length; i++) {

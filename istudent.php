@@ -1,6 +1,5 @@
 <?php
 
-
 require_once("./http.php");
 
 class IStudent {
