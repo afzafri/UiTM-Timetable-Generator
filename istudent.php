@@ -67,7 +67,7 @@ class IStudent {
 
     public function getUiTMCode() {
 
-        foreach($referer as $refer => $kod) {
+        foreach($this->referer as $refer => $kod) {
             if(strpos($this->getUiTMStr(), $refer) !== false) {
                 return $kod;
             }
