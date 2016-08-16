@@ -1,3 +1,4 @@
+
 // js native equivalent of jQuery $(document).ready(function {..});
 document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -15,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             elem.appendChild(el);
         }
     });
+
+    vex.defaultOptions.className = 'vex-theme-os';
 
 });
 
@@ -233,6 +236,25 @@ document.querySelector('.newtable').onchange = function (e) {
     }
 };
 
+document.querySelector('.login').onclick = function (e) {
+
+    vex.dialog.open({
+        message: 'Enter your username and password:',
+        input: [
+            '<input name="id" type="text" placeholder="id" required />',
+        ].join(''),
+        buttons: [
+            extend({}, vex.dialog.buttons.YES, { text: 'Login' }),
+        ],
+        callback: function (data) {
+            if (data) {
+                console.log(data.id);
+            }
+        }
+    })
+
+};
+
 function addNewRow() {
 
     var elems = document.querySelectorAll('.select-subject');
@@ -414,3 +436,19 @@ function parents(nodeCur, parentMatch) {
     return nodeCur;
 
 }
+
+var extend = function(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    if (!arguments[i])
+      continue;
+
+    for (var key in arguments[i]) {
+      if (arguments[i].hasOwnProperty(key))
+        out[key] = arguments[i][key];
+    }
+  }
+
+  return out;
+};
