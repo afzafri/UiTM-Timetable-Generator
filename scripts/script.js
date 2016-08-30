@@ -24,6 +24,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 var listsubject;
 var group = {};
 
+// used by automatic data fetcher
+var fetched_data = null;
+var automatic_fetch = false;
+var group_prev = null;
+var index_list = 0;
+
 // change if user choose any faculty/university from select list
 document.querySelector('#listfaculty').onchange = function () {
 
@@ -37,7 +43,7 @@ document.querySelector('#listfaculty').onchange = function () {
     // create first row table
     addNewRow();
 
-    doRequest('api.php?getsubject', 'faculty=' + this.value, true, function (data) {
+    doRequest('api.php?getsubject', 'faculty=' + this.value, false, function (data) {
 
         if (data != '') {
 
@@ -52,7 +58,6 @@ document.querySelector('#listfaculty').onchange = function () {
                 var el = document.createElement('option');
                 el.value = listsubject[i];
                 el.innerHTML = listsubject[i];
-                el.id = '';
 
                 elem.appendChild(el);
             }
@@ -68,7 +73,55 @@ document.querySelector('#listfaculty').onchange = function () {
 
     // change property of select-table depend on user selected choice
     document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
+
+    // take over automatic fetcher from .login
+    if(automatic_fetch == true) {
+        processCourses();
+    }
 };
+
+var processCourses = function () {
+
+    if(Object.keys(fetched_data).length > 0) {
+
+        var index = null;
+
+        // trick to get first key property from object
+        for(var k in fetched_data) {
+            index = k;
+            break;
+        }
+
+        // automatic select group
+        group_prev = fetched_data[index];
+
+        // delete each one element until "fetched_data" is empty
+        delete fetched_data[index];
+
+        var select_subject = document.querySelectorAll('.select-subject')[index_list];
+        select_subject.value = index; // key = subject
+
+        // because .select-subject was created dynamically
+        // then we need to bubble it up
+        select_subject.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+
+    } else {
+
+        // all done!
+        // reset back to initial states
+
+        fetched_data = null;
+        automatic_fetch = false;
+        group_prev = null;
+        index_list = 0;
+
+        // hide loading box
+        var loadingBox = document.querySelector('#loadingBox');
+        loadingBox.setAttribute('data-disable-auto', 0); // enable back #loadingBox
+        loadingBox.style.display = 'none';
+
+    }
+}
 
 /*
  * using event delegation to set event to dynamic created element
@@ -114,31 +167,50 @@ document.querySelector('.newtable').onchange = function (e) {
 
                 for (k in group[subject]) {
 
-                    var id = 'group-' + subject + '-' + k;
-
                     var el = document.createElement('option');
                     el.value = k;
                     el.innerHTML = k;
-                    el.id = id;
 
                     elem.appendChild(el);
                 }
             };
 
             // fetch data if it not exist in Object data yet
-            // do sync request we need this data before processing
             if (!group[subject]) {
 
-                doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty, true, function (data) {
+                doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty, false, function (data) {
                     if (data != '') {
                         group[subject] = JSON.parse(data);
-
                         exec();
                     }
                 });
             }
 
             exec();
+
+            // for automatic data fetcher
+            if(automatic_fetch == true && group_prev != null) {
+
+                var select_group = document.querySelectorAll('.select-group')[index_list];
+
+                select_group.value = group_prev;
+
+                // because .select-group was created dynamically
+                // then we need to bubble it up
+                select_group.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+
+                index_list++; // go to its next element
+                group_prev = null;
+
+
+                if(Object.keys(fetched_data).length > 0) {
+                    // create mousedown event on .select-subject based on new index_list value
+                    // this is to ensure that javascript load all the subjects before automatic system do it jobs
+                    document.querySelectorAll('.select-subject')[index_list].dispatchEvent(new CustomEvent('mousedown', {bubbles: true}));
+                }
+
+                processCourses();
+            }
         }
 
         // delegate event for select-group
@@ -239,16 +311,35 @@ document.querySelector('.newtable').onchange = function (e) {
 document.querySelector('.login').onclick = function (e) {
 
     vex.dialog.open({
-        message: 'Enter your username and password:',
+        message: 'Enter your UiTM\'s ID no (matrix no.) :',
         input: [
-            '<input name="id" type="text" placeholder="id" required />',
+        '<input name="id" type="text" placeholder="Student\'s matrix ID" required />'
         ].join(''),
         buttons: [
-            extend({}, vex.dialog.buttons.YES, { text: 'Login' }),
+        extend({}, vex.dialog.buttons.YES, { text: 'Automatic fetch!' }),
         ],
-        callback: function (data) {
-            if (data) {
-                console.log(data.id);
+        callback: function (formData) {
+            if (formData) {
+
+                // show loading box
+                var loadingBox = document.querySelector('#loadingBox');
+                loadingBox.setAttribute('data-disable-auto', 1); // disable this loading box for doRequest() function
+                loadingBox.style.display = 'block';
+
+                doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
+                    if (data != '') {
+
+                        data = JSON.parse(data);
+
+                        var elemUiTMSelect = document.querySelector('#listfaculty');
+
+                        automatic_fetch = true;
+                        fetched_data = data['Courses']; // hand it over global variable
+
+                        elemUiTMSelect.value = data['UiTMCode'];
+                        elemUiTMSelect.dispatchEvent(new CustomEvent('change', {}));
+                    }
+                });
             }
         }
     })
@@ -383,28 +474,35 @@ function doRequest(url, postdata, async, func) {
     http.open("POST", url, async);
 
     http.onloadstart = function (e) {
-        document.querySelector('#loadingBox').style.display = 'block';
+
+        // if someone disable the loadingbox
+        // then do nothing with it
+        var loadingBox = document.querySelector('#loadingBox');
+        if(loadingBox.getAttribute('data-disable-auto') == '0') {
+            loadingBox.style.display = 'block';
+        }
     };
 
     http.onreadystatechange = function () {
 
-        document.querySelector('#loadingBox').style.display = 'none';
+        var loadingBox = document.querySelector('#loadingBox');
+        if(loadingBox.getAttribute('data-disable-auto') == '0') {
+            loadingBox.style.display = 'block';
+        }
 
         if (this.readyState === 4) {
             if (this.status >= 200 && this.status < 400) {
 
-                // using switch to make code looks not messy
-                switch(this.responseText) {
-                    case '[]':
-                        alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
-                        break;
-                    case 'icress_timeout':
-                        alertify.delay(10000).error("Can't connect to ICReSS server (timeout). Please try again later.");
-                        break;
-                    default:
-                        alertify.delay(5000).success("Fetching data success!");
-                        func(this.responseText)
-                            break;
+                if(this.responseText == '[]') {
+                    alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
+                } else if (this.responseText.includes("Alert_Error")) {
+
+                    var errormsg = this.responseText.split(':')[1].trim();
+                    alertify.delay(10000).error(errormsg);
+
+                } else {
+                    alertify.delay(5000).success("Fetching data success!");
+                    func(this.responseText);
                 }
 
             } else {
@@ -442,17 +540,17 @@ function parents(nodeCur, parentMatch) {
  * ;)
  */
 function extend(out) {
-  out = out || {};
+    out = out || {};
 
-  for (var i = 1; i < arguments.length; i++) {
-    if (!arguments[i])
-      continue;
+    for (var i = 1; i < arguments.length; i++) {
+        if (!arguments[i])
+            continue;
 
-    for (var key in arguments[i]) {
-      if (arguments[i].hasOwnProperty(key))
-        out[key] = arguments[i][key];
+        for (var key in arguments[i]) {
+            if (arguments[i].hasOwnProperty(key))
+                out[key] = arguments[i][key];
+        }
     }
-  }
 
-  return out;
+    return out;
 };

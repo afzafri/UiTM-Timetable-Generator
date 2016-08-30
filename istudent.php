@@ -93,8 +93,4 @@ class IStudent {
 
 }
 
-$a = new IStudent("2014423424");
-var_dump($a->getCourses());
-var_dump($a->getUiTMCode());
-
 ?>

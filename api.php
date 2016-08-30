@@ -1,5 +1,7 @@
 <?php
 
+require_once('./istudent.php');
+
 define('URL', 'icress.uitm.edu.my');
 define('CACHE_TIMELEFT', 1); // in hours
 
@@ -65,7 +67,7 @@ if(isset($_GET['getgroup'])) {
             $jadual = file_get_contents("http://" . URL . "/jadual/{$_POST['faculty']}/{$_POST['subject']}.html");
 
             if($http_response_header == null) {
-                die("icress_timeout");
+                die("Alert_Error: Icress timeout! Please try again later.");
             }
 
             $jadual = str_replace(array("\r", "\n"), '', $jadual);
@@ -89,6 +91,31 @@ if(isset($_GET['getgroup'])) {
 
         die(file_get_contents($filename));
 
+    }
+}
+
+
+if(isset($_GET['fetchDataMatrix'])) {
+    if(!empty($_POST['studentId'])) {
+
+        try {
+
+            $obj = new IStudent($_POST['studentId']);
+            $courses = $obj->getCourses();
+            $uitmcode = $obj->getUiTMCode();
+
+            if($courses === null || $uitmcode === false) {
+                throw new Exception("Can't fetch resources for this student Id ("
+                                    . htmlentities($_POST['studentId']) . ") !");
+            }
+
+            die(json_encode(array(
+                'Courses' => $courses,
+                'UiTMCode' => $uitmcode)));
+
+        } catch (Exception $e) {
+            die('Alert_Error:' . $e->getMessage());
+        }
     }
 }
 
