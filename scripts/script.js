@@ -1,4 +1,5 @@
 
+
 // js native equivalent of jQuery $(document).ready(function {..});
 document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -27,7 +28,7 @@ var group = {};
 // used by automatic data fetcher
 var fetched_data = null;
 var automatic_fetch = false;
-var group_prev = null;
+var group_prev = {};
 var index_list = 0;
 
 // change if user choose any faculty/university from select list
@@ -43,7 +44,7 @@ document.querySelector('#listfaculty').onchange = function () {
     // create first row table
     addNewRow();
 
-    doRequest('api.php?getsubject', 'faculty=' + this.value, false, function (data) {
+    doRequest('api.php?getsubject', 'faculty=' + this.value, true, function (data) {
 
         if (data != '') {
 
@@ -65,6 +66,11 @@ document.querySelector('#listfaculty').onchange = function () {
             // add new row
             addNewRow();
 
+            // take over automatic fetcher from .login
+            if(automatic_fetch == true) {
+                processCourses();
+            }
+
         }
     });
 
@@ -74,10 +80,6 @@ document.querySelector('#listfaculty').onchange = function () {
     // change property of select-table depend on user selected choice
     document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
 
-    // take over automatic fetcher from .login
-    if(automatic_fetch == true) {
-        processCourses();
-    }
 };
 
 var processCourses = function () {
@@ -92,27 +94,46 @@ var processCourses = function () {
             break;
         }
 
-        // automatic select group
-        group_prev = fetched_data[index];
+        // add into dictionary for later
+        group_prev[index_list] = fetched_data[k];
 
         // delete each one element until "fetched_data" is empty
         delete fetched_data[index];
 
-        var select_subject = document.querySelectorAll('.select-subject')[index_list];
+        var select_subject = document.querySelectorAll('.select-subject')[index_list++];
         select_subject.value = index; // key = subject
 
         // because .select-subject was created dynamically
         // then we need to bubble it up
         select_subject.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
+        // recursively do this again
+        processCourses();
+
     } else {
 
         // all done!
-        // reset back to initial states
+        // now one last thing
+        // select the group based on student's courses
+
+        index_list = 0; // reset to initial index
+
+        for(k in group_prev) {
+
+            var select_group = document.querySelectorAll('.select-group')[index_list];
+            select_group.value = group_prev[k];
+
+            // because .select-group was created dynamically
+            // then we need to bubble it up
+            select_group.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+
+            index_list++; // go to its next element
+        }
+
 
         fetched_data = null;
         automatic_fetch = false;
-        group_prev = null;
+        group_prev = {};
         index_list = 0;
 
         // hide loading box
@@ -173,11 +194,18 @@ document.querySelector('.newtable').onchange = function (e) {
 
                     elem.appendChild(el);
                 }
+
+                if(automatic_fetch == true) {
+
+                    // create mousedown event on .select-subject based on new index_list value
+                    // this is to ensure that javascript load all the subjects before automatic system do it jobs
+                    document.querySelectorAll('.select-subject')[index_list].dispatchEvent(new CustomEvent('mousedown', {bubbles: true}));
+                }
+
             };
 
             // fetch data if it not exist in Object data yet
             if (!group[subject]) {
-
                 doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty, false, function (data) {
                     if (data != '') {
                         group[subject] = JSON.parse(data);
@@ -187,30 +215,6 @@ document.querySelector('.newtable').onchange = function (e) {
             }
 
             exec();
-
-            // for automatic data fetcher
-            if(automatic_fetch == true && group_prev != null) {
-
-                var select_group = document.querySelectorAll('.select-group')[index_list];
-
-                select_group.value = group_prev;
-
-                // because .select-group was created dynamically
-                // then we need to bubble it up
-                select_group.dispatchEvent(new CustomEvent('change', {bubbles: true}));
-
-                index_list++; // go to its next element
-                group_prev = null;
-
-
-                if(Object.keys(fetched_data).length > 0) {
-                    // create mousedown event on .select-subject based on new index_list value
-                    // this is to ensure that javascript load all the subjects before automatic system do it jobs
-                    document.querySelectorAll('.select-subject')[index_list].dispatchEvent(new CustomEvent('mousedown', {bubbles: true}));
-                }
-
-                processCourses();
-            }
         }
 
         // delegate event for select-group
@@ -493,26 +497,39 @@ function doRequest(url, postdata, async, func) {
         if (this.readyState === 4) {
             if (this.status >= 200 && this.status < 400) {
 
-                if(this.responseText == '[]') {
+                if(this.responseText == '') {
+
+                    alertify.delay(10000).error("API returns nothing.\nMaybe an error have happened.\n Try again later...");
+                    loadingBox.style.display = 'none';
+
+                } else if(this.responseText == '[]') {
+
                     alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
+                    loadingBox.style.display = 'none';
+
                 } else if (this.responseText.includes("Alert_Error")) {
 
                     var errormsg = this.responseText.split(':')[1].trim();
+                    loadingBox.style.display = 'none';
                     alertify.delay(10000).error(errormsg);
 
                 } else {
+
                     alertify.delay(5000).success("Fetching data success!");
                     func(this.responseText);
                 }
 
             } else {
                 alertify.delay(10000).error("There is an error when doing an Ajax request!\nHTTP Error Code :" + this.status);
+                loadingBox.style.display = 'none';
             }
         }
     };
 
     http.ontimeout = function () {
         alertify.delay(10000).error('Error request! No internet or server problem?');
+        loadingBox.style.display = 'none';
+
     };
 
     if (postdata != '' && postdata != null) {

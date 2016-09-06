@@ -43,7 +43,7 @@ class IStudent {
         // only make request once 
         if($this->data == null) {
             $this->data = http\http_request($this->url . "/modules/main/bottom.php",
-                                            $this->cookie, NULL);
+                $this->cookie, NULL);
         }
 
         return $this->data;
@@ -55,12 +55,12 @@ class IStudent {
 
             // extract uitm campus location
             preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#',
-                       $this->requestData(), $uitm); 
+                $this->requestData(), $uitm); 
 
             $this->uitm = $uitm[1];
 
         }
-        
+
         return $this->uitm;
     }
 
@@ -83,14 +83,41 @@ class IStudent {
 
             preg_match_all('#title="(.*?)".*php\?cid=(.*?)&#', $this->requestData(), $courses);
 
-            for($i = 0; $i < count($courses[1])-1; $i += 2) {
-                $this->courses[$courses[1][$i]] = $courses[1][$i+1];
+            if(empty($courses[0])) {
+
+                // if system can't fetch data in regular way
+                // then there is an alternative ;)
+                $this->getCoursesAlternative();
+
+            } else {
+                for($i = 0; $i < count($courses[1])-1; $i += 2) {
+                    $this->courses[$courses[1][$i]] = $courses[1][$i+1];
+                }
             }
         }
 
         return $this->courses;
     }
 
+    private function getCoursesAlternative() {
+
+        // if can't get courses & groups an easy way
+        // then do it a long and time consuming way
+
+        preg_match_all('#courseframe\.php\?cid=(.*?)&#', $this->requestData(), $courses);
+        
+        foreach($courses[1] as $course) {
+
+            $get = http\http_request($this->url . "/Group/default.php?ttype=course&courseID=" . $course,
+                $this->cookie, NULL);
+
+            preg_match('#>(.*?)<\/a>#', $get, $group);
+            $this->courses[$course] = $group[1];
+
+        }
+
+    }
 }
 
 ?>
+
