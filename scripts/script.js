@@ -195,7 +195,7 @@ document.querySelector('.newtable').onchange = function (e) {
                     elem.appendChild(el);
                 }
 
-                if(automatic_fetch == true) {
+                if(automatic_fetch == true && Object.keys(fetched_data).length > 0) {
 
                     // create mousedown event on .select-subject based on new index_list value
                     // this is to ensure that javascript load all the subjects before automatic system do it jobs
