@@ -12,7 +12,7 @@
  *
  * $config['CACHE_TYPE'] := 'file'|'database'
  */
-define('CACHE_TYPE', 'database');
+define('CACHE_TYPE', 'file');
 
 /*
  * In case that you chose to use SQLiTE database,
