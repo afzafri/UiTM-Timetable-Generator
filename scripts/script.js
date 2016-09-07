@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 });
 
+// loading box status
+//
+// true = enable
+// false = disable
+var lboxStatus = true;
+
 var listsubject;
 var group = {};
 
@@ -138,7 +144,7 @@ var processCourses = function () {
 
         // hide loading box
         var loadingBox = document.querySelector('#loadingBox');
-        loadingBox.setAttribute('data-disable-auto', 0); // enable back #loadingBox
+        lboxStatus = true;
         loadingBox.style.display = 'none';
 
     }
@@ -327,7 +333,7 @@ document.querySelector('.login').onclick = function (e) {
 
                 // show loading box
                 var loadingBox = document.querySelector('#loadingBox');
-                loadingBox.setAttribute('data-disable-auto', 1); // disable this loading box for doRequest() function
+                lboxStatus = false;
                 loadingBox.style.display = 'block';
 
                 doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
@@ -482,7 +488,7 @@ function doRequest(url, postdata, async, func) {
         // if someone disable the loadingbox
         // then do nothing with it
         var loadingBox = document.querySelector('#loadingBox');
-        if(loadingBox.getAttribute('data-disable-auto') == '0') {
+        if(lboxStatus == true) {
             loadingBox.style.display = 'block';
         }
     };
@@ -490,8 +496,8 @@ function doRequest(url, postdata, async, func) {
     http.onreadystatechange = function () {
 
         var loadingBox = document.querySelector('#loadingBox');
-        if(loadingBox.getAttribute('data-disable-auto') == '0') {
-            loadingBox.style.display = 'block';
+        if(lboxStatus == true) {
+            loadingBox.style.display = 'none';
         }
 
         if (this.readyState === 4) {
