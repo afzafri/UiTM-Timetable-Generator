@@ -8,10 +8,11 @@ UPDATE 10/4/16
 Add Timetable.js javascript plugin to create responsive timetable.
 UPDATE 13/4/16
 Major code overhaul and improvement
+Design and touch up by : Syed Muhamad Danial
 -->
 <html>
 <head>
-    <link href="uitmlogo.png" rel="shortcut icon">
+    <link href="Uitm.jpg" rel="shortcut icon">
     <link rel="stylesheet" href="./styles/timetablejs.css">
     <link rel="stylesheet" type="text/css" href="./styles/design.css">
     <link rel="stylesheet" type="text/css" href="./styles/vex.css">
@@ -20,67 +21,156 @@ Major code overhaul and improvement
 </head>
 <body>
 
-<div>
+	<div>
 
-    <table id="bannerapp">
-        <tr>
-            <td><img src="uitmlogo.png" width="80px"/></td>
-            <td><h1 id="project_title">UiTM Timetable<br>Generator</h1></td>
-        </tr>
-    </table>
-    <br><br>
+			<table id="bannerapp" bgcolor="#2d3033" border="0" cellpadding="0" cellspacing="0" class="wrapper" style="border-collapse:collapse;border-spacing:0;color: #aebdc1; font-size: 12px;" width="100%">
+				<tr>
+					<td align="center" style="padding-top:10px; padding-bottom:10px; padding-right:2px">
+					<a href="http://istudent.uitm.edu.my/nsp/home/main.asp" title="UiTM Student Portal" alt="UiTM Student Portal" target="blank">
+					<img style="width 50px; height:110px" src="Uitm.jpg" width="230px"/>
+					</a>
+					</td>
+					<td align="center" style="padding-top:10px; padding-bottom:10px;padding-left:1px;"><h1 style="color:white" id="project_title">UiTM Timetable<br>Generator</h1></td>
+				</tr>
+			</table>
+		<br><br>
+		<!-- experimental feature -->
+		<button type="button" class="button -dark login">Login to iStudent</button>
 
-    <!-- experimental feature -->
-    <button type="button" class="button -dark login">Login to iStudent</button>
+		<pre>Select faculty/campus from list below</pre>
 
-    <pre>Select faculty/campus from list below</pre>
+		<label>
+			<select name='fakulti' id="listfaculty">
+				<option value=''>---SELECT FACULTY---</option>
+				<!-- amek data kt icress -->
+				<!-- js akan automatik update data kt sini tiap2 kali run -->
+			</select>
+		</label>
+		<div id="select-table">
+			<table class='newtable'>
+				<tr>
+					<th>#</th>
+					<th>Subject</th>
+					<th>Group</th>
+				</tr>
+				<!-- js akan automatik tmbah new row kt sini -->
+			</table>
+		</div>
+	</div>
 
-    <label>
-        <select name='fakulti' id="listfaculty">
-            <option value=''>---SELECT FACULTY---</option>
-            <!-- amek data kt icress -->
-            <!-- js akan automatik update data kt sini tiap2 kali run -->
-        </select>
-    </label>
-    <div id="select-table">
-        <table class='newtable'>
-            <tr>
-                <th>#</th>
-                <th>Subject</th>
-                <th>Group</th>
-            </tr>
-            <!-- js akan automatik tmbah new row kt sini -->
-        </table>
-    </div>
-</div>
+	<div class='timetable'></div>
 
-<div class='timetable'></div>
+	
+	<!--footer yg aku design skali dgn link to dev. team-->
+	 <table bgcolor="#2d3033" border="0" cellpadding="0" cellspacing="0" class="wrapper" style="border-collapse:collapse;border-spacing:0;color: white; font-size: 15px;" width="100%">
+			  <tr>
+				<td align="center">
+				  <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border-spacing:0;">
+					<tr>
+					  <td align="center" style="padding: 32px 12px 0 12px;">
+						<a href="https://twitter.com/syedmdanial" target="blank" style="text-decoration: none;">
+						  <img alt="Twitter Icon" border="0" height="40" src="img/twitt.png" width="40">
+						</a>
+						
+					  </td>
+					  <td align="center" style="padding: 32px 12px 0 12px;">
+						<a href="https://www.facebook.com/mohdshahril.net?fref=ts" target="blank" style="text-decoration: none;">
+						  <img alt="Facebook Icon" border="0" height="40" src="img/fb.png" width="40">
+						</a>
+					  </td>
+					  <td align="center" style="padding: 32px 12px 0 12px;">
+						<a href="https://www.instagram.com/afzafri/" target="blank" style="text-decoration: none;">
+						  <img alt="Instgram Icon" border="0" height="40" src="img/ig.png" width="40">
+						</a>
+					  </td>
+					  
+					</tr>
+				  </table>
+				  <table align="center" border="0" cellpadding="0" cellspacing="0" class="flex-size" style="border-collapse:collapse;border-spacing:0;">
+					<tr>
+					  <td align="left" class="text--footer s-tac" style="mso-line-height-rule:exactly;-webkit-font-smoothing:antialiased;-ms-text-size-adjust:none;
+					  -webkit-text-size-adjust:none;color: white; font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 21px; 
+					  padding-top: 24px;">
+						Have questions or need assistance?
+					  </td>
+					</tr>
+				  </table>
+				  <table align="center" border="0" cellpadding="0" cellspacing="0" class="flex-size" style="border-collapse:collapse;border-spacing:0;">
+					<tr>
+					  <td align="center">
+						
+						<table align="center" border="0" cellpadding="0" cellspacing="0" class="flex-size" style="border-collapse:collapse;border-spacing:0;max-width: 384px;" width="100%">
+						  <tr>
+							<td style="font-size: 0; text-align: center;">
+							  <div style="display: inline-block;">
+								<table align="left" border="0" cellpadding="0" cellspacing="0" class="content" width="182" style="border-collapse:collapse;border-spacing:0;">
+								  <tr>
+									<td align="center" style="padding: 16px 16px 0 16px;">
+									  
+									  <a href="https://github.com/afzafri/UiTM-Timetable-Generator/issues" target="blank" style="background-color:#2d3033;border:1px solid #aebdc1;border-radius:20px;
+									  color:white;display:inline-block;font-family:'Open Sans', Verdana, Helvetica, Arial, sans-serif;font-size:13px;font-weight:300;line-height:40px;
+									  text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;text-transform: uppercase;mso-hide:all; 
+									  padding-top:10px; padding-bottom:3px">
+										<img alt="Github Icon" border="0" height="40" src="img/git.png" width="40">
+										<br>
+										Support
+									  </a>
+									</td>
+								  </tr>
+								</table>
+							  </div>
+							 
+							  <div style="display: inline-block;">
+								
+							  </div>
+							</td>
+						  </tr>
+						</table>
+					  </td>
+					</tr>
+				  </table>
+				  <table align="center" border="0" cellpadding="0" cellspacing="0" class="flex-size" style="border-collapse:collapse;border-spacing:0;">
+					<tr>
+					  <td align="center" class="text--footer" style="mso-line-height-rule:exactly;-webkit-font-smoothing:antialiased;-ms-text-size-adjust:none;-webkit-text-size-adjust:none;
+					  color: white; font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 18px; padding: 32px 20px 0 20px;">
+					  An Open Source Project
+					  </td>
+					</tr>
+					<tr>
+					  <td align="center" class="text--footer" style="mso-line-height-rule:exactly;-webkit-font-smoothing:antialiased;-ms-text-size-adjust:none;-webkit-text-size-adjust:none;
+					  color: white; font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 18px; padding: 0 20px;">
+					  <span class="maskLink-footer">
+					  &copy; 2016 Afif, Sharil & Syed<br> 
+					  Diploma in Computer Science (CS110)<br>
+					  UiTM Perlis
+					  </span>
 
-<footer>
-    If you found any issues, please open a report at <a href="https://github.com/afzafri/UiTM-Timetable-Generator/issues">issues tracker</a>.<br> Your help is much appreciated. :)<br><br>
+					  </td>
+					</tr>
+					
+				  </table>
+				</td>
+			  </tr>
+			</table>
+	
 
-    An <a href="https://github.com/afzafri/UiTM-Timetable-Generator">open source project</a> from Afif & Shahril &copy; 2016<br>
-    Diploma in Computer Science (CS110)<br>
-    UiTM Perlis
-</footer>
+	<div id="loadingBox" class="ontop">
+		<div class="popup">
 
-<div id="loadingBox" class="ontop">
-    <div class="popup">
+			<!-- amek kt sini ;) http://tobiasahlin.com/spinkit/ -->
+			<div class="sk-folding-cube">
+				<div class="sk-cube1 sk-cube"></div>
+				<div class="sk-cube2 sk-cube"></div>
+				<div class="sk-cube4 sk-cube"></div>
+				<div class="sk-cube3 sk-cube"></div>
+			</div>
+		</div>
+	</div>
 
-        <!-- amek kt sini ;) http://tobiasahlin.com/spinkit/ -->
-        <div class="sk-folding-cube">
-            <div class="sk-cube1 sk-cube"></div>
-            <div class="sk-cube2 sk-cube"></div>
-            <div class="sk-cube4 sk-cube"></div>
-            <div class="sk-cube3 sk-cube"></div>
-        </div>
-    </div>
-</div>
-
-<script src='./scripts/alertify.min.js'></script>
-<script src='./scripts/timetable.js'></script>
-<script src='./scripts/vex.combined.min.js'></script>
-<script src='./scripts/script.js'></script>
+	<script src='./scripts/alertify.min.js'></script>
+	<script src='./scripts/timetable.js'></script>
+	<script src='./scripts/vex.combined.min.js'></script>
+	<script src='./scripts/script.js'></script>
 
 </body>
 </html>
