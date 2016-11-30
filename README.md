@@ -9,10 +9,13 @@ Fetch and generate Timetable from iCress UiTM
 4. UPDATE 2 : 13/4/16 - Major code overhaul, updated by Shahril
 5. UPDATE 3 : 20/9/16 - Another major code overhaul, added automatic timetable creator
 6. UPDATE 4 : 20/9/16 - Major design changes by Syed Danial
-7. Contact Us :
+7. UPDATE 5 : 1/12/16 - Little update, fixed floating footer issue, and added mobile view support
+8. Contact Us :
   - http://fb.me/afzafri
   - http://fb.me/mohdshahril.net
-  - https://twitter.com/syedmdanial
+  - https://twitter.com/syedmdanial 
+9. Live Website :
+  - http://timetable.reaperz.net
 
 ## Credit
 1. Mohd Shahril - Regex code for fetching and sort data (1st version), Major code overhaul and improvement
