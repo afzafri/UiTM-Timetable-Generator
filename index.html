@@ -9,6 +9,8 @@ Add Timetable.js javascript plugin to create responsive timetable.
 UPDATE 13/4/16
 Major code overhaul and improvement
 Design and touch up by : Syed Muhamad Danial
+UPDATE 1/12/16
+A little update to the frontend, now support mobile view. by - afif
 -->
 <html>
 <head>
@@ -17,57 +19,64 @@ Design and touch up by : Syed Muhamad Danial
     <link rel="stylesheet" type="text/css" href="./styles/design.css">
     <link rel="stylesheet" type="text/css" href="./styles/vex.css">
     <link rel="stylesheet" type="text/css" href="./styles/vex-theme-os.css">
+    <!-- scale down/resize page content to fix screen width, as for mobile view -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>UiTM Timetable Generator</title>
 </head>
 <body>
 
-	<div>
-			<!--aku tambah design unter header bg nampak kemas dan lagi elok also link ke istudent portal dkt gmbar uitm-->
-			<table class="bannerapp">
-				<tr>
-					<td align="center" id ="deslogouitm">
-					<a href="http://istudent.uitm.edu.my/nsp/home/main.asp" title="UiTM Student Portal" alt="UiTM Student Portal" target="blank">
-					<img style="width 50px; height:110px" src="Uitm.jpg" width="230px"/>
-					</a>
-					</td>
-					<td align="center" id="destitle">
-						<h1 style="color:white" id="project_title">
-						UiTM Timetable<br>
-						Generator
-						</h1>
-					</td>
-				</tr>
-			</table>
-		<br><br>
-		<!-- experimental feature -->
-		<button type="button" class="button -dark login">Login to iStudent</button>
+<!-- start wrapper - use to fix the footer -->
+<div class="wrapper">
 
-		<pre>Select faculty/campus from list below</pre>
-
-		<label>
-			<select name='fakulti' id="listfaculty">
-				<option value=''>---SELECT FACULTY---</option>
-				<!-- amek data kt icress -->
-				<!-- js akan automatik update data kt sini tiap2 kali run -->
-			</select>
-		</label>
-		<div id="select-table">
-			<table class='newtable'>
-				<tr>
-					<th>#</th>
-					<th>Subject</th>
-					<th>Group</th>
-				</tr>
-				<!-- js akan automatik tmbah new row kt sini -->
-			</table>
-		</div>
-	</div>
-
-	<div class='timetable'></div>
-
-	
-	<!--footer yg aku design skali dgn link to dev. team-->
+	<!--aku tambah design unter header bg nampak kemas dan lagi elok also link ke istudent portal dkt gmbar uitm-->
 	<table class="bannerapp">
+		<tr>
+			<td align="center" id="deslogouitm">
+				<a href="http://istudent.uitm.edu.my/nsp/home/main.asp" title="UiTM Student Portal" alt="UiTM Student Portal" target="blank">
+					<img style="width 50px; height:110px" src="Uitm.jpg" width="230px"/>
+				</a>
+			</td>
+			<td align="center" id="destitle">
+				<h1 style="color:white" id="project_title">
+				UiTM Timetable<br>
+				Generator
+				</h1>
+			</td>
+		</tr>
+	</table>
+	<br><br>
+	<!-- experimental feature -->
+	<button type="button" class="button -dark login">Login to iStudent</button>
+
+	<pre>Select faculty/campus from list below</pre>
+
+	<label>
+		<select name='fakulti' id="listfaculty">
+			<option value=''>---SELECT FACULTY---</option>
+			<!-- amek data kt icress -->
+			<!-- js akan automatik update data kt sini tiap2 kali run -->
+		</select>
+	</label>
+
+	<div id="select-table">
+		<table class='newtable'>
+			<tr>
+				<th>#</th>
+				<th>Subject</th>
+				<th>Group</th>
+			</tr>
+			<!-- js akan automatik tmbah new row kt sini -->
+		</table>
+	</div>
+	
+	<!-- generate timetable -->
+	<div class='timetable'></div>
+	<br><br><br>
+
+</div> <!-- end wrapper -->
+
+	<!--footer yg aku design skali dgn link to dev. team-->
+	<table class="bannerappfooter">
 		<tr>
 			<td align="center">
 				<table id="destabletodevteam">
