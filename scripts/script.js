@@ -74,6 +74,17 @@ document.querySelector('#listfaculty').onchange = function () {
 
             // take over automatic fetcher from .login
             if(automatic_fetch == true) {
+
+                // remove if any subject non-exist in listsubject
+                if(lboxStatus == false) {
+                    for(k in fetched_data) {
+                        if(listsubject.indexOf(k) < 0) {
+                            delete fetched_data[k];
+                        }
+                    }
+                }
+
+                // jump to processing function
                 processCourses();
             }
 
@@ -101,12 +112,13 @@ var processCourses = function () {
         }
 
         // add into dictionary for later
-        group_prev[index_list] = fetched_data[k];
+        group_prev[index_list] = fetched_data[index];
 
         // delete each one element until "fetched_data" is empty
         delete fetched_data[index];
 
         var select_subject = document.querySelectorAll('.select-subject')[index_list++];
+
         select_subject.value = index; // key = subject
 
         // because .select-subject was created dynamically
@@ -136,7 +148,7 @@ var processCourses = function () {
             index_list++; // go to its next element
         }
 
-
+        // reset all data
         fetched_data = null;
         automatic_fetch = false;
         group_prev = {};
@@ -146,9 +158,8 @@ var processCourses = function () {
         var loadingBox = document.querySelector('#loadingBox');
         lboxStatus = true;
         loadingBox.style.display = 'none';
-
     }
-}
+};
 
 /*
  * using event delegation to set event to dynamic created element
@@ -323,7 +334,8 @@ document.querySelector('.login').onclick = function (e) {
     vex.dialog.open({
         message: 'Enter your UiTM\'s ID no (matrix no.) :',
         input: [
-        '<input name="id" type="text" placeholder="Student\'s matrix ID" required />'
+        '<input name="id" type="text" placeholder="Student\'s matrix ID" required />' +
+        '(This is alpha feature! Consider manual adjusting if it doesn\'t works)'
         ].join(''),
         buttons: [
         extend({}, vex.dialog.buttons.YES, { text: 'Automatic fetch!' }),

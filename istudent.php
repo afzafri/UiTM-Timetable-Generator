@@ -81,7 +81,7 @@ class IStudent {
         // get the courses data from istudent
         if($this->courses == null) {
 
-            preg_match_all('#title="(.*?)".*php\?cid=(.*?)&#', $this->requestData(), $courses);
+            preg_match_all('/--\>\n.*title="(.*?)".*php\?cid=(.*?)&/', $this->requestData(), $courses);
 
             if(empty($courses[0])) {
 
@@ -90,8 +90,8 @@ class IStudent {
                 $this->getCoursesAlternative();
 
             } else {
-                for($i = 0; $i < count($courses[1])-1; $i += 2) {
-                    $this->courses[$courses[1][$i]] = $courses[1][$i+1];
+                for($i = 0; $i < count($courses[1]); $i++) {
+                    $this->courses[$courses[2][$i]] = $courses[1][$i]; // [subject] = group
                 }
             }
         }
