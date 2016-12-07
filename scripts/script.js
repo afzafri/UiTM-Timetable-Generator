@@ -1,22 +1,29 @@
 // js native equivalent of jQuery $(document).ready(function {..});
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    doRequest("api.php?getlist", null, true, function (data) {
+    try {
 
-        var list = JSON.parse(data);
-        var elem = document.querySelector('#listfaculty');
+        doRequest("api.php?getlist", null, true, function (data) {
 
-        for (var i = 0; i < list.length; i++) {
+            var list = JSON.parse(data);
+            var elem = document.querySelector('#listfaculty');
 
-            var el = document.createElement('option');
-            el.value = list[i].code;
-            el.innerHTML = list[i].fullname;
+            for (var i = 0; i < list.length; i++) {
 
-            elem.appendChild(el);
-        }
-    });
+                var el = document.createElement('option');
+                el.value = list[i].code;
+                el.innerHTML = list[i].fullname;
 
-    vex.defaultOptions.className = 'vex-theme-os';
+                elem.appendChild(el);
+            }
+        });
+
+        vex.defaultOptions.className = 'vex-theme-os';
+
+    } catch (e) {
+        alertify.delay(10000).error(e);
+        blockLoadingBox(false);
+    }
 
 });
 
@@ -334,8 +341,8 @@ document.querySelector('.newtable').onchange = function (e) {
             // add event
             for (var i = 0; i < Object.keys(info).length; i++) {
                 timetable.addEvent(info[i].name, info[i].loc,
-                    new Date(0, 0, 0, info[i].startH, info[i].startM),
-                    new Date(0, 0, 0, info[i].endH, info[i].endM), '#');
+                        new Date(0, 0, 0, info[i].startH, info[i].startM),
+                        new Date(0, 0, 0, info[i].endH, info[i].endM), '#');
             }
 
             var renderer = new Timetable.Renderer(timetable);
@@ -360,11 +367,11 @@ document.querySelector('.login').onclick = function (e) {
         vex.dialog.open({
             message: 'Enter your UiTM\'s ID no (matrix no.) :',
             input: [
-                '<input name="id" type="text" placeholder="Student\'s matrix ID" required />' +
-                '(This is alpha feature! Consider manual adjusting if it doesn\'t works)'
+            '<input name="id" type="text" placeholder="Student\'s matrix ID" required />' +
+            '(This is alpha feature! Consider manual adjusting if it doesn\'t works)'
             ].join(''),
             buttons: [
-                extend({}, vex.dialog.buttons.YES, {text: 'Automatic fetch!'}),
+            extend({}, vex.dialog.buttons.YES, {text: 'Automatic fetch!'}),
             ],
             callback: function (formData) {
                 if (formData) {
@@ -412,9 +419,9 @@ function addNewRow() {
         // sorry huduh gila kot :(((
 
         elem.innerHTML = '\
-                     <td width="50px">' + (elems.length + 1) + '</td>\
-                     <td><select class="select-subject"></select></td>\
-                     <td><select class="select-group"></select></td>';
+                         <td width="50px">' + (elems.length + 1) + '</td>\
+                         <td><select class="select-subject"></select></td>\
+                         <td><select class="select-group"></select></td>';
 
         document.querySelector('.newtable tbody').appendChild(elem);
 
@@ -439,14 +446,14 @@ function isClash(canuse) {
                 var datadst = group[ssubjdst.value][canuse[j].value];
 
                 /*
-                 Object
-                 1 : "11:00am"
-                 2 : "11:50am"
-                 3 : "Monday"
-                 4 : "Full Time"
-                 5 : "First Timer and Repeater"
-                 6 : "C303"
-                 */
+                   Object
+                   1 : "11:00am"
+                   2 : "11:50am"
+                   3 : "Monday"
+                   4 : "Full Time"
+                   5 : "First Timer and Repeater"
+                   6 : "C303"
+                   */
 
                 for (var z = 0; z < datasrc.length; z++) {
                     for (var x = 0; x < datadst.length; x++) {
@@ -463,18 +470,18 @@ function isClash(canuse) {
 
                             /* here is what happening
 
-                             how can we check if time is clashing?
+                               how can we check if time is clashing?
 
-                             algo that I used is, first we check if (src starttime & src endtime) is lower than dst startime
-                             second condition is, we check if (src starttime & src endtime) is higher than dst endtime
+                               algo that I used is, first we check if (src starttime & src endtime) is lower than dst startime
+                               second condition is, we check if (src starttime & src endtime) is higher than dst endtime
 
-                             if we got both of it correct, then we know that both time isn't clashing
+                               if we got both of it correct, then we know that both time isn't clashing
 
-                             then how to know if they're clashing?
+                               then how to know if they're clashing?
 
-                             easy! we just negate `cond` to get the other one, example our current condition is true,
-                             to get the other condition, just negate the `cond` using ! -> !cond
-                             */
+                               easy! we just negate `cond` to get the other one, example our current condition is true,
+                               to get the other condition, just negate the `cond` using ! -> !cond
+                               */
                             var cond = (stimesrc < stimedst && etimesrc <= stimedst) ||
                                 (stimesrc >= etimedst && etimesrc > etimedst);
 
