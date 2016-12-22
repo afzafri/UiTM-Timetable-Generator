@@ -352,6 +352,9 @@ document.querySelector('.newtable').onchange = function (e) {
 
             renderer.draw('.timetable'); // any css selector
 
+            // append download timetable button
+            document.getElementById("btn-download").innerHTML = "<button onclick='return saveImg()' class='button -dark' title='Save timetable as PNG image'>Save Timetable</button><br><br>";
+
         }
 
     } catch (e) {
@@ -655,3 +658,18 @@ function extend(out) {
 
     return out;
 };
+
+// Save (download) timetable as image
+function saveImg() {
+    // use html2canvas js library, to convert the content into html5 "canvas"
+    var timearea = document.getElementById("timetable");
+    html2canvas(timearea, {
+      onrendered: function(canvas) {
+            // create new hyperlink with download attribute, set the image url, auto click the link to download
+            var link = document.createElement('a');
+            link.download = "timetable.png";
+            link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+            link.click();
+        }
+    });
+}
