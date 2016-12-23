@@ -3,7 +3,7 @@
 Fetch and generate Timetable from iCress UiTM
 
 ## Created By :
-1. Afif Zafri, Mohd Shahril & Syed Mohd Danial
+1. Afif Zafri, Mohd Shahril & Syed Muhamad Danial
 2. Created Date : 24/1/16
 3. Contact Us :
   - http://fb.me/afzafri
