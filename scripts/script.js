@@ -663,6 +663,11 @@ function extend(out) {
 function saveImg() {
 
     try {
+        // set viewport meta width, so even on mobile, page will rendered desktop mode. needed for full screenshot
+        var element = document.getElementsByName("viewport")[0]; 
+        element.setAttribute("content", ""); 
+        document.body.style.zoom="60%"; // zoom out the page, for low res screen
+
         // use html2canvas js library, to convert the content into html5 "canvas"
         var timearea = document.getElementById("timetable");
         html2canvas(timearea, {
@@ -672,6 +677,10 @@ function saveImg() {
                 link.download = "timetable.png";
                 link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
                 link.click();
+
+                // restore back the responsive viewport meta and zoom leve
+                element.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"); 
+                document.body.style.zoom="100%";
             }
         });
     }
