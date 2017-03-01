@@ -1,8 +1,9 @@
+
 // js native equivalent of jQuery $(document).ready(function {..});
 document.addEventListener("DOMContentLoaded", function (event) {
 
     try {
-
+        
         doRequest("api.php?getlist", null, true, function (data) {
 
             var list = JSON.parse(data);
@@ -119,7 +120,7 @@ var processCourses = function () {
 
             var index = null;
 
-            // trick to get first key property from object
+            // (bad) trick to get first key property from object
             for (var k in fetched_data) {
                 index = k;
                 break;
@@ -179,7 +180,7 @@ var processCourses = function () {
 };
 
 /*
- * using event delegation to set event to dynamic created element
+ * using event delegation to set an event to the dynamic created elements
  * guide : https://davidwalsh.name/event-delegate
  * other reference : http://javascript.info/tutorial/bubbling-and-capturing
  */
@@ -241,13 +242,13 @@ document.querySelector('.newtable').onchange = function (e) {
                     if (automatic_fetch == true && Object.keys(fetched_data).length > 0) {
 
                         // create mousedown event on .select-subject based on new index_list value
-                        // this is to ensure that javascript load all the subjects before automatic system do it jobs
+                        // this is to ensure that javascript loads all the subjects before automatic system do it jobs
                         document.querySelectorAll('.select-subject')[index_list].dispatchEvent(new CustomEvent('mousedown', {bubbles: true}));
                     }
 
                 };
 
-                // fetch data if it not exist in Object data yet
+                // fetch data if it does not exist in Object data yet
                 if (!group[subject]) {
                     doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty, false, function (data) {
                         if (data != '') {
@@ -267,7 +268,7 @@ document.querySelector('.newtable').onchange = function (e) {
             var datagroup = [];
             var canuse = [];
 
-            // filter any select whos currently selecting empty option
+            // filter any select who is currently selecting empty option
             for (var i = 0; i < groups.length; i++) {
                 if (groups[i].selectedIndex >= 0 && groups[i].value != '') {
 
@@ -280,7 +281,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
             var clashCheck = isClash(canuse);
 
-            // check if group time is clashing
+            // check if group times are clashing
             if (clashCheck) {
                 alertify.error("Timetable clash! Please choose another groups.");
             }
@@ -347,7 +348,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
             var renderer = new Timetable.Renderer(timetable);
 
-            // remove previous table before draw new one
+            // remove previous table before drawing new one
             document.querySelector('.timetable').innerHTML = '';
 
             renderer.draw('.timetable'); // any css selector
@@ -380,8 +381,8 @@ document.querySelector('.login').onclick = function (e) {
                     blockLoadingBox(true);
 
                     doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
-                        if (data != '') {
 
+                        if (data != '') {
 
                             data = JSON.parse(data);
 
@@ -445,16 +446,6 @@ function isClash(canuse) {
                 var ssubjdst = parents(canuse[j], '.row-select').querySelector('.select-subject');
                 var datadst = group[ssubjdst.value][canuse[j].value];
 
-                /*
-                   Object
-                   1 : "11:00am"
-                   2 : "11:50am"
-                   3 : "Monday"
-                   4 : "Full Time"
-                   5 : "First Timer and Repeater"
-                   6 : "C303"
-                   */
-
                 for (var z = 0; z < datasrc.length; z++) {
                     for (var x = 0; x < datadst.length; x++) {
 
@@ -462,31 +453,74 @@ function isClash(canuse) {
                         // then check if time is clash
                         if (datasrc[z][3] === datadst[x][3]) {
 
+                            // time 1
                             var stimesrc = convertDate(datasrc[z][1]);
                             var etimesrc = convertDate(datasrc[z][2]);
 
+                            // time 2
                             var stimedst = convertDate(datadst[x][1]);
                             var etimedst = convertDate(datadst[x][2]);
 
-                            /* here is what happening
+                            /*  -- Here on how it works --
 
-                               how can we check if time is clashing?
+                                So let us ask a simple question, given two times, how to 
+                                check if both are clashing against each others?
 
-                               algo that I used is, first we check if (src starttime & src endtime) is lower than dst startime
-                               second condition is, we check if (src starttime & src endtime) is higher than dst endtime
+                                Simple observations :
 
-                               if we got both of it correct, then we know that both time isn't clashing
+                                1)
 
-                               then how to know if they're clashing?
+                                    Time 1: 2.00 PM - 4.00 PM  
+                                    Time 2: 3.45 PM - 5.00 PM 
 
-                               easy! we just negate `cond` to get the other one, example our current condition is true,
-                               to get the other condition, just negate the `cond` using ! -> !cond
+                                        time clashing -----------
+                                                                |
+                                                                |
+                                                                ▼
+                                    ----------------------------------
+                                    |       2.00 PM - 4.00 PM        |
+                                    ----------------------------------
+                                                                ------------------------------
+                                                                |       3.45 PM - 5.00 PM    |
+                                                                ------------------------------
+
+                                2)
+                                    
+                                    Time 1: 2.00 PM - 4.00 PM  
+                                    Time 2: 4.15 PM - 5.00 PM 
+
+                                                time not clashing --------
+                                                                         |
+                                                                         |
+                                                                         ▼
+                                    ----------------------------------
+                                    |       2.00 PM - 4.00 PM        |
+                                    ----------------------------------
+                                                                           ------------------------------
+                                                                           |       4.15 PM - 5.00 PM    |
+                                                                           ------------------------------
+
+                                So from these two simple observations, we can derive a pretty simple algorithm, which 
+                                sufficiently follows below rules :
+
+                                    1) If time1 <= time2, then times aren't clashing
+                                    2) If time1 >= time2, then times aren't clashing
+
+                                So, back to our original question, how to check if times are clashing? Well, taking the counter-example 
+                                from above two rules, then we can deduce in order the times to clash, both of above rules must be INCORRECT.
+
+                                    if ( incorrect(time1 <= time2) and incorrect(time1 >= time2) ) {
+                                        # times are clashing
+                                    }
+                                
                                */
-                            var cond = (stimesrc < stimedst && etimesrc <= stimedst) ||
-                                (stimesrc >= etimedst && etimesrc > etimedst);
+
+                            // check if time are clashing
+                            var cond_before = stimesrc < stimedst && etimesrc <= stimedst;
+                            var conf_after  = stimesrc >= etimedst && etimesrc > etimedst
 
                             // if clashing, then return true
-                            if (!cond) {
+                            if (!cond_before && !conf_after) {
                                 return true;
                             }
                         }
@@ -575,7 +609,7 @@ function doRequest(url, postdata, async, func) {
 
                     } else if (this.responseText == '[]') {
 
-                        alertify.delay(10000).error("Request return no data!\nNo internet connection or server problem?");
+                        alertify.delay(10000).error("Request returns no data!\nNo internet connection or server problem?");
 
                     } else if (this.responseText.includes("Alert_Error")) {
 
@@ -584,7 +618,7 @@ function doRequest(url, postdata, async, func) {
 
                     } else {
 
-                        alertify.delay(5000).success("Fetching data success!");
+                        alertify.delay(5000).success("Fetching data succeed!");
                         func(this.responseText);
                     }
 
