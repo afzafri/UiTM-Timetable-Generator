@@ -353,8 +353,8 @@ document.querySelector('.newtable').onchange = function (e) {
 
             renderer.draw('.timetable'); // any css selector
 
-            // append download timetable button
-            document.getElementById("btn-download").innerHTML = "<button onclick='return saveImg()' class='button -dark' title='Save timetable as PNG image'>Export Timetable to Image (Experimental)</button><br><br>";
+            // show tools
+            document.getElementById("tools").style.display = 'block';
 
         }
 
@@ -724,3 +724,4 @@ function saveImg() {
     }
     
 }
+
