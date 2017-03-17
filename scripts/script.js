@@ -732,15 +732,16 @@ function saveImg() {
 }
 
 // Change timetable events colours scheme (background, border, text)
-function changeColours()
+function changeColours(type)
 {
     // fetch list of events nodes
     var events = document.getElementsByClassName('time-entry');
 
     // fetch choosen colors
-    var bg_color = document.getElementById('change_bg_color').value;
-    var border_color = document.getElementById('change_border_color').value;
-    var text_color = document.getElementById('change_text_color').value;
+    // check if type is set to 'default', set var value to default colors
+    var bg_color = (type != 'default') ? document.getElementById('change_bg_color').value : '#EC6A5E';
+    var border_color = (type != 'default') ? document.getElementById('change_border_color').value : '#e32c1b';
+    var text_color = (type != 'default') ? document.getElementById('change_text_color').value : '#ffffff';
     
     // iterate through the nodes, change the colors
     for(var i=0; i<events.length; i++)
@@ -748,6 +749,14 @@ function changeColours()
         events[i].style.backgroundColor = bg_color;
         events[i].style.borderColor = border_color;
         events[i].style.color = text_color;
+    }
+
+    // if type is set to 'default' reset back the colors pickers to default colors
+    if(type == 'default')
+    {
+        document.getElementById('change_bg_color').value = '#EC6A5E';
+        document.getElementById('change_border_color').value = '#e32c1b';
+        document.getElementById('change_text_color').value = '#ffffff';
     }
 }
 
