@@ -725,6 +725,7 @@ function saveImg() {
     
 }
 
+// Change timetable events colours scheme (background, border, text)
 function changeColours()
 {
     // fetch list of events nodes
@@ -741,7 +742,6 @@ function changeColours()
         events[i].style.backgroundColor = bg_color;
         events[i].style.borderColor = border_color;
         events[i].style.color = text_color;
-
     }
 }
 
