@@ -107,9 +107,9 @@ document.querySelector('#listfaculty').onchange = function () {
 
         // reset colors input and hide the tools section before render new table
         document.getElementById('tools').style.display = 'none';
-        document.getElementById('change_bg_color').value = '000000';
-        document.getElementById('change_border_color').value = '000000';
-        document.getElementById('change_text_color').value = '000000';
+        document.getElementById('change_bg_color').value = '#EC6A5E';
+        document.getElementById('change_border_color').value = '#e32c1b';
+        document.getElementById('change_text_color').value = '#ffffff';
 
     } catch (e) {
         alertify.delay(10000).error(e);
