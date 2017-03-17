@@ -105,6 +105,12 @@ document.querySelector('#listfaculty').onchange = function () {
         // change property of select-table depend on user selected choice
         document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
 
+        // reset colors input and hide the tools section before render new table
+        document.getElementById('tools').style.display = 'none';
+        document.getElementById('change_bg_color').value = '000000';
+        document.getElementById('change_border_color').value = '000000';
+        document.getElementById('change_text_color').value = '000000';
+
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
