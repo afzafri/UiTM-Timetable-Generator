@@ -73,23 +73,25 @@ A little update to the frontend, now support mobile view. by - afif
 	<!-- generate timetable -->
 	<div class='timetable' id='timetable'></div>
 
-	<!-- tools -->
+	<!-- tools list -->
 	<div id="tools" style="display: none;">
 
 		<!-- change timetable event colours -->
-		<b><u>Customize colours</u></b>:
 		<center>
-			<table>
-				<tr>
-					<td>Background:</td> <td><input id="change_bg_color" type="color" onchange="return changeColours()"></td>
-				</tr>
-				<tr>
-					<td>Border:</td> <td><input id="change_border_color" type="color" onchange="return changeColours()"></td>
-				</tr>
-				<tr>
-					<td>Text:</td> <td><input id="change_text_color" type="color" onchange="return changeColours()"></td>
-				</tr>
-			</table>
+			<fieldset style="display: inline;">
+				<legend><b><u>Customize colours</u></b></legend>
+				<table>
+					<tr>
+						<td>Background:</td> <td><input id="change_bg_color" type="color" onchange="return changeColours()"></td>
+					</tr>
+					<tr>
+						<td>Border:</td> <td><input id="change_border_color" type="color" onchange="return changeColours()"></td>
+					</tr>
+					<tr>
+						<td>Text:</td> <td><input id="change_text_color" type="color" onchange="return changeColours()"></td>
+					</tr>
+				</table>
+			</fieldset>
 		</center>
 		<br><br>
 
