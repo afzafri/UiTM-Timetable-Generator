@@ -727,9 +727,14 @@ function saveImg() {
 
 function changeColours()
 {
+    // fetch the choosen colour value and list of events nodes
     var newcolor = document.getElementById('change_colours').value;
     var events = document.getElementsByClassName('time-entry');
 
-    console.log(events);
+    // iterate through the nodes, change the colors
+    for(var i=0; i<events.length; i++)
+    {
+        events[i].style.backgroundColor = newcolor;
+    }
 }
 
