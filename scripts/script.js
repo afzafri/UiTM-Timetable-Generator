@@ -725,3 +725,11 @@ function saveImg() {
     
 }
 
+function changeColours()
+{
+    var newcolor = document.getElementById('change_colours').value;
+    var events = document.getElementsByClassName('time-entry');
+
+    console.log(events);
+}
+
