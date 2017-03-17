@@ -727,14 +727,21 @@ function saveImg() {
 
 function changeColours()
 {
-    // fetch the choosen colour value and list of events nodes
-    var newcolor = document.getElementById('change_colours').value;
+    // fetch list of events nodes
     var events = document.getElementsByClassName('time-entry');
 
+    // fetch choosen colors
+    var bg_color = document.getElementById('change_bg_color').value;
+    var border_color = document.getElementById('change_border_color').value;
+    var text_color = document.getElementById('change_text_color').value;
+    
     // iterate through the nodes, change the colors
     for(var i=0; i<events.length; i++)
     {
-        events[i].style.backgroundColor = newcolor;
+        events[i].style.backgroundColor = bg_color;
+        events[i].style.borderColor = border_color;
+        events[i].style.color = text_color;
+
     }
 }
 
