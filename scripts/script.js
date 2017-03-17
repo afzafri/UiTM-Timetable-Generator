@@ -106,10 +106,8 @@ document.querySelector('#listfaculty').onchange = function () {
         document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
 
         // reset colors input and hide the tools section before render new table
+        changeColours('default');
         document.getElementById('tools').style.display = 'none';
-        document.getElementById('change_bg_color').value = '#EC6A5E';
-        document.getElementById('change_border_color').value = '#e32c1b';
-        document.getElementById('change_text_color').value = '#ffffff';
 
     } catch (e) {
         alertify.delay(10000).error(e);
@@ -359,7 +357,8 @@ document.querySelector('.newtable').onchange = function (e) {
 
             renderer.draw('.timetable'); // any css selector
 
-            // show tools
+            // reset colors input and show the tools section before render new table
+            changeColours('default');
             document.getElementById("tools").style.display = 'block';
 
         }
