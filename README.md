@@ -19,6 +19,8 @@ Fetch and generate Timetable from iCress UiTM
 4. UPDATE 4 : 20/9/16 - Major design changes by Syed Danial
 5. UPDATE 5 : 1/12/16 - Little update, fixed floating footer issue, and added mobile view support
 6. UPDATE 6 : 22/12/16 - Added feature for saving the timetable to PNG image file (experimental)
+7. UPDATE 7 : 17/3/17 - Added feature for customizing the events colours scheme (background, border, text)
+
 
 ## Credit
 1. Mohd Shahril - Regex code for fetching and sort data (1st version), Major code overhaul and improvement
