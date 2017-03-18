@@ -84,16 +84,22 @@ A little update to the frontend, now support mobile view. by - afif
 		<center>
 			<fieldset style="display: inline;">
 				<legend><b><u>Customize colours</u></b></legend>
-				<table>
+
+				<table id="subjectColorTable" border="1px" style="border-collapse: collapse; text-align: center;">
+
 					<tr>
-						<td>Background:</td> <td><input id="change_bg_color" type="color" onchange="return changeColours()"></td>
+						<th>Subject</th>
+						<th>Background</th>
+						<th>Border</th>
+						<th>Text</th>
 					</tr>
 					<tr>
-						<td>Border:</td> <td><input id="change_border_color" type="color" onchange="return changeColours()"></td>
+						<td>All</td>
+						<td><input id="change_bg_color" type="color" onchange="return changeColours()"></td>
+						<td><input id="change_border_color" type="color" onchange="return changeColours()"></td>
+						<td><input id="change_text_color" type="color" onchange="return changeColours()"></td>
 					</tr>
-					<tr>
-						<td>Text:</td> <td><input id="change_text_color" type="color" onchange="return changeColours()"></td>
-					</tr>
+
 				</table>
 				<br>
 				<a href="#" onclick="return changeColours('default')"><i>Reset default</i></a>
