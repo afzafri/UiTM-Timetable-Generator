@@ -763,6 +763,31 @@ function changeColours(type)
     }
 }
 
+// Change event colours scheme for each subject
+function changeSubjectColours(subject)
+{
+    // fetch list of events nodes
+    var events = document.getElementsByClassName('time-entry');
+
+    // fetch choosen colors
+    var bg_color = document.getElementById('change_bg_color'+subject).value;
+    var border_color = document.getElementById('change_border_color'+subject).value;
+    var text_color = document.getElementById('change_text_color'+subject).value;
+    
+    // iterate through the nodes, change the colors
+    for(var i=0; i<events.length; i++)
+    {
+        var name = events[i].getElementsByTagName('h5')[0].innerHTML;
+
+        if(name == subject)
+        {
+            events[i].style.backgroundColor = bg_color;
+            events[i].style.borderColor = border_color;
+            events[i].style.color = text_color;
+        }
+    }
+}
+
 // function to fetch and list down the subjects for changing colors
 function listSubjectsColour()
 {
@@ -790,10 +815,12 @@ function listSubjectsColour()
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
 
+        var funcname = "changeSubjectColours('"+subjectsname[i]+"')";
+
         cell1.innerHTML = subjectsname[i];
-        cell2.innerHTML = '<input id="change_bg_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
-        cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
-        cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell2.innerHTML = '<input id="change_bg_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
+        cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
+        cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
     }
     
 }
