@@ -106,6 +106,7 @@ document.querySelector('#listfaculty').onchange = function () {
         document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
 
         // reset colors input and hide the tools section before render new table
+        resetTableSubject();
         changeColours('default');
         listSubjectsColour();
         document.getElementById('tools').style.display = 'none';
@@ -359,6 +360,7 @@ document.querySelector('.newtable').onchange = function (e) {
             renderer.draw('.timetable'); // any css selector
 
             // reset colors input and show the tools section before render new table
+            resetTableSubject();
             changeColours('default');
             listSubjectsColour();
             document.getElementById("tools").style.display = 'block';
@@ -735,8 +737,6 @@ function saveImg() {
 // Change timetable events colours scheme (background, border, text)
 function changeColours(type)
 {
-    resetTableSubject();
-
     // fetch list of events nodes
     var events = document.getElementsByClassName('time-entry');
 
@@ -791,9 +791,9 @@ function listSubjectsColour()
         var cell4 = row.insertCell(3);
 
         cell1.innerHTML = subjectsname[i];
-        cell2.innerHTML = '<input id="change_bg_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
-        cell3.innerHTML = '<input id="change_border_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
-        cell4.innerHTML = '<input id="change_text_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell2.innerHTML = '<input id="change_bg_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
     }
     
 }
