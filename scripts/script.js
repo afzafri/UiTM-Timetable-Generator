@@ -107,7 +107,7 @@ document.querySelector('#listfaculty').onchange = function () {
 
         // reset colors input and hide the tools section before render new table
         changeColours('default');
-        document.getElementById('changeColoursTool').style.display = 'none';
+        listSubjectsColour();
         document.getElementById('tools').style.display = 'none';
 
     } catch (e) {
@@ -360,7 +360,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
             // reset colors input and show the tools section before render new table
             changeColours('default');
-            document.getElementById('changeColoursTool').style.display = 'none';
+            listSubjectsColour();
             document.getElementById("tools").style.display = 'block';
 
         }
@@ -735,6 +735,8 @@ function saveImg() {
 // Change timetable events colours scheme (background, border, text)
 function changeColours(type)
 {
+    resetTableSubject();
+
     // fetch list of events nodes
     var events = document.getElementsByClassName('time-entry');
 
@@ -777,8 +779,28 @@ function listSubjectsColour()
         }
     }
 
-    console.log(subjectsname);
+    // append list of subject with color input
+    var table = document.getElementById('subjectColorTable');
+    for(var i=0; i<subjectsname.length; i++)
+    {
+        var row = table.insertRow(i+2);
 
-    document.getElementById('changeColoursTool').style.display = 'block';
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+
+        cell1.innerHTML = subjectsname[i];
+        cell2.innerHTML = '<input id="change_bg_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell3.innerHTML = '<input id="change_border_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+        cell4.innerHTML = '<input id="change_text_color" type="color" onchange="return changeSubjectColours('+subjectsname[i]+')">';
+    }
     
+}
+
+// reset table, remove current list of subjects
+function resetTableSubject()
+{
+    var table = document.getElementById('subjectColorTable');
+    table.getElementsByTagName('tbody')[0].innerHTML = "<tr>" + table.rows[0].innerHTML + "</tr><tr>" + table.rows[1].innerHTML + "</tr>"; 
 }
