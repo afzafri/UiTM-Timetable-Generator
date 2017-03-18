@@ -818,9 +818,9 @@ function listSubjectsColour()
         var funcname = "changeSubjectColours('"+subjectsname[i]+"')";
 
         cell1.innerHTML = subjectsname[i];
-        cell2.innerHTML = '<input id="change_bg_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
-        cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
-        cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return changeSubjectColours('+funcname+')">';
+        cell2.innerHTML = '<input id="change_bg_color'+subjectsname[i]+'" type="color" onchange="return '+funcname+'">';
+        cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return '+funcname+'">';
+        cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return '+funcname+'">';
     }
     
 }
