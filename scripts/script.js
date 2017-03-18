@@ -107,6 +107,7 @@ document.querySelector('#listfaculty').onchange = function () {
 
         // reset colors input and hide the tools section before render new table
         changeColours('default');
+        document.getElementById('changeColoursTool').style.display = 'none';
         document.getElementById('tools').style.display = 'none';
 
     } catch (e) {
@@ -359,6 +360,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
             // reset colors input and show the tools section before render new table
             changeColours('default');
+            document.getElementById('changeColoursTool').style.display = 'none';
             document.getElementById("tools").style.display = 'block';
 
         }
@@ -759,3 +761,24 @@ function changeColours(type)
     }
 }
 
+// function to fetch and list down the subjects for changing colors
+function listSubjectsColour()
+{
+    // fetch list of events nodes
+    var events = document.getElementsByClassName('time-entry');
+    var subjectsname = [];
+
+    for(var i=0; i<events.length; i++)
+    {
+        var name = events[i].getElementsByTagName('h5')[0].innerHTML;
+        if(subjectsname.indexOf(name) == -1)
+        {
+            subjectsname.push(name);
+        }
+    }
+
+    console.log(subjectsname);
+
+    document.getElementById('changeColoursTool').style.display = 'block';
+    
+}
