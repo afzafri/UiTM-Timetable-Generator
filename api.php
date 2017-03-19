@@ -1,9 +1,9 @@
 <?php
 
-require_once('./istudent.php');
-require_once('./icress_module.php');
+require_once('./modules/istudent_module.php');
+require_once('./modules/icress_module.php');
 
-CACHE_TYPE == 'file' ? require_once('./file_module.php') : require_once('./sqlite_module.php');
+CACHE_TYPE == 'file' ? require_once('./modules/file_module.php') : require_once('./modules/sqlite_module.php');
 
 if(isset($_GET['getlist'])) {
     die(CACHE_TYPE == 'file' ? file_getJadual()
