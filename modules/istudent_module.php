@@ -17,9 +17,24 @@ class IStudent {
     // cache bottom.php's result
     private $data = null;
 
-    // traditional case matching way
+    // <regex> => "Icress Code"
     private $referer = array(
-        "Arau" => "AR"
+        "Arau" => "AR", # perlis
+        "Seri Iskandar|Ipoh|Teluk Intan|Tapah" => "SI", # perak
+        "Jengka|Kuantan|Raub|Bukit Sekilau" => "JK", # pahang
+        "Machang|Kota Bharu" => "MA", # kelantan
+        "Segamat|Johor Bahru|Larkin|Pasir Gudang" => "SG", # johor
+        "Sungai Petani|Alor Setar" => "SP", # kedah
+        "Alor Gajah|Melaka|Jasin" => "AG", # melaka
+        "Kuala Pilah|Seremban|Rembau" => "KP", # negeri sembilan
+        "Bukit Mertajam|Bertam|Balik Pulau" => "BT", # pulau pinang 
+        "Samarahan|Kuching|Mukah|Miri" => "SA", # sarawak
+        "Kota Kinabalu|Tawau" => "KK", # sabah
+        "Dungun|Marang|Kuala Terengganu|Bukit Besi" => "DU", # terengganu
+
+        # special case (later i'll handle this case)
+        "Shah Alam|Dengkil|Kuala Selangor|Seksyen 17|Putra Jaya|Golden Hope|Sg. Buloh|Selayang|Puncak Alam|Puncak Perdana" => "SELANGOR",
+
     );
 
     function __construct($student_id) {
@@ -67,7 +82,7 @@ class IStudent {
     public function getUiTMCode() {
 
         foreach($this->referer as $refer => $kod) {
-            if(strpos($this->getUiTMStr(), $refer) !== false) {
+            if(preg_match("/" . $refer . "/i" , $this->getUiTMStr())) {
                 return $kod;
             }
         }
