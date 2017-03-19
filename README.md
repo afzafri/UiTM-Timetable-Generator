@@ -13,7 +13,7 @@ Fetch and generate Timetable from iCress UiTM
   - http://timetable.reaperz.net
   
 ## Changelogs
-1. UPDATE 1 : 10/4/16
+1. UPDATE 1 : 10/4/16 - Initial design
 2. UPDATE 2 : 13/4/16 - Major code overhaul, updated by Shahril
 3. UPDATE 3 : 20/9/16 - Another major code overhaul, added automatic timetable creator
 4. UPDATE 4 : 20/9/16 - Major design changes by Syed Danial
@@ -24,23 +24,27 @@ Fetch and generate Timetable from iCress UiTM
 
 ## Credit
 1. Mohd Shahril - Regex code for fetching and sort data (1st version), Major code overhaul and improvement
-2. Timetable.js
+2. Syed Muhammad Danial - Great UI improvement.
+3. Timetable.js
    - Webpage : http://timetablejs.org/
    - GitHub : https://github.com/Grible/timetable.js
-3. html2canvas
+4. html2canvas
    - Webpage : https://html2canvas.hertzen.com/
    - GitHub : https://github.com/niklasvh/html2canvas/
 
 ## Installation
 
 Drag and drop all files into your server/localhost.
+Adjust `config.php` that suite your need.
 
 ## Usage
 
-1. Choose number of subjects taken and click submit.
-2. Fill in the subjects code and groups for each subjects
-3. Click submit, and a timetable will be generated.
-4. Click print button if you want to print.
+1. Select faculty or campus.
+2. Select courses that you want the timetable to generate.
+3. (Optional) Change colour for each subjects.
+4. (Optional) Export the timetable image to your device.
+
+Note! : Automatic iStudent data fetcher is currently on experimental mode, consider manual adjusting if needed. 
 
 ## Contributing
 
