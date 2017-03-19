@@ -35,7 +35,7 @@ Fetch and generate Timetable from iCress UiTM
 ## Installation
 
 Drag and drop all files into your server/localhost.
-Adjust `config.php` that suite your need.
+Adjust `config.php` to suite your need.
 
 ## Usage
 
