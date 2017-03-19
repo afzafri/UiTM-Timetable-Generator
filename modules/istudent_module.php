@@ -33,7 +33,7 @@ class IStudent {
             'page=simsweb.uitm.edu.my&nopelajar=' . $student_id . '&login=' . $student_id . 
             '&search.x=210&search.y=57');
 
-        preg_match('/Set-Cookie: (.*?);/', $get, $out); // extract cookie
+        preg_match('#Set-Cookie: (.*?);#', $get, $out); // extract cookie
         $this->cookie = $out[1];
 
     }
@@ -54,7 +54,7 @@ class IStudent {
         if($this->uitm == null) {
 
             // extract uitm campus location
-            preg_match('/<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>/',
+            preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#',
                 $this->requestData(), $uitm); 
 
             $this->uitm = $uitm[1];
@@ -111,7 +111,7 @@ class IStudent {
             $get = http\http_request($this->url . "/Group/default.php?ttype=course&courseID=" . $course,
                 $this->cookie, NULL);
 
-            preg_match('/>(.*?)<\/a>/', $get, $group);
+            preg_match('#>(.*?)<\/a>#', $get, $group);
             $this->courses[$course] = $group[1];
 
         }
