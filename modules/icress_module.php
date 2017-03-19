@@ -33,7 +33,7 @@ function icress_getSubject($faculty, $subject) {
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
     $jadual = str_replace(array("\r", "\n"), '', $jadual);
-    preg_match_all('#<td>(.*?)</td>#i', $jadual, $outs);
+    preg_match_all('/<td>(.*?)</td>/i', $jadual, $outs);
     $splits = array_chunk(array_splice($outs[1], 7), 7);
     $new = array();
 
