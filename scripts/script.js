@@ -459,7 +459,7 @@ function isClash(canuse) {
                 var datadst = group[ssubjdst.value][canuse[j].value];
 
                 for (var z = 0; z < datasrc.length; z++) {
-                    for (var x = 0; x < datadst.length; x++) {
+                    for (var x = z+1; x < datadst.length; x++) {
 
                         // if in same day
                         // then check if time is clash
