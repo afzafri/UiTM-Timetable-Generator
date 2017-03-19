@@ -19,6 +19,7 @@ class IStudent {
 
     // <regex> => "Icress Code"
     private $referer = array(
+        
         "Arau" => "AR", # perlis
         "Seri Iskandar|Ipoh|Teluk Intan|Tapah" => "SI", # perak
         "Jengka|Kuantan|Raub|Bukit Sekilau" => "JK", # pahang
@@ -32,8 +33,8 @@ class IStudent {
         "Kota Kinabalu|Tawau" => "KK", # sabah
         "Dungun|Marang|Kuala Terengganu|Bukit Besi" => "DU", # terengganu
 
-        # special case (later i'll handle this case)
-        "Shah Alam|Dengkil|Kuala Selangor|Seksyen 17|Putra Jaya|Golden Hope|Sg. Buloh|Selayang|Puncak Alam|Puncak Perdana" => "SELANGOR",
+        # special case
+        "Shah Alam|Dengkil|Kuala Selangor|Seksyen 17|Putra Jaya|Golden Hope|Sg. Buloh|Selayang|Puncak Alam|Puncak Perdana" => "B",
 
     );
 

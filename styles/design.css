@@ -23,6 +23,7 @@ css for footer, fixed "floating" footer*/
     min-height: 100%;
     margin-bottom: -50px;
 }
+
 .bannerappfooter {
     position: absolute;
     height: 50px;
