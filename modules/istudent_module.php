@@ -48,8 +48,21 @@ class IStudent {
             'page=simsweb.uitm.edu.my&nopelajar=' . $student_id . '&login=' . $student_id . 
             '&search.x=210&search.y=57');
 
-        preg_match('#Set-Cookie: (.*?);#', $get, $out); // extract cookie
-        $this->cookie = $out[1];
+        // uitm perak uses it own subdomain for i-learn
+        if (strpos($get, "perak.i-learn.uitm.edu.my")) {
+
+            // extract redirect location
+            preg_match('/Location: (.*?)\n/', $get, $out);
+
+            // make further request
+            $get = http\http_request(trim($out[1]), NULL, NULL);
+
+            // change i-learn url
+            $this->url = "http://perak.i-learn.uitm.edu.my";
+        }
+
+        preg_match('/Set-Cookie: (.*?);/', $get, $out); // extract cookie
+        $this->cookie = $out[sizeof($out)-1];
 
     }
 
@@ -69,9 +82,7 @@ class IStudent {
         if($this->uitm == null) {
 
             // extract uitm campus location
-            preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#',
-                $this->requestData(), $uitm); 
-
+            preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#', $this->requestData(), $uitm);
             $this->uitm = $uitm[1];
 
         }
