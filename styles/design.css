@@ -371,12 +371,12 @@ label:after {
 }
 
 .timetable aside li, .timetable time li {
-    height: 80px;
+    height: 95px;
 }
 
 .timetable .time-entry,
 .timetable ul.room-timeline li:first-child .time-entry {
-    height: 79px;
+    height: 95px;
 }
 
 .room-timeline h5 {
