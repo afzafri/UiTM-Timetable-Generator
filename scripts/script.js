@@ -555,7 +555,7 @@ function convertDate(time) {
         // get either pm or am
         var dateIndi = time.substr(index - 1, 2);
 
-        if (dateIndi === 'pm' && getHour != 12) {
+        if (dateIndi === 'pm' && getHour < 12) {
             getHour += 12;
         }
 
