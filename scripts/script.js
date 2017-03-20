@@ -3,18 +3,15 @@
 document.addEventListener("DOMContentLoaded", function (event) {
 
     try {
-        
         doRequest("api.php?getlist", null, true, function (data) {
 
             var list = JSON.parse(data);
             var elem = document.querySelector('#listfaculty');
 
             for (var i = 0; i < list.length; i++) {
-
                 var el = document.createElement('option');
                 el.value = list[i].code;
                 el.innerHTML = list[i].fullname;
-
                 elem.appendChild(el);
             }
         });
@@ -198,11 +195,9 @@ document.querySelector('.newtable').onmousedown = function (e) {
         if (e.target && e.target.matches(".row-select:last-child .select-subject")) {
 
             for (var i = 0; i < listsubject.length; i++) {
-
                 var el = document.createElement('option');
                 el.value = listsubject[i];
                 el.innerHTML = listsubject[i];
-
                 e.target.appendChild(el);
             }
 
@@ -237,11 +232,9 @@ document.querySelector('.newtable').onchange = function (e) {
                     elem.innerHTML = '<option value="">Select group</option>';
 
                     for (k in group[subject]) {
-
                         var el = document.createElement('option');
                         el.value = k;
                         el.innerHTML = k;
-
                         elem.appendChild(el);
                     }
 
@@ -277,10 +270,8 @@ document.querySelector('.newtable').onchange = function (e) {
             // filter any select who is currently selecting empty option
             for (var i = 0; i < groups.length; i++) {
                 if (groups[i].selectedIndex >= 0 && groups[i].value != '') {
-
                     var ssubj = parents(groups[i], '.row-select').querySelector('.select-subject');
                     datagroup[ssubj.value] = group[ssubj.value][groups[i].value];
-
                     canuse.push(groups[i]);
                 }
             }
@@ -398,8 +389,6 @@ document.querySelector('.login').onclick = function (e) {
 
                             elemUiTMSelect.value = data['UiTMCode'];
                             elemUiTMSelect.dispatchEvent(new CustomEvent('change', {}));
-
-
                         }
                     });
                 }
