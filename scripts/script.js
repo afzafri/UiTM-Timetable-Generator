@@ -288,9 +288,8 @@ document.querySelector('.newtable').onchange = function (e) {
             var clashCheck = isClash(canuse);
 
             // check if group times are clashing
-            if (clashCheck) {
+            if (clashCheck)
                 alertify.error("Timetable clash! Please choose another groups.");
-            }
 
             var places = [];
             var info = [];
@@ -301,9 +300,8 @@ document.querySelector('.newtable').onchange = function (e) {
             for (var k in datagroup) {
 
                 // ignore drawing clashing data
-                if (clashCheck && Object.keys(datagroup).length > 1 && k.indexOf(getSubject) >= 0) {
+                if (clashCheck && Object.keys(datagroup).length > 1 && k.indexOf(getSubject) >= 0)
                     continue;
-                }
 
                 for (var j = 0; j < datagroup[k].length; j++) {
 
@@ -312,13 +310,8 @@ document.querySelector('.newtable').onchange = function (e) {
                     var startTime = convertDate(datagroup[k][j][1]);
                     var endTime = convertDate(datagroup[k][j][2]);
 
-                    if (startTime < minTime) {
-                        minTime = startTime;
-                    }
-
-                    if (endTime > maxTime) {
-                        maxTime = endTime;
-                    }
+                    minTime = Math.min(startTime, minTime);
+                    maxTime = Math.max(endTime, maxTime);
 
                     var start = startTime.toString().split('.');
                     var end = endTime.toString().split('.');
@@ -428,13 +421,9 @@ function addNewRow() {
 
         var elem = document.createElement('tr');
         elem.className = 'row-select';
-
-        // sorry huduh gila kot :(((
-
-        elem.innerHTML = '\
-                         <td width="50px">' + (elems.length + 1) + '</td>\
-                         <td><select class="select-subject"></select></td>\
-                         <td><select class="select-group"></select></td>';
+        elem.innerHTML = '<td width="50px">' + (elems.length + 1) + '</td>\
+                          <td><select class="select-subject"></select></td>\
+                          <td><select class="select-group"></select></td>';
 
         document.querySelector('.newtable tbody').appendChild(elem);
 
@@ -556,7 +545,7 @@ function convertDate(time) {
         // find am/pm index (using only 'm' character)
         var index = time.indexOf("m");
 
-        // compute real time length
+        // compute real time length (either am or pm)
         var getTime = time.substr(0, index - 1);
 
         // get hour & minute
