@@ -307,8 +307,8 @@ document.querySelector('.newtable').onchange = function (e) {
                     var start = startTime.toString().split('.');
                     var end = endTime.toString().split('.');
 
-                    var endFirst = !start[1] ? 0 : parseFloat(start[1] + (start[1].length == 1 ? '0' : ''));
-                    var endSecon = !end[1] ? 0 : parseFloat(end[1] + (end[1].length == 1 ? '0' : ''));
+                    var endFirst = !start[1] ? 0 : parseFloat(start[1]);
+                    var endSecon = !end[1] ? 0 : parseFloat(end[1]);
 
                     var name = '<h5>' + k + '</h5>' +
                         '<p><i>' + datagroup[k][j][6] + '</i></p>' +
@@ -317,9 +317,9 @@ document.querySelector('.newtable').onchange = function (e) {
                     info.push({
                         name: name,
                         loc: datagroup[k][j][3],
-                        startH: start[0],
+                        startH: parseFloat(start[0]),
                         startM: endFirst,
-                        endH: end[0],
+                        endH: parseFloat(end[0]),
                         endM: endSecon
                     });
                 }
