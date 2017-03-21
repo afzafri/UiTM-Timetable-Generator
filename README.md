@@ -2,6 +2,8 @@
 # UiTM Timetable Generator
 Fetch and generate Timetable from iCress UiTM
 
+Official website for this project: http://uitmtimetable.com/
+
 ## Created By :
 1. Afif Zafri, Mohd Shahril & Syed Muhamad Danial
 2. Created Date : 24/1/16
@@ -9,8 +11,6 @@ Fetch and generate Timetable from iCress UiTM
   - http://fb.me/afzafri
   - http://fb.me/mohdshahril.net
   - https://twitter.com/syedmdanial 
-4. Live Website :
-  - http://timetable.reaperz.net
   
 ## Changelogs
 1. UPDATE 1 : 10/4/16 - Initial design
@@ -31,6 +31,7 @@ Fetch and generate Timetable from iCress UiTM
 4. html2canvas
    - Webpage : https://html2canvas.hertzen.com/
    - GitHub : https://github.com/niklasvh/html2canvas/
+5. Muhammad Nabil - For sponsoring domain and hosting, thanks!
 
 ## Installation
 
