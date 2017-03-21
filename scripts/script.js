@@ -548,7 +548,7 @@ function convertDate(time) {
             getHour += 12;
         }
 
-        return parseFloat(getHour + '.' + getMinutes);
+        return getHour + '.' + getMinutes;
 
     } catch (e) {
         alertify.delay(10000).error(e);
