@@ -26,10 +26,15 @@ if(isset($_GET['getgroup'])) {
 
 if(isset($_GET['fetchDataMatrix'])) {
     if(!empty($_POST['studentId'])) {
-
+        
         try {
 
             $obj = new IStudent($_POST['studentId']);
+
+            if ($obj->error != null) {
+                throw new Exception(htmlentities($obj->error));
+            }
+
             $courses = $obj->getCourses();
             $uitmcode = $obj->getUiTMCode();
 

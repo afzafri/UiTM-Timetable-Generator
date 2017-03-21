@@ -17,6 +17,9 @@ class IStudent {
     // cache bottom.php's result
     private $data = null;
 
+    // error status of this object
+    public $error = null;
+
     // <regex> => "Icress Code"
     private $referer = array(
         
@@ -49,7 +52,11 @@ class IStudent {
             'page=simsweb.uitm.edu.my&nopelajar=' . $student_id . '&login=' . $student_id . 
             '&search.x=210&search.y=57');
 
-        // uitm perak uses it own subdomain for i-learn
+        if (empty($get)) {
+            $this->error = "iStudent login failed! Server maybe currently down right now.";
+            return;
+        }
+
         if (strpos($get, "perak.i-learn.uitm.edu.my")) {
 
             // extract redirect location
