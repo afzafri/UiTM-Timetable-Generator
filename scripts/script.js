@@ -595,16 +595,16 @@ function doRequest(url, postdata, async, func) {
 
                     if (this.responseText == '') {
 
-                        alertify.delay(10000).error("API returns nothing.\nMaybe an error have happened.\n Try again later...");
+                        alertify.delay(20000).error("API returns nothing.\nMaybe an error have happened.\n Try again later...");
 
                     } else if (this.responseText == '[]') {
 
-                        alertify.delay(10000).error("Request returns no data!\nNo internet connection or server problem?");
+                        alertify.delay(20000).error("Request returns no data!\nNo internet connection or server problem?");
 
                     } else if (this.responseText.includes("Alert_Error")) {
 
                         var errormsg = this.responseText.split(':')[1].trim();
-                        alertify.delay(10000).error(errormsg);
+                        alertify.delay(20000).error(errormsg);
 
                     } else {
 
@@ -613,13 +613,13 @@ function doRequest(url, postdata, async, func) {
                     }
 
                 } else {
-                    alertify.delay(10000).error("There is an error when doing an Ajax request!\nHTTP Error Code :" + this.status);
+                    alertify.delay(20000).error("There is an error when doing an Ajax request!\nHTTP Error Code :" + this.status);
                 }
             }
         };
 
         http.ontimeout = function () {
-            alertify.delay(10000).error('Error request! No internet or server problem?');
+            alertify.delay(20000).error('Error request! No internet or server problem?');
             blockLoadingBox(false);
 
         };
@@ -637,7 +637,7 @@ function doRequest(url, postdata, async, func) {
         }
 
     } catch (e) {
-        alertify.delay(10000).error(e);
+        alertify.delay(20000).error(e);
         blockLoadingBox(false);
     }
 }
