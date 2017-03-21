@@ -8,19 +8,19 @@ class IStudent {
 
     private $cookie = null;
 
-    // array containing list of courses
+    # array containing list of courses
     private $courses = null;
 
-    // uitm campus string
+    # uitm campus string
     private $uitm = null;
 
-    // cache bottom.php's result
+    # cache bottom.php's result
     private $data = null;
 
-    // error status of this object
+    # error status of this object
     public $error = null;
 
-    // <regex> => "Icress Code"
+    # <regex> => "Icress Code"
     private $referer = array(
         
         "Arau" => "AR", # perlis
@@ -57,26 +57,27 @@ class IStudent {
             return;
         }
 
+        # uitm perak uses it own subdomain for i-learn
         if (strpos($get, "perak.i-learn.uitm.edu.my")) {
 
-            // extract redirect location
+            # extract redirect location
             preg_match('/Location: (.*?)\n/', $get, $out);
 
-            // make further request
+            # make further request
             $get = http\http_request(trim($out[1]), NULL, NULL);
 
-            // change i-learn url
+            # change i-learn url
             $this->url = "http://perak.i-learn.uitm.edu.my";
         }
 
-        preg_match('/Set-Cookie: (.*?);/', $get, $out); // extract cookie
+        preg_match('/Set-Cookie: (.*?);/', $get, $out); # extract cookie
         $this->cookie = $out[sizeof($out)-1];
 
     }
 
     private function requestData() {
 
-        // only make request once 
+        # only make request once 
         if($this->data == null) {
             $this->data = http\http_request($this->url . "/modules/main/bottom.php",
                 $this->cookie, NULL);
@@ -89,7 +90,7 @@ class IStudent {
 
         if($this->uitm == null) {
 
-            // extract uitm campus location
+            # extract uitm campus location
             preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#', $this->requestData(), $uitm);
             $this->uitm = $uitm[1];
 
@@ -111,21 +112,21 @@ class IStudent {
 
     public function getCourses() {
 
-        // for first time
-        // get the courses data from istudent
+        # for first time
+        # get the courses data from istudent
         if($this->courses == null) {
 
             preg_match_all('/--\>\n.*title="(.*?)".*php\?cid=(.*?)&/', $this->requestData(), $courses);
 
             if(empty($courses[0])) {
 
-                // if system can't fetch data in regular way
-                // then there is an alternative ;)
+                # if system can't fetch data in regular way
+                # then there is an alternative ;)
                 $this->getCoursesAlternative();
 
             } else {
                 for($i = 0; $i < count($courses[1]); $i++) {
-                    $this->courses[$courses[2][$i]] = $courses[1][$i]; // [subject] = group
+                    $this->courses[$courses[2][$i]] = $courses[1][$i]; # [subject] = group
                 }
             }
         }
@@ -135,8 +136,8 @@ class IStudent {
 
     private function getCoursesAlternative() {
 
-        // if can't get courses & groups an easy way
-        // then do it a long and time consuming way
+        # if can't get courses & groups an easy way
+        # then do it a long and time consuming way
 
         preg_match_all('#courseframe\.php\?cid=(.*?)&#', $this->requestData(), $courses);
         
