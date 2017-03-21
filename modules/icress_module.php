@@ -1,6 +1,7 @@
 <?php
 
 require_once('./config.php');
+require_once('./modules/http_module.php');
 
 # non-selangor UiTMs code
 # refer `istudent_module.php` for description about each code
@@ -50,21 +51,22 @@ function icress_getFaculty($faculty) {
         # referer - later use to get courses that mapped with faculty
         $courses_referer = [];
 
+        $links = [];
         for ($i = 0; $i < count($selangor); $i++) {
-
-            # get course code
             $code = array_keys($selangor[$i])[0];
+            $links[] = "http://" . ICRESS_URL . "/jadual/{$code}/{$code}.html";
+        }
 
-            # get course code's timetale
-            $get = file_get_contents("http://" . ICRESS_URL . "/jadual/{$code}/{$code}.html");
-            $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+        $return_data = http\http_request($links, null, null, count($links));
+
+        foreach ($return_data as $data) {
 
             # extract the required data only
-            preg_match_all('/>(.*)<\//', $get, $out);
+            preg_match_all('/\\\\(.*)\\\\(.*)\.html/', $data, $out);
 
             # save into arrays
-            $courses_referer[$code] = $out[1];
-            $courses = array_merge($courses, $out[1]);
+            $courses_referer[$out[1][0]] = $out[2];
+            $courses = array_merge($courses, $out[2]);
         }
 
         # cache selangor's faculties
