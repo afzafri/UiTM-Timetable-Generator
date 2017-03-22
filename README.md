@@ -57,4 +57,4 @@ Note! : Automatic iStudent data fetcher is currently on experimental mode, consi
 
 ## License
 
-Free to use and distribute
+This library is under ```MIT license```, please look at the LICENSE file
