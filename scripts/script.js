@@ -643,13 +643,9 @@ function doRequest(url, postdata, async, func) {
 }
 
 var blockLoadingBox = function (bool) {
-
-    // get the element
-    var loadingBox = document.querySelector('#loadingBox');
-
+    var loadingBox = document.querySelector('.se-pre-con');
+    loadingBox.style.display = bool == true ? 'block' : 'none'; 
     lboxStatus = bool;
-
-    loadingBox.style.display = bool == true ? 'block' : 'none';
 };
 
 function parents(nodeCur, parentMatch) {
