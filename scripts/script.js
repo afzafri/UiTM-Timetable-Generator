@@ -379,14 +379,10 @@ document.querySelector('.login').onclick = function (e) {
                     doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
 
                         if (data != '') {
-
                             data = JSON.parse(data);
-
                             var elemUiTMSelect = document.querySelector('#listfaculty');
-
                             automatic_fetch = true;
                             fetched_data = data['Courses']; // hand it over global variable
-
                             elemUiTMSelect.value = data['UiTMCode'];
                             elemUiTMSelect.dispatchEvent(new CustomEvent('change', {}));
                         }
@@ -405,10 +401,9 @@ document.querySelector('.login').onclick = function (e) {
 function addNewRow() {
 
     try {
-
         var elems = document.querySelectorAll('.select-subject');
-
         var elem = document.createElement('tr');
+        
         elem.className = 'row-select';
         elem.innerHTML = '<td width="50px">' + (elems.length + 1) + '</td>\
                           <td><select class="select-subject"></select></td>\
@@ -578,40 +573,26 @@ function doRequest(url, postdata, async, func) {
     try {
 
         var http = new XMLHttpRequest();
-
         http.open("POST", url, async);
-
         http.onloadstart = function (e) {
-
             blockLoadingBox(true);
         };
 
         http.onreadystatechange = function () {
-
             blockLoadingBox(false);
-
             if (this.readyState === 4) {
                 if (this.status >= 200 && this.status < 400) {
-
                     if (this.responseText == '') {
-
                         alertify.delay(20000).error("API returns nothing.\nMaybe an error have happened.\n Try again later...");
-
                     } else if (this.responseText == '[]') {
-
                         alertify.delay(20000).error("Request returns no data!\nNo internet connection or server problem?");
-
                     } else if (this.responseText.includes("Alert_Error")) {
-
                         var errormsg = this.responseText.split(':')[1].trim();
                         alertify.delay(20000).error(errormsg);
-
                     } else {
-
                         alertify.delay(5000).success("Fetching data succeed!");
                         func(this.responseText);
                     }
-
                 } else {
                     alertify.delay(20000).error("There is an error when doing an Ajax request!\nHTTP Error Code :" + this.status);
                 }
@@ -621,18 +602,14 @@ function doRequest(url, postdata, async, func) {
         http.ontimeout = function () {
             alertify.delay(20000).error('Error request! No internet or server problem?');
             blockLoadingBox(false);
-
         };
 
         if (postdata != '' && postdata != null) {
             // send the proper header information along with the request
             http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
             // send POST request with out data
             http.send(postdata);
-
         } else {
-
             http.send();
         }
 
@@ -649,11 +626,8 @@ var blockLoadingBox = function (bool) {
 };
 
 function parents(nodeCur, parentMatch) {
-
-    for (; !nodeCur.matches(parentMatch); nodeCur = nodeCur.parentNode) {
-    }
+    for (; !nodeCur.matches(parentMatch); nodeCur = nodeCur.parentNode) {}
     return nodeCur;
-
 }
 
 /*
@@ -664,9 +638,7 @@ function extend(out) {
     out = out || {};
 
     for (var i = 1; i < arguments.length; i++) {
-        if (!arguments[i])
-            continue;
-
+        if (!arguments[i]) continue;
         for (var key in arguments[i]) {
             if (arguments[i].hasOwnProperty(key))
                 out[key] = arguments[i][key];
