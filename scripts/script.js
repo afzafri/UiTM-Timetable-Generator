@@ -403,7 +403,7 @@ function addNewRow() {
     try {
         var elems = document.querySelectorAll('.select-subject');
         var elem = document.createElement('tr');
-        
+
         elem.className = 'row-select';
         elem.innerHTML = '<td width="50px">' + (elems.length + 1) + '</td>\
                           <td><select class="select-subject"></select></td>\
@@ -432,7 +432,7 @@ function isClash(canuse) {
                 var datadst = group[ssubjdst.value][canuse[j].value];
 
                 for (var z = 0; z < datasrc.length; z++) {
-                    for (var x = z; x < datadst.length; x++) {
+                    for (var x = 0; x < datadst.length; x++) {
 
                         // if in same day
                         // then check if time is clash
