@@ -21,7 +21,6 @@ function icress_getJadual() {
     preg_match_all('/(?<=value=")(\w*)-(.[^"]*)/', $get, $out);
 
     for ($i = 0; $i < count($out[1]); $i++) {
-
         if (in_array($out[1][$i], $list)) { # if non-selangor uitm
             $collect[] = array('code' => $out[1][$i], 'fullname' => $out[2][$i]);
         } else {

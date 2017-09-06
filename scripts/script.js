@@ -430,6 +430,10 @@ function isClash(canuse) {
 
                 var ssubjdst = parents(canuse[j], '.row-select').querySelector('.select-subject');
                 var datadst = group[ssubjdst.value][canuse[j].value];
+                
+                console.log("Data Compare Debug:");
+                console.log("datasrc:\n"); console.log(datasrc);
+                console.log("datadst:\n"); console.log(datadst);
 
                 for (var z = 0; z < datasrc.length; z++) {
                     for (var x = 0; x < datadst.length; x++) {
@@ -502,10 +506,15 @@ function isClash(canuse) {
 
                             // check if time are clashing
                             var cond_before = stimesrc < stimedst && etimesrc <= stimedst;
-                            var conf_after  = stimesrc >= etimedst && etimesrc > etimedst
+                            var cond_after  = stimesrc >= etimedst && etimesrc > etimedst;
+
+                            console.log("Comparison Debug:");
+                            console.log(stimesrc + " < " + stimedst + " && " + etimesrc + " <= " + stimedst);
+                            console.log(stimesrc + " < " + etimedst + " && " + etimesrc + " <= " + etimedst);
+                            console.log("Total Condition: " + (!cond_before && !cond_after));
 
                             // if clashing, then return true
-                            if (!cond_before && !conf_after) {
+                            if (!cond_before && !cond_after) {
                                 return true;
                             }
                         }
@@ -543,7 +552,7 @@ function convertDate(time) {
             getHour += 12;
         }
 
-        return getHour + '.' + getMinutes;
+        return parseFloat(getHour + '.' + getMinutes);
 
     } catch (e) {
         alertify.delay(10000).error(e);
