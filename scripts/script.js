@@ -281,6 +281,8 @@ document.querySelector('.newtable').onchange = function (e) {
             // check if group times are clashing
             if (clashCheck)
                 alertify.error("Timetable clash! Please choose another groups.");
+            else
+                alertify.success("Successfully rendered!");
 
             var places = [];
             var info = [];
