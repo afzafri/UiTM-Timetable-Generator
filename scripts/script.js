@@ -433,10 +433,6 @@ function isClash(canuse) {
                 var ssubjdst = parents(canuse[j], '.row-select').querySelector('.select-subject');
                 var datadst = group[ssubjdst.value][canuse[j].value];
                 
-                console.log("Data Compare Debug:");
-                console.log("datasrc:\n"); console.log(datasrc);
-                console.log("datadst:\n"); console.log(datadst);
-
                 for (var z = 0; z < datasrc.length; z++) {
                     for (var x = 0; x < datadst.length; x++) {
 
@@ -445,12 +441,12 @@ function isClash(canuse) {
                         if (datasrc[z][3] === datadst[x][3]) {
 
                             // time 1
-                            var stimesrc = convertDate(datasrc[z][1]);
-                            var etimesrc = convertDate(datasrc[z][2]);
+                            var stimesrc = convertHourToMinutes(datasrc[z][1]);
+                            var etimesrc = convertHourToMinutes(datasrc[z][2]);
 
                             // time 2
-                            var stimedst = convertDate(datadst[x][1]);
-                            var etimedst = convertDate(datadst[x][2]);
+                            var stimedst = convertHourToMinutes(datadst[x][1]);
+                            var etimedst = convertHourToMinutes(datadst[x][2]);
 
                             /*  -- Here on how it works --
 
@@ -510,11 +506,6 @@ function isClash(canuse) {
                             var cond_before = stimesrc < stimedst && etimesrc <= stimedst;
                             var cond_after  = stimesrc >= etimedst && etimesrc > etimedst;
 
-                            console.log("Comparison Debug:");
-                            console.log(stimesrc + " < " + stimedst + " && " + etimesrc + " <= " + stimedst);
-                            console.log(stimesrc + " < " + etimedst + " && " + etimesrc + " <= " + etimedst);
-                            console.log("Total Condition: " + (!cond_before && !cond_after));
-
                             // if clashing, then return true
                             if (!cond_before && !cond_after) {
                                 return true;
@@ -554,12 +545,17 @@ function convertDate(time) {
             getHour += 12;
         }
 
-        return parseFloat(getHour + '.' + getMinutes);
+        return getHour + '.' + getMinutes;
 
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
+}
+
+function convertHourToMinutes(time) {
+    time = convertDate(time).split(".");
+    return parseInt(time[0])*60 + parseInt(time[1]);
 }
 
 /*
