@@ -279,8 +279,8 @@ document.querySelector('.newtable').onchange = function (e) {
             var clashCheck = isClash(canuse);
 
             // check if group times are clashing
-            if (clashCheck)
-                alertify.error("Timetable clash! Please choose another groups.");
+            if (clashCheck != false)
+                alertify.error("Timetable clash (" + clashCheck[0] + " - " + clashCheck[1] + ") ! Please choose another groups.");
             else
                 alertify.success("Successfully rendered!");
 
@@ -508,7 +508,7 @@ function isClash(canuse) {
 
                             // if clashing, then return true
                             if (!cond_before && !cond_after) {
-                                return true;
+                                return [ssubjsrc.value, ssubjdst.value];
                             }
                         }
                     }
