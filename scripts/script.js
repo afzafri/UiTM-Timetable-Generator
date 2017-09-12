@@ -40,16 +40,16 @@ var automatic_fetch = false;
 var group_prev = {};
 var index_list = 0;
 
-// change if user choose any faculty/university from select list
+// change if user choose any state from select list
 document.querySelector('#listfaculty').onchange = function () {
 
     try {
 
-        var trelem = document.querySelectorAll('.newtable tr');
+        var tree_elem = document.querySelectorAll('.newtable tr');
 
-        // remove existing row if user changes faculty/university
-        for (var i = 1; i < trelem.length; i++) {
-            trelem[i].parentNode.removeChild(trelem[i]);
+        // remove existing row if user changes state
+        for (var i = 1; i < tree_elem.length; i++) {
+            tree_elem[i].parentNode.removeChild(tree_elem[i]);
         }
 
         // create first row table
@@ -260,7 +260,7 @@ document.querySelector('.newtable').onchange = function (e) {
                 exec();
             }
 
-            // delegate event for select-group
+        // delegate event for select-group
         } else if (e.target && e.target.matches(".select-group")) {
 
             var groups = document.querySelectorAll('.select-group');
@@ -359,6 +359,33 @@ document.querySelector('.newtable').onchange = function (e) {
     }
 };
 
+document.querySelector('.newtable').onclick = function (e) {
+
+    try {
+        
+        // delegate events
+
+        if (e.target && e.target.matches(".delete-subject")) {
+            
+            var subjectElem = e.target.parentNode.parentNode.querySelector('.select-subject');
+            subjectElem.value = '';
+            subjectElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+
+        } else if (e.target && e.target.matches(".delete-group")) {
+            
+            var groupElem = e.target.parentNode.parentNode.querySelector(".select-group");
+            groupElem.value = '';
+            groupElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+
+        }
+
+    } catch (e) {
+        alertify.delay(10000).error(e);
+        blockLoadingBox(false);
+    }
+
+}
+
 document.querySelector('.login').onclick = function (e) {
 
     try {
@@ -409,7 +436,9 @@ function addNewRow() {
         elem.className = 'row-select';
         elem.innerHTML = '<td width="50px">' + (elems.length + 1) + '</td>\
                           <td><select class="select-subject"></select></td>\
-                          <td><select class="select-group"></select></td>';
+                          <td><button class="delete-subject button-delete"></button></td>\
+                          <td><select class="select-group"></select></td>\
+                          <td><button class="delete-group button-delete"></button></td>';
 
         document.querySelector('.newtable tbody').appendChild(elem);
 

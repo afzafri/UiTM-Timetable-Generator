@@ -33,7 +33,7 @@ define('CACHE_DBFILENAME', 'cache.db');
  * to the one from official source of data. The longer the cache
  * time, the data might be outdated. The newest one might consume
  * more server bandwidth as the application will fetch the data
- * more often that usual
+ * more often than usual
  *
  * $config['CACHE_TIMELEFT'] := hour;
  */

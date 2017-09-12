@@ -127,24 +127,28 @@ a {
 }
 
 .newtable td {
-    text-align: center;
+    background-color: #FFFFFF;
 }
 
 .newtable td select {
-    width: 130px;
+    width: 100%;
 }
 
-.newtable th:not(:first-child) {
+.newtable td:first-child {
+    text-align: center;
+}
+
+.newtable td:nth-child(2n+3) {
+    width: 30px;
+}
+
+.newtable th:nth-child(even) {
     width: 100px;
 }
 
 .newtable th {
     background-color: #211d70;
     color: white;
-}
-
-.newtable td {
-    background-color: #FFFFFF;
 }
 
 .button {
@@ -188,6 +192,15 @@ a {
 .button.-dark:focus {
   outline: 1px dotted white;
   outline-offset: -4px;
+}
+
+.button-delete {
+    background-image: url( '../img/delete-icon.ico' );
+    background-color: transparent;
+    overflow: hidden;
+    height: 28px;  
+    width: 28px;
+    border-radius: 50%;
 }
 
 select {
