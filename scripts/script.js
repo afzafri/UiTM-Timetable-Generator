@@ -371,9 +371,13 @@ document.querySelector('.newtable').onclick = function (e) {
 
         if (e.target && e.target.matches(".delete-subject")) {
             
-            var subjectElem = e.target.parentNode.parentNode.querySelector('.select-subject');
+            var parentNode = e.target.parentNode.parentNode;
+            var subjectElem = parentNode.querySelector('.select-subject');
+            var groupElem = parentNode.querySelector('.select-group');
             subjectElem[0].selected = true;
+            groupElem[0].selected = true;
             subjectElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+            groupElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
         } else if (e.target && e.target.matches(".delete-group")) {
             
