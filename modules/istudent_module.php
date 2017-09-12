@@ -47,40 +47,35 @@ class IStudent {
 
     private function login($student_id) {
 
-        $get = http\http_request($this->url . "/studentLogin.php",
-            NULL,
-            'page=simsweb.uitm.edu.my&nopelajar=' . $student_id . '&login=' . $student_id . 
-            '&search.x=210&search.y=57');
+        # make initial request to ilearn
+        $post_data = 'page=simsweb.uitm.edu.my&nopelajar=' . $student_id . '&login=' . $student_id . '&search.x=210&search.y=57';
+        $inital_data = http\http_request($this->url . "/studentLogin.php", NULL, $post_data);
 
-        if (empty($get)) {
+        if (empty($inital_data)) {
             $this->error = "iStudent login failed! Server maybe currently down right now.";
             return;
         }
 
-        # uitm perak uses it own subdomain for i-learn
-        if (strpos($get, "perak.i-learn.uitm.edu.my")) {
+        preg_match("/Location: (.*)/", $inital_data, $out);
 
-            # extract redirect location
-            preg_match('/Location: (.*?)\n/', $get, $out);
+        # verify using its link
+        $verify_data = http\http_request(trim($out[1]));
 
-            # make further request
-            $get = http\http_request(trim($out[1]), NULL, NULL);
-
-            # change i-learn url
-            $this->url = "http://perak.i-learn.uitm.edu.my";
+        if (empty($verify_data)) {
+            $this->error = "iStudent url verification failed! Please use manual method for now.";
+            return;
         }
 
-        preg_match('/Set-Cookie: (.*?);/', $get, $out); # extract cookie
-        $this->cookie = $out[sizeof($out)-1];
-
+        # extract cookie
+        preg_match("/Set-Cookie: (.*?);/", $verify_data, $out);
+        $this->cookie = trim($out[1]);
     }
 
     private function requestData() {
 
         # only make request once 
         if($this->data == null) {
-            $this->data = http\http_request($this->url . "/modules/main/bottom.php",
-                $this->cookie, NULL);
+            $this->data = http\http_request($this->url . "/v3/users/profile", $this->cookie, NULL);
         }
 
         return $this->data;
@@ -91,7 +86,7 @@ class IStudent {
         if($this->uitm == null) {
 
             # extract uitm campus location
-            preg_match('#<BR>Campus.*:.*<b>([A-Za-z0-9 ]+)<\/b>#', $this->requestData(), $uitm);
+            preg_match("/<p style=\"color:#327FA8\">(.*?)<\/p>/", $this->requestData(), $uitm);
             $this->uitm = $uitm[1];
 
         }
@@ -116,41 +111,14 @@ class IStudent {
         # get the courses data from istudent
         if($this->courses == null) {
 
-            preg_match_all('/--\>\n.*title="(.*?)".*php\?cid=(.*?)&/', $this->requestData(), $courses);
+            preg_match_all("/AppModel\.AddSdbrCourseGroup\('(.*?)','[0-9]+','(.*?)'\);/", $this->requestData(), $courses);
 
-            if(empty($courses[0])) {
-
-                # if system can't fetch data in regular way
-                # then there is an alternative ;)
-                $this->getCoursesAlternative();
-
-            } else {
-                for($i = 0; $i < count($courses[1]); $i++) {
-                    $this->courses[$courses[2][$i]] = $courses[1][$i]; # [subject] = group
-                }
+            for($i = 0; $i < count($courses[1]); $i++) {
+                $this->courses[$courses[1][$i]] = $courses[2][$i]; # [subject] = group
             }
         }
 
         return $this->courses;
-    }
-
-    private function getCoursesAlternative() {
-
-        # if can't get courses & groups an easy way
-        # then do it a long and time consuming way
-
-        preg_match_all('#courseframe\.php\?cid=(.*?)&#', $this->requestData(), $courses);
-        
-        foreach($courses[1] as $course) {
-
-            $get = http\http_request($this->url . "/Group/default.php?ttype=course&courseID=" . $course,
-                $this->cookie, NULL);
-
-            preg_match('#>(.*?)<\/a>#', $get, $group);
-            $this->courses[$course] = $group[1];
-
-        }
-
     }
 }
 
