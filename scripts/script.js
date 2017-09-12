@@ -194,8 +194,12 @@ document.querySelector('.newtable').onmousedown = function (e) {
 
         if (e.target && e.target.matches(".row-select:last-child .select-subject")) {
 
+            var el = document.createElement('option');
+            el.innerHTML = '<option value="">Select subject</option>';
+            e.target.appendChild(el);
+
             for (var i = 0; i < listsubject.length; i++) {
-                var el = document.createElement('option');
+                el = document.createElement('option');
                 el.value = listsubject[i];
                 el.innerHTML = listsubject[i];
                 e.target.appendChild(el);
@@ -368,13 +372,13 @@ document.querySelector('.newtable').onclick = function (e) {
         if (e.target && e.target.matches(".delete-subject")) {
             
             var subjectElem = e.target.parentNode.parentNode.querySelector('.select-subject');
-            subjectElem.value = '';
+            subjectElem[0].selected = true;
             subjectElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
         } else if (e.target && e.target.matches(".delete-group")) {
             
             var groupElem = e.target.parentNode.parentNode.querySelector(".select-group");
-            groupElem.value = '';
+            groupElem[0].selected = true;
             groupElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
         }
