@@ -43,7 +43,7 @@ if(isset($_GET['fetchDataMatrix'])) {
                 'UiTMCode' => $uitmcode)));
 
         } catch (Exception $e) {
-            die('Alert_Error:' . $e->getMessage());
+            die('Alert_Error:' . htmlentities($e->getMessage()));
         }
     }
 }
