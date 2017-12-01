@@ -108,6 +108,11 @@ class IStudent {
 
             preg_match_all("/AppModel\.AddSdbrCourseGroup\('(.*?)','[0-9]+','(.*?)'\);/", $this->requestData(), $courses);
 
+            # check if student has completed the SuFO
+            if (preg_match("/blocked until SuFO/", $this->requestData())) {
+                throw new Exception("Auto fetcher won't function well if you still not completed all your SuFO yet!");
+            }
+
             for($i = 0; $i < count($courses[1]); $i++) {
                 $this->courses[$courses[1][$i]] = $courses[2][$i]; # [subject] = group
             }
