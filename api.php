@@ -31,16 +31,11 @@ if(isset($_GET['fetchDataMatrix'])) {
 
             $obj = new IStudent($_POST['studentId']);
 
-            if ($obj->error != null) {
-                throw new Exception(htmlentities($obj->error));
-            }
-
             $courses = $obj->getCourses();
             $uitmcode = $obj->getUiTMCode();
 
             if($courses === null || $uitmcode === false) {
-                throw new Exception("Can't fetch resources for this student Id ("
-                    . htmlentities($_POST['studentId']) . ") !");
+                throw new Exception("Can't fetch resources for this student Id (" . $_POST['studentId'] . ") !");
             }
 
             die(json_encode(array(

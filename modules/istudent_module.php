@@ -17,9 +17,6 @@ class IStudent {
     # cache bottom.php's result
     private $data = null;
 
-    # error status of this object
-    public $error = null;
-
     # <regex> => "Icress Code"
     private $referer = array(
         
@@ -52,8 +49,7 @@ class IStudent {
         $inital_data = http\http_request($this->url . "/studentLogin.php", NULL, $post_data);
 
         if (empty($inital_data)) {
-            $this->error = "iStudent login failed! Server maybe currently down right now.";
-            return;
+            throw new Exception("iStudent login failed! Server maybe currently down right now.");
         }
 
         preg_match("/Location: (.*)/", $inital_data, $out);
@@ -62,8 +58,7 @@ class IStudent {
         $verify_data = http\http_request(trim($out[1]));
 
         if (empty($verify_data)) {
-            $this->error = "iStudent url verification failed! Please use manual method for now.";
-            return;
+            throw new Exception("iStudent url verification failed! Please use manual method for now.");
         }
 
         # extract cookie
