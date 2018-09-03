@@ -20,6 +20,7 @@ A little update to the frontend, now support mobile view. by - afif
     <link rel="stylesheet" type="text/css" href="./styles/design.css">
     <link rel="stylesheet" type="text/css" href="./styles/vex.css">
     <link rel="stylesheet" type="text/css" href="./styles/vex-theme-os.css">
+    <link rel="stylesheet" type="text/css" href="./styles/blobselect.css">
     <!-- scale down/resize page content to fix screen width, as for mobile view -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>UiTM Timetable Generator</title>
@@ -64,13 +65,14 @@ A little update to the frontend, now support mobile view. by - afif
 
 	<pre>Select faculty/campus from list below</pre>
 
-	<label>
-		<select name='fakulti' id="listfaculty">
-			<option value=''>Select Your Campus State Here</option>
-			<!-- amek data kt icress -->
-			<!-- js akan automatik update data kt sini tiap2 kali run -->
-		</select>
-	</label>
+
+  <center>
+  	<select name='fakulti' id="listfaculty">
+  		<option value=''>Select Your Campus State Here</option>
+  		<!-- amek data kt icress -->
+  		<!-- js akan automatik update data kt sini tiap2 kali run -->
+  	</select>
+  </center>
 
 	<div id="select-table">
 		<table class='newtable'>
@@ -84,7 +86,7 @@ A little update to the frontend, now support mobile view. by - afif
 			<!-- js akan automatik tmbah new row kt sini -->
 		</table>
 	</div>
-	
+
 	<!-- generate timetable -->
 	<div class='timetable' id='timetable'></div>
 
@@ -125,7 +127,7 @@ A little update to the frontend, now support mobile view. by - afif
 		<br><br>
 
 	</div>
-	
+
 	<br><br><br>
 
 </div> <!-- end wrapper -->
@@ -140,7 +142,7 @@ A little update to the frontend, now support mobile view. by - afif
 							<a href="https://twitter.com/syedmdanial" target="blank">
 								<img alt="Twitter Icon" border="0" height="40" src="img/twitt.png" width="40">
 							</a>
-						
+
 						</td>
 						<td class="destd">
 							<a href="https://www.facebook.com/mohdshahril.net?fref=ts" target="blank">
@@ -152,7 +154,7 @@ A little update to the frontend, now support mobile view. by - afif
 							  <img alt="Instgram Icon" border="0" height="40" src="img/ig.png" width="40">
 							</a>
 						</td>
-					  
+
 					</tr>
 				</table>
 				<table class="destb1">
@@ -172,7 +174,7 @@ A little update to the frontend, now support mobile view. by - afif
 											<table class="destb1" width="182">
 												<tr>
 													<td id="tdgithub">
-													  
+
 														<a href="https://github.com/afzafri/UiTM-Timetable-Generator/issues" target="blank" id="desgithub">
 															<img alt="Github Icon" border="0" height="40" src="img/git.png" width="40">
 															<br>
@@ -203,7 +205,7 @@ A little update to the frontend, now support mobile view. by - afif
 			</td>
 		</tr>
 	</table>
-	
+
 
 	<div class="se-pre-con"></div>
 
@@ -211,6 +213,7 @@ A little update to the frontend, now support mobile view. by - afif
 	<script src='./scripts/external/timetable.js'></script>
 	<script src='./scripts/external/vex.combined.min.js'></script>
 	<script src='./scripts/external/html2canvas.min.js'></script>
+  <script src='./scripts/external/blobselect.min.js'></script>
 	<script src='./scripts/script.js'></script>  <!-- main javascript code -->
 
 </body>
