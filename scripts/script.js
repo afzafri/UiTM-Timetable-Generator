@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
-
 });
 
 // loading box status
@@ -74,6 +73,8 @@ document.querySelector('#listfaculty').onchange = function () {
                     elem.appendChild(el);
                 }
 
+                initSelect();
+
                 // add new row
                 addNewRow();
 
@@ -112,7 +113,6 @@ document.querySelector('#listfaculty').onchange = function () {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
-
 };
 
 var processCourses = function () {
@@ -205,6 +205,10 @@ document.querySelector('.newtable').onmousedown = function (e) {
                 e.target.appendChild(el);
             }
 
+            // init select plugin and toggle
+            initSelect();
+            toggleSelect();
+
             // add new row into last position
             addNewRow();
         }
@@ -213,6 +217,7 @@ document.querySelector('.newtable').onmousedown = function (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
+
 };
 
 document.querySelector('.newtable').onchange = function (e) {
@@ -366,11 +371,11 @@ document.querySelector('.newtable').onchange = function (e) {
 document.querySelector('.newtable').onclick = function (e) {
 
     try {
-        
+
         // delegate events
 
         if (e.target && e.target.matches(".delete-subject")) {
-            
+
             var parentNode = e.target.parentNode.parentNode;
             var subjectElem = parentNode.querySelector('.select-subject');
             var groupElem = parentNode.querySelector('.select-group');
@@ -380,7 +385,7 @@ document.querySelector('.newtable').onclick = function (e) {
             groupElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
         } else if (e.target && e.target.matches(".delete-group")) {
-            
+
             var groupElem = e.target.parentNode.parentNode.querySelector(".select-group");
             groupElem[0].selected = true;
             groupElem.dispatchEvent(new CustomEvent('change', {bubbles: true}));
@@ -449,7 +454,6 @@ function addNewRow() {
                           <td><button class="delete-group button-delete"></button></td>';
 
         document.querySelector('.newtable tbody').appendChild(elem);
-
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
@@ -469,7 +473,7 @@ function isClash(canuse) {
 
                 var ssubjdst = parents(canuse[j], '.row-select').querySelector('.select-subject');
                 var datadst = group[ssubjdst.value][canuse[j].value];
-                
+
                 for (var z = 0; z < datasrc.length; z++) {
                     for (var x = 0; x < datadst.length; x++) {
 
@@ -487,15 +491,15 @@ function isClash(canuse) {
 
                             /*  -- Here on how it works --
 
-                                So let us ask a simple question, given two times, how to 
+                                So let us ask a simple question, given two times, how to
                                 check if both are clashing against each others?
 
                                 Simple observations :
 
                                 1)
 
-                                    Time 1: 2.00 PM - 4.00 PM  
-                                    Time 2: 3.45 PM - 5.00 PM 
+                                    Time 1: 2.00 PM - 4.00 PM
+                                    Time 2: 3.45 PM - 5.00 PM
 
                                         time clashing -----------
                                                                 |
@@ -509,9 +513,9 @@ function isClash(canuse) {
                                                                 ------------------------------
 
                                 2)
-                                    
-                                    Time 1: 2.00 PM - 4.00 PM  
-                                    Time 2: 4.15 PM - 5.00 PM 
+
+                                    Time 1: 2.00 PM - 4.00 PM
+                                    Time 2: 4.15 PM - 5.00 PM
 
                                                 time not clashing --------
                                                                          |
@@ -524,19 +528,19 @@ function isClash(canuse) {
                                                                            |       4.15 PM - 5.00 PM    |
                                                                            ------------------------------
 
-                                So from these two simple observations, we can derive a pretty simple algorithm, which 
+                                So from these two simple observations, we can derive a pretty simple algorithm, which
                                 sufficiently follows below rules :
 
                                     1) If time1 <= time2, then times aren't clashing
                                     2) If time1 >= time2, then times aren't clashing
 
-                                So, back to our original question, how to check if times are clashing? Well, taking the counter-example 
+                                So, back to our original question, how to check if times are clashing? Well, taking the counter-example
                                 from above two rules, then we can deduce in order the times to clash, both of above rules must be INCORRECT.
 
                                     if ( incorrect(time1 <= time2) and incorrect(time1 >= time2) ) {
                                         # times are clashing
                                     }
-                                
+
                                */
 
                             // check if time are clashing
@@ -665,7 +669,7 @@ function doRequest(url, postdata, async, func) {
 
 var blockLoadingBox = function (bool) {
     var loadingBox = document.querySelector('.se-pre-con');
-    loadingBox.style.display = bool == true ? 'block' : 'none'; 
+    loadingBox.style.display = bool == true ? 'block' : 'none';
     lboxStatus = bool;
 };
 
@@ -697,8 +701,8 @@ function saveImg() {
 
     try {
         // set viewport meta width, so even on mobile, page will rendered desktop mode. needed for full screenshot
-        var element = document.getElementsByName("viewport")[0]; 
-        element.setAttribute("content", ""); 
+        var element = document.getElementsByName("viewport")[0];
+        element.setAttribute("content", "");
         document.body.style.zoom="60%"; // zoom out the page, for low res screen
 
         // use html2canvas js library, to convert the content into html5 "canvas"
@@ -712,7 +716,7 @@ function saveImg() {
                 link.click();
 
                 // restore back the responsive viewport meta and zoom leve
-                element.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"); 
+                element.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no");
                 document.body.style.zoom="100%";
             }
         });
@@ -721,7 +725,7 @@ function saveImg() {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
-    
+
 }
 
 // Change timetable events colours scheme (background, border, text)
@@ -735,7 +739,7 @@ function changeColours(type)
     var bg_color = (type != 'default') ? document.getElementById('change_bg_color').value : '#EC6A5E';
     var border_color = (type != 'default') ? document.getElementById('change_border_color').value : '#e32c1b';
     var text_color = (type != 'default') ? document.getElementById('change_text_color').value : '#ffffff';
-    
+
     // iterate through the nodes, change the colors
     for(var i=0; i<events.length; i++)
     {
@@ -763,7 +767,7 @@ function changeSubjectColours(subject)
     var bg_color = document.getElementById('change_bg_color'+subject).value;
     var border_color = document.getElementById('change_border_color'+subject).value;
     var text_color = document.getElementById('change_text_color'+subject).value;
-    
+
     // iterate through the nodes, change the colors
     for(var i=0; i<events.length; i++)
     {
@@ -812,12 +816,42 @@ function listSubjectsColour()
         cell3.innerHTML = '<input id="change_border_color'+subjectsname[i]+'" type="color" onchange="return '+funcname+'">';
         cell4.innerHTML = '<input id="change_text_color'+subjectsname[i]+'" type="color" onchange="return '+funcname+'">';
     }
-    
+
 }
 
 // reset table, remove current list of subjects
 function resetTableSubject()
 {
     var table = document.getElementById('subjectColorTable');
-    table.getElementsByTagName('tbody')[0].innerHTML = "<tr>" + table.rows[0].innerHTML + "</tr><tr>" + table.rows[1].innerHTML + "</tr>"; 
+    table.getElementsByTagName('tbody')[0].innerHTML = "<tr>" + table.rows[0].innerHTML + "</tr><tr>" + table.rows[1].innerHTML + "</tr>";
+}
+
+// Function to initialize blob-select plugin
+function initSelect()
+{
+  var selects = document.getElementsByClassName('select-subject');
+  for(var i=0;i<selects.length;i++)
+  {
+    // init plugin
+    selects[i].blobSelect.init({
+      search: 'true',
+    });
+
+    // destroy init, to allow the select box dynamically fill in with data
+    selects[i].blobSelect.destroy();
+
+    // re-init the plugin. This way is not clean, but serve as temporary workaround
+    selects[i].blobSelect.init({
+      search: 'true',
+    });
+  }
+}
+
+// Since the select box is dynamically rendered and populated
+// after click event, this causes the plugin to initialized, but not toggling the select box.
+// so we need to re-toggle the select box again
+function toggleSelect()
+{
+  var selects = document.getElementsByClassName('blobselect');
+  selects[selects.length-1].click();
 }
