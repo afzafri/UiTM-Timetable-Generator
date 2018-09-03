@@ -10,8 +10,8 @@ Official website for this project: https://www.uitmtimetable.com/
 3. Contact Us :
   - http://fb.me/afzafri
   - http://fb.me/mohdshahril.net
-  - https://twitter.com/syedmdanial 
-  
+  - https://twitter.com/syedmdanial
+
 ## Changelogs
 1. UPDATE 1 : 10/4/16 - Initial design
 2. UPDATE 2 : 13/4/16 - Major code overhaul, updated by Shahril
@@ -20,6 +20,7 @@ Official website for this project: https://www.uitmtimetable.com/
 5. UPDATE 5 : 1/12/16 - Little update, fixed floating footer issue, and added mobile view support
 6. UPDATE 6 : 22/12/16 - Added feature for saving the timetable to PNG image file (experimental)
 7. UPDATE 7 : 17/3/17 - Added feature for customizing the events colours scheme (background, border, text)
+8. UPDATE 8 : 3/9/18 - Added feature to search for subject code inside the select subject box
 
 
 ## Credit
@@ -31,7 +32,9 @@ Official website for this project: https://www.uitmtimetable.com/
 4. html2canvas
    - Webpage : https://html2canvas.hertzen.com/
    - GitHub : https://github.com/niklasvh/html2canvas/
-5. Muhammad Nabil - For sponsoring domain and hosting, thanks!
+5. blob-select
+   - GitHub : https://github.com/Blobfolio/blob-select
+6. Muhammad Nabil - For sponsoring domain and hosting, thanks!
 
 ## Installation
 
@@ -45,7 +48,7 @@ Adjust `config.php` to suite your need.
 3. (Optional) Change colour for each subjects.
 4. (Optional) Export the timetable image to your device.
 
-Note! : Automatic iStudent data fetcher is currently on experimental mode, consider manual adjusting if needed. 
+Note! : Automatic iStudent data fetcher is currently on experimental mode, consider manual adjusting if needed.
 
 ## Contributing
 
