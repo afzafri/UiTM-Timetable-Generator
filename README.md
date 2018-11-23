@@ -10,7 +10,7 @@ Official website for this project: https://www.uitmtimetable.com/
 3. Contact Us :
   - http://fb.me/afzafri
   - http://fb.me/mohdshahril.net
-  - https://twitter.com/syedmdanial
+  - https://www.facebook.com/syedmdanial.sd
 
 ## Changelogs
 1. UPDATE 1 : 10/4/16 - Initial design
