@@ -38,8 +38,10 @@ Official website for this project: https://www.uitmtimetable.com/
 
 ## Installation
 
-Drag and drop all files into your server/localhost.
-Adjust `config.php` to suite your need.
+1) Drag and drop all files into your web server directory. For eq; Apache2 for Ubuntu is located in `/var/www/html`. 
+2) Don't forget to set the correct permission as this timetable writes cache file, so do `chmod -R 777 /var/www/html`. 
+3) Install Curl extension for PHP. In Ubuntu, run `sudo apt-get install php-curl` and you will be fine.
+4) Adjust `config.php` to suite your need. and Voila!
 
 ## Usage
 
