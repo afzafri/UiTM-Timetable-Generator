@@ -171,6 +171,13 @@ a {
   appearance: none;
 }
 
+.button.-sm {
+  margin: 6px;
+  padding: 8px 8px;
+  font-size: 12px;
+  font-weight: 300;
+}
+
 .button:hover {
   -webkit-transition: all 60ms ease;
   transition: all 60ms ease;
@@ -190,6 +197,15 @@ a {
   background: #333030;
 }
 .button.-dark:focus {
+  outline: 1px dotted white;
+  outline-offset: -4px;
+}
+
+.button.-purple {
+  color: #FFFFFF;
+  background: purple;
+}
+.button.-purple:focus {
   outline: 1px dotted white;
   outline-offset: -4px;
 }
