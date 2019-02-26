@@ -754,8 +754,11 @@ function saveImg() {
 function saveExcel() {
 
     try {
-        var timetableData = document.getElementById("exportData").value;
-        console.log(timetableData);
+        var timetableInfo = document.getElementById("exportData").value;
+
+        doRequest("api.php?exportexcel", 'timetableInfo='.timetableInfo, true, function (data) {
+          console.log(data);
+        });
     }
     catch (e) {
         alertify.delay(10000).error(e);
