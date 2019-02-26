@@ -675,8 +675,11 @@ function doRequest(url, postdata, async, func) {
         };
 
         if (postdata != '' && postdata != null) {
-            // send the proper header information along with the request
-            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // check if the data is FormData, then it is file upload. no need to set content type
+            if(!(postdata instanceof FormData)) {
+              // send the proper header information along with the request
+              http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            }
             // send POST request with out data
             http.send(postdata);
         } else {
@@ -765,6 +768,31 @@ function saveExcel() {
           }
 
         });
+    }
+    catch (e) {
+        alertify.delay(10000).error(e);
+        blockLoadingBox(false);
+    }
+
+}
+
+// Import (upload) timetable .xlsx Excel file and render timetable
+function importExcel() {
+
+    try {
+        var excelFile = document.getElementById("excelFile").files;
+        var formData = new FormData();
+
+        if (!excelFile[0].type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+          alertify.delay(10000).error('Invalid file! Only xlsx file are allowed.');
+        } else {
+          // Add the file to the request.
+          formData.append('excelFile', excelFile[0], excelFile[0].name);
+
+          doRequest("api.php?importexcel", formData, true, function (data) {
+            console.log(data);
+          });
+        }
     }
     catch (e) {
         alertify.delay(10000).error(e);
