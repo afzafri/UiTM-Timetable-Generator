@@ -53,6 +53,6 @@ if(isset($_POST['exportTimetable'])) {
   if(!empty($_POST['timetableInfo'])) {
     $obj = new ExportExcel();
     $result = $obj->toExcel($_POST['timetableInfo']);
-    print_r($result);
+    echo $result;
   }
 }
