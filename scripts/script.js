@@ -750,6 +750,20 @@ function saveImg() {
 
 }
 
+// Save (download) timetable as Excel spreadsheet
+function saveExcel() {
+
+    try {
+        var timetableData = document.getElementById("exportData").value;
+        console.log(timetableData);
+    }
+    catch (e) {
+        alertify.delay(10000).error(e);
+        blockLoadingBox(false);
+    }
+
+}
+
 // Change timetable events colours scheme (background, border, text)
 function changeColours(type)
 {

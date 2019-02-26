@@ -210,6 +210,15 @@ a {
   outline-offset: -4px;
 }
 
+.button.-green {
+  color: #FFFFFF;
+  background: #008000;
+}
+.button.-green:focus {
+  outline: 1px dotted white;
+  outline-offset: -4px;
+}
+
 .button-delete {
     background-image: url( '../img/delete-icon.ico' );
     background-color: transparent;
