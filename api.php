@@ -2,6 +2,7 @@
 
 require_once('./modules/istudent_module.php');
 require_once('./modules/icress_module.php');
+require_once('./modules/exportexcel_module.php');
 
 CACHE_TYPE == 'file' ? require_once('./modules/file_module.php') : require_once('./modules/sqlite_module.php');
 
@@ -26,7 +27,7 @@ if(isset($_GET['getgroup'])) {
 
 if(isset($_GET['fetchDataMatrix'])) {
     if(!empty($_POST['studentId'])) {
-        
+
         try {
 
             $obj = new IStudent($_POST['studentId']);
@@ -48,4 +49,10 @@ if(isset($_GET['fetchDataMatrix'])) {
     }
 }
 
-
+if(isset($_POST['exportTimetable'])) {
+  if(!empty($_POST['timetableInfo'])) {
+    $obj = new ExportExcel();
+    $result = $obj->toExcel($_POST['timetableInfo']);
+    print_r($result);
+  }
+}
