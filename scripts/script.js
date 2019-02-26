@@ -796,16 +796,79 @@ function importExcel() {
 
             if(status) {
               var timetable = jsonTB.timetable;
+              var info = [];
+              var exportData = [];
+              var minTime = 23.59, maxTime = 0.0;
+              
               for(var i=1;i<timetable.length;i++) {
-                var day = timetable[i][0];
-                var subject = timetable[i][1];
-                var group = timetable[i][2];
-                var place = timetable[i][3];
-                var start_time = timetable[i][4];
-                var end_time = timetable[i][5];
 
-                console.log(end_time);
+                var startTime = convertDate(timetable[i][4]);
+                var endTime = convertDate(timetable[i][5]);
+
+                minTime = Math.min(startTime, minTime);
+                maxTime = Math.max(endTime, maxTime);
+
+                var start = startTime.toString().split('.');
+                var end = endTime.toString().split('.');
+
+                var endFirst = !start[1] ? 0 : parseFloat(start[1]);
+                var endSecon = !end[1] ? 0 : parseFloat(end[1]);
+
+                var subject = timetable[i][1];
+                var classroom = timetable[i][3];
+                var classStart = timetable[i][4];
+                var classEnd = timetable[i][5];
+                var dayName = timetable[i][0];
+                var classGroup = timetable[i][2];
+                var name = '<h5>' + subject + '</h5>' +
+                            '<p><i>' + classroom + '</i></p>' +
+                            '<p>' + classStart + '-' + classEnd + '</p>';
+
+                info.push({
+                    name: name,
+                    loc: dayName,
+                    startH: parseFloat(start[0]),
+                    startM: endFirst,
+                    endH: parseFloat(end[0]),
+                    endM: endSecon
+                });
+
+                // Array data for export feature
+                exportData.push({
+                    day: dayName,
+                    subject: subject,
+                    group: classGroup,
+                    classroom: classroom,
+                    class_start: classStart,
+                    class_end: classEnd
+                });
+
               }
+
+              // convert array to JSON, append to textarea for fetching later
+              document.getElementById('exportData').value = JSON.stringify(exportData);
+
+              var timetable = new Timetable();
+              timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
+              timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+
+              // add event
+              for (var i = 0; i < Object.keys(info).length; i++) {
+                  timetable.addEvent(info[i].name, info[i].loc,
+                          new Date(0, 0, 0, info[i].startH, info[i].startM),
+                          new Date(0, 0, 0, info[i].endH, info[i].endM), '#');
+              }
+
+              var renderer = new Timetable.Renderer(timetable);
+              // remove previous table before drawing new one
+              document.querySelector('.timetable').innerHTML = '';
+
+              renderer.draw('.timetable'); // any css selector
+              // reset colors input and show the tools section before render new table
+              resetTableSubject();
+              changeColours('default');
+              listSubjectsColour();
+              document.getElementById("tools").style.display = 'block';
 
               alertify.success(message);
             } else {
