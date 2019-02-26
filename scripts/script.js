@@ -790,7 +790,28 @@ function importExcel() {
           formData.append('excelFile', excelFile[0], excelFile[0].name);
 
           doRequest("api.php?importexcel", formData, true, function (data) {
-            console.log(data);
+            var jsonTB = JSON.parse(data);
+            var status = jsonTB.status;
+            var message = jsonTB.message;
+
+            if(status) {
+              var timetable = jsonTB.timetable;
+              for(var i=1;i<timetable.length;i++) {
+                var day = timetable[i][0];
+                var subject = timetable[i][1];
+                var group = timetable[i][2];
+                var place = timetable[i][3];
+                var start_time = timetable[i][4];
+                var end_time = timetable[i][5];
+
+                console.log(end_time);
+              }
+
+              alertify.success(message);
+            } else {
+              alertify.delay(10000).error(message);
+            }
+
           });
         }
     }
