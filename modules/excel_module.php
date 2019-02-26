@@ -69,19 +69,30 @@ class Excel {
   	$stat = json_decode($obj->upload(), true);
 
     $updFilename = null;
+    $result = [];
 
     if(array_key_exists('errors', $stat))
     {
       $msg = $stat['errors']['status'];
-      return false;
+      $result['status'] = false;
+      $result['message'] = $msg;
+
+      return json_encode($result);
     }
     else
     {
       $updFilename = $stat['success']['filename'];
       $msg = $stat['success']['status'];
-      return true;
-    }
+      $result['status'] = true;
+      $result['message'] = $msg;
 
+      $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+      $spreadsheet = $reader->load("./upload/".$updFilename);
+      $result['timetable'] = $spreadsheet->getActiveSheet()->toArray();
+
+      return json_encode($result);
+    }
+    
     return false;
   }
 
