@@ -295,6 +295,8 @@ document.querySelector('.newtable').onchange = function (e) {
 
             var places = [];
             var info = [];
+            var exportData = [];
+            var c = 0;
             var minTime = 23.59, maxTime = 0.0;
 
             var getSubject = parents(e.target, '.row-select').querySelector('.select-subject').value;
@@ -321,20 +323,40 @@ document.querySelector('.newtable').onchange = function (e) {
                     var endFirst = !start[1] ? 0 : parseFloat(start[1]);
                     var endSecon = !end[1] ? 0 : parseFloat(end[1]);
 
+                    var classroom = datagroup[k][j][6];
+                    var classStart = datagroup[k][j][1];
+                    var classEnd = datagroup[k][j][2];
+                    var dayName = datagroup[k][j][3];
+                    var classGroup = groups[c].value;
+
                     var name = '<h5>' + k + '</h5>' +
-                        '<p><i>' + datagroup[k][j][6] + '</i></p>' +
-                        '<p>' + datagroup[k][j][1] + '-' + datagroup[k][j][2] + '</p>';
+                        '<p><i>' + classroom + '</i></p>' +
+                        '<p>' + classStart + '-' + classEnd + '</p>';
 
                     info.push({
                         name: name,
-                        loc: datagroup[k][j][3],
+                        loc: dayName,
                         startH: parseFloat(start[0]),
                         startM: endFirst,
                         endH: parseFloat(end[0]),
                         endM: endSecon
                     });
+
+                    // Array data for export feature
+                    exportData.push({
+                        day: dayName,
+                        subject: k,
+                        group: classGroup,
+                        classroom: classroom,
+                        class_start: classStart,
+                        class_end: classEnd
+                    });
                 }
+                c++;
             }
+
+            // convert array to JSON, append to textarea for fetching later
+            document.getElementById('exportData').value = JSON.stringify(exportData);
 
             var timetable = new Timetable();
             timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
