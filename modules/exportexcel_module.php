@@ -46,15 +46,15 @@ class ExportExcel {
       
       try {
         $writer->save('download/'.$filename);
-        $server_link = 'http://' . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
-        $msg = $server_link.'download/'.$filename;
+        $server_link = $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+        $msg = $server_link . 'download/' . $filename;
 
       }
       catch (Exception $e) {
         $msg = "Failed to export. ".$e->getMessage();
       }
 
-      return $msg;
+      return trim($msg);
   }
 
 }
