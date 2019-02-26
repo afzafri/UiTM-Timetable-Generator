@@ -42,12 +42,13 @@ class ExportExcel {
       }
 
       $writer = new Xlsx($spreadsheet);
-
+      $filename = 'UiTM Timetable-'.rand().'.xlsx';
+      
       try {
-        $writer->save('UiTM Timetable.xlsx');
+        $writer->save('download/'.$filename);
         $msg = "Excel file downloaded.";
         $server_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
-        header("Location: ".$server_link.'/UiTM Timetable.xlsx'); // download the file
+        header("Location: ".$server_link.'/download/'.$filename); // download the file
       }
       catch (Exception $e) {
         $msg = "Failed to export. ".$e->getMessage();
