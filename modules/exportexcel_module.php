@@ -5,11 +5,11 @@ require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class ExportExcel {
+class Excel {
 
   private $msg = null;
 
-  public function toExcel($data) {
+  public function exportExcel($data) {
       $timetable = json_decode($data, true);
 
       $spreadsheet = new Spreadsheet();
@@ -43,7 +43,7 @@ class ExportExcel {
 
       $writer = new Xlsx($spreadsheet);
       $filename = 'UiTM-Timetable-'.rand().'.xlsx';
-      
+
       try {
         $writer->save('download/'.$filename);
         $server_link = $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
