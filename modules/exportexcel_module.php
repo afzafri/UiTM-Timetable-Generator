@@ -46,7 +46,7 @@ class ExportExcel {
       
       try {
         $writer->save('download/'.$filename);
-        $server_link = (stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+        $server_link = 'http://' . $_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
         $msg = $server_link.'download/'.$filename;
 
       }

@@ -760,6 +760,7 @@ function saveExcel() {
           if (data.indexOf('Failed to export') !== -1) {
             alertify.delay(20000).error(data);
           } else {
+            data = data.replace(/^http(s?):/, location.protocol);
             // ref: https://stackoverflow.com/questions/3749231/download-file-using-javascript-jquer
             document.getElementById('excel_frame').src = data;
           }
