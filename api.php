@@ -49,10 +49,11 @@ if(isset($_GET['fetchDataMatrix'])) {
     }
 }
 
-if(isset($_POST['exportTimetable'])) {
+if(isset($_GET['exportexcel'])) {
   if(!empty($_POST['timetableInfo'])) {
     $obj = new ExportExcel();
     $result = $obj->toExcel($_POST['timetableInfo']);
-    echo $result;
+    die($result);
   }
+
 }
