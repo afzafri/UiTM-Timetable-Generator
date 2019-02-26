@@ -21,6 +21,7 @@ Official website for this project: https://www.uitmtimetable.com/
 6. UPDATE 6 : 22/12/16 - Added feature for saving the timetable to PNG image file (experimental)
 7. UPDATE 7 : 17/3/17 - Added feature for customizing the events colours scheme (background, border, text)
 8. UPDATE 8 : 3/9/18 - Added feature to search for subject code inside the select subject box
+9. UPDATE 9 : 26/2/19 - Added feature to export timetable to Excel spreadsheet file, and also import back the Excel spreadsheet file into the system to render timetable
 
 
 ## Credit
@@ -34,12 +35,15 @@ Official website for this project: https://www.uitmtimetable.com/
    - GitHub : https://github.com/niklasvh/html2canvas/
 5. blob-select
    - GitHub : https://github.com/Blobfolio/blob-select
-6. Muhammad Nabil - For sponsoring domain and hosting, thanks!
+6. PhpSpreadsheet
+   - Webpage : https://phpspreadsheet.readthedocs.io
+   - GitHub : https://github.com/PHPOffice/PhpSpreadsheet
+7. Muhammad Nabil - For sponsoring domain and hosting, thanks!
 
 ## Installation
 
-1) Drag and drop all files into your web server directory. For eq; Apache2 for Ubuntu is located in `/var/www/html`. 
-2) Don't forget to set the correct permission as this timetable writes cache file, so do `chmod -R 777 /var/www/html`. 
+1) Drag and drop all files into your web server directory. For eq; Apache2 for Ubuntu is located in `/var/www/html`.
+2) Don't forget to set the correct permission as this timetable writes cache file, so do `chmod -R 777 /var/www/html`.
 3) Install required PHP additional extensions, run `sudo apt install php-curl php-mbstring php-zip php-xml` and you'll be fine.
 4) Adjust `config.php` to suite your need. and Voila!
 
