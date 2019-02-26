@@ -76,13 +76,20 @@ A little update to the frontend, now support mobile view. by - afif
 	<pre>Select faculty/campus from list below</pre>
 
 
+  <div class='inputTimetable'>
   <center>
   	<select name='fakulti' id="listfaculty">
   		<option value=''>Select Your Campus State Here</option>
   		<!-- amek data kt icress -->
   		<!-- js akan automatik update data kt sini tiap2 kali run -->
   	</select>
+    <br>
+    or
+    <br><br>
+    Import Excel (.xlsx) file <input type="file" id="excelFile" onchange="return importExcel()"/>
+
   </center>
+  </div>
 
 	<div id="select-table">
 		<table class='newtable'>
