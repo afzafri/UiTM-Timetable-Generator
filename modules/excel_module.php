@@ -1,6 +1,7 @@
 <?php
 
 require 'vendor/autoload.php';
+require_once('uploader_module.php');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -55,6 +56,33 @@ class Excel {
       }
 
       return trim($msg);
+  }
+
+  public function importExcel($data) {
+
+    // upload file first
+  	$obj = new Uploader();
+  	$obj->dir = "./upload/"; //directory to store the image/file
+  	$obj->files = $data; //receive from form
+  	$obj->filetype = array('xlsx','xls'); //set the allowed image/file extensions
+  	$obj->size = 1000000; //set file/image size limit. note: 100000 is 100KB
+  	$stat = json_decode($obj->upload(), true);
+
+    $updFilename = null;
+
+    if(array_key_exists('errors', $stat))
+    {
+      $msg = $stat['errors']['status'];
+      return false;
+    }
+    else
+    {
+      $updFilename = $stat['success']['filename'];
+      $msg = $stat['success']['status'];
+      return true;
+    }
+
+    return false;
   }
 
 }

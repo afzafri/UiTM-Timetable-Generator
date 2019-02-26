@@ -56,3 +56,11 @@ if(isset($_GET['exportexcel'])) {
     die($result);
   }
 }
+
+if(isset($_GET['importexcel'])) {
+  if(!empty($_FILES['excelFile'])) {
+    $obj = new Excel();
+    $result = $obj->importExcel($_FILES['excelFile']);
+    die($result);
+  }
+}
