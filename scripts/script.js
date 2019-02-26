@@ -799,7 +799,7 @@ function importExcel() {
               var info = [];
               var exportData = [];
               var minTime = 23.59, maxTime = 0.0;
-              
+
               for(var i=1;i<timetable.length;i++) {
 
                 var startTime = convertDate(timetable[i][4]);
@@ -883,6 +883,8 @@ function importExcel() {
         blockLoadingBox(false);
     }
 
+    // clear input
+    document.getElementById("excelFile").value = "";
 }
 
 // Change timetable events colours scheme (background, border, text)
