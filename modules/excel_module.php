@@ -47,7 +47,7 @@ class Excel {
       try {
         $writer->save('download/'.$filename);
         $server_link = $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-        $msg = $server_link . 'download/' . $filename;
+        $msg = $server_link . '/download/' . $filename;
 
       }
       catch (Exception $e) {
