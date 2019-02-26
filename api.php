@@ -2,7 +2,7 @@
 
 require_once('./modules/istudent_module.php');
 require_once('./modules/icress_module.php');
-require_once('./modules/exportexcel_module.php');
+require_once('./modules/excel_module.php');
 
 CACHE_TYPE == 'file' ? require_once('./modules/file_module.php') : require_once('./modules/sqlite_module.php');
 
