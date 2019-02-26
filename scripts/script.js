@@ -756,8 +756,14 @@ function saveExcel() {
     try {
         var timetableInfo = document.getElementById("exportData").value;
 
-        doRequest("api.php?exportexcel", 'timetableInfo='.timetableInfo, true, function (data) {
-          console.log(data);
+        doRequest("api.php?exportexcel", 'timetableInfo=' + timetableInfo, true, function (data) {
+          if (data.indexOf('Failed to export') !== -1) {
+            alertify.delay(20000).error(data);
+          } else {
+            // ref: https://stackoverflow.com/questions/3749231/download-file-using-javascript-jquer
+            document.getElementById('excel_frame').src = data;
+          }
+
         });
     }
     catch (e) {
