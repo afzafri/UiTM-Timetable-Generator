@@ -421,46 +421,47 @@ document.querySelector('.newtable').onclick = function (e) {
 
 }
 
-document.querySelector('.login').onclick = function (e) {
+// Outdated script - not working anymore
+// document.querySelector('.login').onclick = function (e) {
 
-    try {
+//     try {
 
-        vex.dialog.open({
-            message: 'Enter your UiTM\'s ID no (matrix no.) :',
-            input: [
-            '<input name="id" type="text" placeholder="Student\'s matrix ID" required />' +
-            '(This is alpha feature! Consider manual adjusting if it doesn\'t works)'
-            ].join(''),
-            buttons: [
-            extend({}, vex.dialog.buttons.YES, {text: 'Automatic fetch!'}),
-            ],
-            callback: function (formData) {
-                if (formData) {
+//         vex.dialog.open({
+//             message: 'Enter your UiTM\'s ID no (matrix no.) :',
+//             input: [
+//             '<input name="id" type="text" placeholder="Student\'s matrix ID" required />' +
+//             '(This is alpha feature! Consider manual adjusting if it doesn\'t works)'
+//             ].join(''),
+//             buttons: [
+//             extend({}, vex.dialog.buttons.YES, {text: 'Automatic fetch!'}),
+//             ],
+//             callback: function (formData) {
+//                 if (formData) {
 
-                    // block loading box
-                    blockLoadingBox(true);
+//                     // block loading box
+//                     blockLoadingBox(true);
 
-                    doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
+//                     doRequest('api.php?fetchDataMatrix', 'studentId=' + formData.id, true, function (data) {
 
-                        if (data != '') {
-                            data = JSON.parse(data);
-                            var elemUiTMSelect = document.querySelector('#listfaculty');
-                            automatic_fetch = true;
-                            fetched_data = data['Courses']; // hand it over global variable
-                            elemUiTMSelect.value = data['UiTMCode'];
-                            elemUiTMSelect.dispatchEvent(new CustomEvent('change', {}));
-                        }
-                    });
-                }
-            }
-        })
+//                         if (data != '') {
+//                             data = JSON.parse(data);
+//                             var elemUiTMSelect = document.querySelector('#listfaculty');
+//                             automatic_fetch = true;
+//                             fetched_data = data['Courses']; // hand it over global variable
+//                             elemUiTMSelect.value = data['UiTMCode'];
+//                             elemUiTMSelect.dispatchEvent(new CustomEvent('change', {}));
+//                         }
+//                     });
+//                 }
+//             }
+//         })
 
-    } catch (e) {
-        alertify.delay(10000).error(e);
-        blockLoadingBox(false);
-    }
+//     } catch (e) {
+//         alertify.delay(10000).error(e);
+//         blockLoadingBox(false);
+//     }
 
-};
+// };
 
 function addNewRow() {
 
