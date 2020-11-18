@@ -38,7 +38,7 @@
   height: calc(100% + 5px);
   opacity: 0;
 }
-@media screen and (min-width: 37.5em) {
+@media screen and (min-width: 1em) {
   .blobselect > select {
     display: none;
   }
@@ -111,7 +111,7 @@
   font-style: italic;
   color: #ccc;
 }
-@media screen and (min-width: 37.5em) {
+@media screen and (min-width: 1em) {
   .is-multiple .blobselect-selection:not(.is-placeholder) {
     position: relative;
     pointer-events: auto;
@@ -155,7 +155,7 @@
   transform-origin: top center;
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
-@media screen and (min-width: 37.5em) {
+@media screen and (min-width: 1em) {
   .blobselect.is-opening .blobselect-items {
     display: block;
   }
