@@ -2,7 +2,7 @@
 # UiTM Timetable Generator
 Fetch and generate Timetable from iCress UiTM
 
-Official website for this project: https://www.uitmtimetable.com/
+Official website for this project: https://uitmtimetable.herokuapp.com (thanks [Adib](https://github.com/ADIBzTER))!
 
 ## Created By :
 1. Afif Zafri, Mohd Shahril & Syed Muhamad Danial
