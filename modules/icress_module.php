@@ -11,7 +11,7 @@ function icress_getJadual() {
 
     global $list;
 
-    $get = file_get_contents('http://' . ICRESS_URL . '/jadual/jadual/jadual.asp');
+    $get = file_get_contents('https://' . ICRESS_URL . '/jadual/jadual/jadual.asp');
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
     $collect = [];
@@ -53,7 +53,7 @@ function icress_getFaculty($faculty) {
         $links = [];
         for ($i = 0; $i < count($selangor); $i++) {
             $code = array_keys($selangor[$i])[0];
-            $links[] = "http://" . ICRESS_URL . "/jadual/{$code}/{$code}.html";
+            $links[] = "https://" . ICRESS_URL . "/jadual/{$code}/{$code}.html";
         }
 
         $return_data = http\http_request($links, null, null, count($links));
@@ -75,7 +75,7 @@ function icress_getFaculty($faculty) {
 
     } else { # for non-selangor uitm
 
-        $get = file_get_contents("http://" . ICRESS_URL . "/jadual/{$faculty}/{$faculty}.html");
+        $get = file_get_contents("https://" . ICRESS_URL . "/jadual/{$faculty}/{$faculty}.html");
         $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
         preg_match_all('/>(.*)<\//', $get, $out);
@@ -114,7 +114,7 @@ function icress_getSubject($faculty, $subject) {
 function icress_getSubject_wrapper($faculty, $subject) {
 
     # start fetching the icress data
-    $jadual = file_get_contents("http://" . ICRESS_URL . "/jadual/{$faculty}/{$subject}.html");
+    $jadual = file_get_contents("https://" . ICRESS_URL . "/jadual/{$faculty}/{$subject}.html");
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
     # parse the html to more neat representation about classes
