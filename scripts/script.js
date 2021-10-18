@@ -62,7 +62,7 @@ document.querySelector('#listfaculty').onchange = function () {
 
                 var elem = document.querySelector('.row-select:last-child .select-subject');
 
-                elem.innerHTML = '<option value="">Select subject</option>';
+                elem.innerHTML = '<option value="">Select Subject</option>';
 
                 for (var i = 0; i < listsubject.length; i++) {
 
@@ -733,18 +733,21 @@ function saveImg() {
 
         // use html2canvas js library, to convert the content into html5 "canvas"
         var timearea = document.getElementById("timetable");
-        html2canvas(timearea, {
-          onrendered: function(canvas) {
-                // create new hyperlink with download attribute, set the image url, auto click the link to download
-                var link = document.createElement('a');
-                link.download = "timetable.png";
-                link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
-                link.click();
+        html2canvas(timearea, { scale: 3 }).then((canvas) => {
+          // create new hyperlink with download attribute, set the image url, auto click the link to download
+          var link = document.createElement('a');
+          link.download = 'timetable.png';
+          link.href = canvas
+            .toDataURL('image/png')
+            .replace('image/png', 'image/octet-stream');
+          link.click();
 
-                // restore back the responsive viewport meta and zoom leve
-                element.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no");
-                document.body.style.zoom="100%";
-            }
+          // restore back the responsive viewport meta and zoom leve
+          element.setAttribute(
+            'content',
+            'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+          );
+          document.body.style.zoom = '100%';
         });
     }
     catch (e) {
