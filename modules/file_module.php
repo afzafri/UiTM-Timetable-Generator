@@ -16,22 +16,26 @@ function file_getJadual() {
     return file_get_contents($filename);
 }
 
-function file_getFaculty($faculty) {
+function file_getCampus($campus, $faculty) {
 
-    $filename = './cache/' . $faculty . '.dat';
+		$filename = empty($faculty) ?
+				'./cache/' . $campus . '.dat' :
+				'./cache/' . $campus . '-' . $faculty . '.dat';
 
     if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
-        file_put_contents($filename, icress_getFaculty($faculty));
+        file_put_contents($filename, icress_getCampus($campus, $faculty));
 
     return file_get_contents($filename);
 }
 
-function file_getSubject($faculty, $subject) {
+function file_getSubject($campus, $faculty, $subject) {
 
-    $filename = './cache/' . $_POST['faculty'] . '-' . $_POST['subject'] . '.dat';
+		$filename = empty($faculty) ?
+    		'./cache/' . $_POST['campus'] . '-' . $_POST['subject'] . '.dat' :
+    		'./cache/' . $_POST['campus'] . '-' . $_POST['faculty'] . '-' . $_POST['subject'] . '.dat';
 
     if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
-        file_put_contents($filename, icress_getSubject($faculty, $subject));
+        file_put_contents($filename, icress_getSubject($campus, $faculty, $subject));
 
     return file_get_contents($filename);
 }

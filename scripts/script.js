@@ -6,14 +6,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
         doRequest("api.php?getlist", null, true, function (data) {
 
             var list = JSON.parse(data);
-            var elem = document.querySelector('#listfaculty');
+            var elem = document.querySelector('#listcampus');
 
             for (var i = 0; i < list.length; i++) {
+								// Seperate campus & faculty
+								// ARSHAD AYUB GRADUATE BUSINESS SCHOOL
+								if (list[i].code === 'AA') {
+										elem = document.querySelector('#listfaculty');
+								}
+
                 var el = document.createElement('option');
                 el.value = list[i].code;
                 el.innerHTML = list[i].fullname;
                 elem.appendChild(el);
             }
+
+						initSelect('select-campus');
+						initSelect('select-faculty');
         });
 
         vex.defaultOptions.className = 'vex-theme-os';
@@ -39,22 +48,43 @@ var automatic_fetch = false;
 var group_prev = {};
 var index_list = 0;
 
-// change if user choose any state from select list
+// change if user choose any campus from select list
+document.querySelector('#listcampus').onchange = function () {
+
+		// If campus B (Selangor) selected
+		let code = document.querySelector('#listcampus').value;
+		if (code[0] === 'B') {
+				document.querySelector('#listfaculty').value = '';
+				document.querySelector('#div-faculty').hidden = false;
+				
+				clearTable();
+
+				return;
+		} else {// If non-campus B (Selangor) selected
+				document.querySelector('#listfaculty').value = '';
+				document.querySelector('#div-faculty').hidden = true;
+		}
+
+		showNewTable();
+}
+
 document.querySelector('#listfaculty').onchange = function () {
+		showNewTable();
+}
+
+var showNewTable = function() {
 
     try {
 
-        var tree_elem = document.querySelectorAll('.newtable tr');
-
-        // remove existing row if user changes state
-        for (var i = 1; i < tree_elem.length; i++) {
-            tree_elem[i].parentNode.removeChild(tree_elem[i]);
-        }
+				clearTable();
 
         // create first row table
         addNewRow();
 
-        doRequest('api.php?getsubject', 'faculty=' + this.value, true, function (data) {
+				var campus = document.querySelector('#listcampus').value;
+				var faculty = document.querySelector('#listfaculty').value;
+
+        doRequest('api.php?getsubject', 'campus=' + campus + '&faculty=' + faculty, true, function (data) {
 
             if (data != '') {
 
@@ -73,7 +103,7 @@ document.querySelector('#listfaculty').onchange = function () {
                     elem.appendChild(el);
                 }
 
-                initSelect();
+                initSelect('select-subject');
 
                 // add new row
                 addNewRow();
@@ -97,23 +127,32 @@ document.querySelector('#listfaculty').onchange = function () {
             }
         });
 
-        // remove previous table before drawing a new one
-        document.querySelector('.timetable').innerHTML = '';
-
-        // change property of select-table depend on user selected choice
-        document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
-
-        // reset colors input and hide the tools section before render new table
-        resetTableSubject();
-        changeColours('default');
-        listSubjectsColour();
-        document.getElementById('tools').style.display = 'none';
-
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
 };
+
+var clearTable = function() {
+		var tree_elem = document.querySelectorAll('.newtable tr');
+
+		// remove existing row if user changes campus
+		for (var i = 1; i < tree_elem.length; i++) {
+				tree_elem[i].parentNode.removeChild(tree_elem[i]);
+		}
+
+		// remove previous table before drawing a new one
+		document.querySelector('.timetable').innerHTML = '';
+
+		// change property of select-table depend on user selected choice
+		document.querySelector('#select-table').style.display = this.value != '' ? 'block' : 'none';
+
+		// reset colors input and hide the tools section before render new table
+		resetTableSubject();
+		changeColours('default');
+		listSubjectsColour();
+		document.getElementById('tools').style.display = 'none';
+}
 
 var processCourses = function () {
 
@@ -206,13 +245,12 @@ document.querySelector('.newtable').onmousedown = function (e) {
             }
 
             // init select plugin and toggle
-            initSelect();
+            initSelect('select-subject');
             toggleSelect();
 
             // add new row into last position
             addNewRow();
         }
-
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
@@ -227,6 +265,7 @@ document.querySelector('.newtable').onchange = function (e) {
         // delegate event for select-subject
         if (e.target && e.target.matches(".select-subject")) {
 
+            var campus = document.querySelector('#listcampus').value;
             var faculty = document.querySelector('#listfaculty').value;
             var subject = e.target.value;
 
@@ -258,7 +297,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
                 // fetch data if it does not exist in Object data yet
                 if (!group[subject]) {
-                    doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty, false, function (data) {
+                    doRequest('api.php?getgroup', 'subject=' + subject + '&faculty=' + faculty + '&campus=' + campus, false, function (data) {
                         if (data != '') {
                             group[subject] = JSON.parse(data);
                             exec();
@@ -360,7 +399,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
             var timetable = new Timetable();
             timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
-            timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+            timetable.addLocations(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']);
 
             // add event
             for (var i = 0; i < Object.keys(info).length; i++) {
@@ -384,6 +423,8 @@ document.querySelector('.newtable').onchange = function (e) {
 
         }
 
+				initSelect('select-group');
+				
     } catch (e) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
@@ -593,7 +634,7 @@ function convertDate(time) {
     try {
 
         // find am/pm index (using only 'm' character)
-        var index = time.indexOf("m");
+        var index = time.indexOf("M");
 
         // compute real time length (either am or pm)
         var getTime = time.substr(0, index - 1);
@@ -990,9 +1031,9 @@ function resetTableSubject()
 }
 
 // Function to initialize blob-select plugin
-function initSelect()
+function initSelect(className)
 {
-  var selects = document.getElementsByClassName('select-subject');
+  var selects = document.getElementsByClassName(className);
   for(var i=0;i<selects.length;i++)
   {
     // init plugin

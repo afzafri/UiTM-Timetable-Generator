@@ -12,16 +12,16 @@ if(isset($_GET['getlist'])) {
 }
 
 if(isset($_GET['getsubject'])) {
-    if(!empty($_POST['faculty'])) {
-        die(CACHE_TYPE == 'file' ? file_getFaculty($_POST['faculty'])
-            : db_getFaculty($_POST['faculty']));
+    if(!empty($_POST['campus'])) {
+        die(CACHE_TYPE == 'file' ? file_getCampus($_POST['campus'], $_POST['faculty'])
+            : db_getCampus($_POST['campus']));
     }
 }
 
 if(isset($_GET['getgroup'])) {
-    if(!empty($_POST['subject']) && !empty($_POST['faculty'])) {
-        die(CACHE_TYPE == 'file' ? file_getSubject($_POST['faculty'], $_POST['subject'])
-            : db_getSubject($_POST['faculty'], $_POST['subject']));
+    if(!empty($_POST['subject']) && !empty($_POST['campus'])) {
+        die(CACHE_TYPE == 'file' ? file_getSubject($_POST['campus'], $_POST['faculty'], $_POST['subject'])
+            : db_getSubject($_POST['campus'], $_POST['subject']));
     }
 }
 

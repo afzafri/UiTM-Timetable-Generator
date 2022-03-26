@@ -73,17 +73,25 @@ A little update to the frontend, now support mobile view. by - afif
 	<!-- experimental feature OUTDATED/NOT WORKIKNG-->
 	<!-- <button type="button" class="button -dark login">Auto Fetch from i-Learn</button> -->
 
-	<pre>Select faculty/campus from list below</pre>
+	<pre>Select Campus/Faculty from list below</pre>
 
 
   <div class='inputTimetable'>
   <center>
-  	<select name='fakulti' id="listfaculty">
-  		<option value=''>Select Your Campus State Here</option>
+  	<select name='campus' id="listcampus" class="select-campus">
+  		<option value=''>Select Campus</option>
   		<!-- amek data kt icress -->
   		<!-- js akan automatik update data kt sini tiap2 kali run -->
   	</select>
-    <br>
+		<br>
+		<div id="div-faculty" hidden>
+			<select name='faculty' id="listfaculty" class="select-faculty">
+				<option value=''>Select Faculty</option>
+				<!-- amek data kt icress -->
+				<!-- js akan automatik update data kt sini tiap2 kali run -->
+			</select>
+			<br>
+		</div>
     or
     <br><br>
 
