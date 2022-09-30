@@ -104,7 +104,7 @@ function icress_getSubject_wrapper($campus, $faculty, $subject) {
 				}
 			}
 
-			$group = trim($row->childNodes[3]->nodeValue);
+			$group = trim($row->childNodes[5]->nodeValue);
 			array_shift($tableDatas);
 			$groups[$group][] = $tableDatas;
 		}

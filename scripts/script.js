@@ -350,8 +350,9 @@ document.querySelector('.newtable').onchange = function (e) {
 
                     places.push(datagroup[k][j][6]);
 
-                    var startTime = convertDate(datagroup[k][j][1]);
-                    var endTime = convertDate(datagroup[k][j][2]);
+										let {day, startTime, endTime} = parseDayTime(datagroup[k][j][0]);
+                    startTime = convertDate(startTime);
+                    endTime = convertDate(endTime);
 
                     minTime = Math.min(startTime, minTime);
                     maxTime = Math.max(endTime, maxTime);
@@ -362,10 +363,10 @@ document.querySelector('.newtable').onchange = function (e) {
                     var endFirst = !start[1] ? 0 : parseFloat(start[1]);
                     var endSecon = !end[1] ? 0 : parseFloat(end[1]);
 
-                    var classroom = datagroup[k][j][6];
-                    var classStart = datagroup[k][j][1];
-                    var classEnd = datagroup[k][j][2];
-                    var dayName = datagroup[k][j][3];
+                    var classroom = datagroup[k][j][4];
+                    var classStart = startTime;
+                    var classEnd = endTime;
+                    var dayName = day;
                     var classGroup = groups[c].value;
 
                     var name = '<h5>' + k + '</h5>' +
@@ -627,6 +628,21 @@ function isClash(canuse) {
         alertify.delay(10000).error(e);
         blockLoadingBox(false);
     }
+}
+
+function parseDayTime(dayTime) {
+	// "MONDAY ( 12:00 PM-13:00 PM )" <-- dayTime format
+	dayTime = dayTime.split('(');
+
+	let day = dayTime[0];
+	let time = dayTime[1];
+
+	time = time.replace(')', '');
+	day = day.trim();
+	time = time.trim();
+	let [startTime, endTime] = time.split('-');
+
+	return {day, startTime, endTime};
 }
 
 function convertDate(time) {
