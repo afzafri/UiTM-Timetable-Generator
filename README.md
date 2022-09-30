@@ -22,6 +22,7 @@ Official website for this project: https://uitmtimetable.herokuapp.com (thanks [
 7. UPDATE 7 : 17/3/17 - Added feature for customizing the events colours scheme (background, border, text)
 8. UPDATE 8 : 3/9/18 - Added feature to search for subject code inside the select subject box
 9. UPDATE 9 : 26/2/19 - Added feature to export timetable to Excel spreadsheet file, and also import back the Excel spreadsheet file into the system to render timetable
+10. UPDATE 10: 30/9/22 - Fixed day & time parsing, added example of icress table for future debugging in references folder
 
 
 ## Credit
