@@ -350,7 +350,7 @@ document.querySelector('.newtable').onchange = function (e) {
 
                     places.push(datagroup[k][j][6]);
 
-										let {day, startTime, endTime} = parseDayTime(datagroup[k][j][0]);
+										let [day, startTime, endTime] = parseDayTime(datagroup[k][j][0]);
                     startTime = convertDate(startTime);
                     endTime = convertDate(endTime);
 
@@ -544,15 +544,16 @@ function isClash(canuse) {
 
                         // if in same day
                         // then check if time is clash
-                        if (datasrc[z][3] === datadst[x][3]) {
-
+                        let [day1, startTime1, endTime1] = parseDayTime(datasrc[z][0]);
+                        let [day2, startTime2, endTime2] = parseDayTime(datadst[x][0]);
+                        if (day1 === day2) {
                             // time 1
-                            var stimesrc = convertHourToMinutes(datasrc[z][1]);
-                            var etimesrc = convertHourToMinutes(datasrc[z][2]);
+                            var stimesrc = convertHourToMinutes(startTime1);
+                            var etimesrc = convertHourToMinutes(endTime1);
 
                             // time 2
-                            var stimedst = convertHourToMinutes(datadst[x][1]);
-                            var etimedst = convertHourToMinutes(datadst[x][2]);
+                            var stimedst = convertHourToMinutes(startTime2);
+                            var etimedst = convertHourToMinutes(endTime2);
 
                             /*  -- Here on how it works --
 
@@ -642,7 +643,7 @@ function parseDayTime(dayTime) {
 	time = time.trim();
 	let [startTime, endTime] = time.split('-');
 
-	return {day, startTime, endTime};
+	return [day, startTime, endTime];
 }
 
 function convertDate(time) {
