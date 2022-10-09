@@ -5,14 +5,23 @@ require_once('./modules/http_module.php');
 
 function icress_getJadual() {
 
-    $get = file_get_contents('https://' . ICRESS_URL . '/timetable/search.asp');
+    $get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp');
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+	$get = cleanHTML($get);
 		
     $collect = [];
+
+	// set error level
+	$internalErrors = libxml_use_internal_errors(true);
 
     # extract campus name and its code
 		$htmlDoc = new DOMDocument();
 		$htmlDoc->loadHTML($get);
+
+		// Restore error level
+		libxml_use_internal_errors($internalErrors);
+
 		$options = $htmlDoc->getElementsByTagName('option');
 
 		for ($i = 0; $i < count($options); $i++) {
@@ -23,14 +32,28 @@ function icress_getJadual() {
 			$value = trim($options[$i]->nodeValue);
 			$value = explode('-', $value, 2);
 
-			if (is_null($value[1])) {
+			$code = isset($value[0]) ? $value[0] : "";
+			$fullname = isset($value[1]) ? $value[1] : "";
+
+			if (is_null($fullname) || $fullname == "") {
 				continue;
 			}
 
-			$collect[] = array('code' => $value[0], 'fullname' => $value[1]);
+			$collect[] = array('code' => $code, 'fullname' => $fullname);
 		}
 
     return json_encode($collect);
+}
+
+function cleanHTML($html) {
+	$patern = "/<SCRIPT.*?>(.*?)<\/SCRIPT>/si";
+	preg_match_all($patern, $html, $parsed);
+
+	$rm_script = $parsed[0][0];
+
+	$html = str_replace($rm_script, "", $html);
+	
+	return $html;
 }
 
 function icress_getCampus($campus, $faculty) {
