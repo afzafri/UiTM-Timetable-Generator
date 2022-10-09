@@ -92,10 +92,10 @@ function icress_getCampus($campus, $faculty) {
 }
 
 function icress_getSubject($campus, $faculty, $subject) {
-
+	
     $subjects_output = [];
     
-		$subjects_output = icress_getSubject_wrapper($campus, $faculty, $subject);
+	$subjects_output = icress_getSubject_wrapper($campus, $faculty, $subject);
 
     return json_encode($subjects_output);
 }
@@ -103,32 +103,37 @@ function icress_getSubject($campus, $faculty, $subject) {
 function icress_getSubject_wrapper($campus, $faculty, $subject) {
 
     # start fetching the icress data
-    $jadual = file_get_contents("https://" . ICRESS_URL . "/timetable/list/{$campus}/{$faculty}/{$subject}.html");
+    $jadual = file_get_contents("https://" . ICRESS_URL . "/ttt_timetable_2022/list/{$campus}/{$faculty}/{$subject}.html");
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
-
+	
     # parse the html to more neat representation about classes
     $jadual = str_replace(array("\r", "\n"), '', $jadual);
 
-		$htmlDoc = new DOMDocument();
-		$htmlDoc->loadHTML($jadual);
-		$tableRows = $htmlDoc->getElementsByTagName('tr');
-		$groups = [];
+	// set error level
+	$internalErrors = libxml_use_internal_errors(true);
+	$htmlDoc = new DOMDocument();
+	$htmlDoc->loadHTML($jadual);
+	// Restore error level
+	libxml_use_internal_errors($internalErrors);
 
-		foreach ($tableRows as $key => $row) {
-			if ($key === 0 || $key === 1) {
-				continue;
-			}
-			$tableDatas = [];
-			foreach($row->childNodes as $tableData) {
-				if (strcmp($tableData->nodeName, 'td') === 0) {
-					array_push($tableDatas, $tableData->nodeValue);
-				}
-			}
+	$tableRows = $htmlDoc->getElementsByTagName('tr');
+	$groups = [];
 
-			$group = trim($row->childNodes[5]->nodeValue);
-			array_shift($tableDatas);
-			$groups[$group][] = $tableDatas;
+	foreach ($tableRows as $key => $row) {
+		if ($key === 0 || $key === 1) {
+			continue;
 		}
+		$tableDatas = [];
+		foreach($row->childNodes as $tableData) {
+			if (strcmp($tableData->nodeName, 'td') === 0) {
+				array_push($tableDatas, $tableData->nodeValue);
+			}
+		}
+
+		$group = trim($row->childNodes[5]->nodeValue);
+		array_shift($tableDatas);
+		$groups[$group][] = $tableDatas;
+	}
 
     return $groups;
 }
