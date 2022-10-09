@@ -16,51 +16,42 @@ function icress_getJadual() {
 	$internalErrors = libxml_use_internal_errors(true);
 
     # extract campus name and its code
-		$htmlDoc = new DOMDocument();
-		$htmlDoc->loadHTML($get);
+	$htmlDoc = new DOMDocument();
+	$htmlDoc->loadHTML($get);
 
-		// Restore error level
-		libxml_use_internal_errors($internalErrors);
+	// Restore error level
+	libxml_use_internal_errors($internalErrors);
 
-		$options = $htmlDoc->getElementsByTagName('option');
+	$options = $htmlDoc->getElementsByTagName('option');
 
-		for ($i = 0; $i < count($options); $i++) {
-			if ($i === 0) {
-				continue;
-			}
-
-			$value = trim($options[$i]->nodeValue);
-			$value = explode('-', $value, 2);
-
-			$code = isset($value[0]) ? $value[0] : "";
-			$fullname = isset($value[1]) ? $value[1] : "";
-
-			if (is_null($fullname) || $fullname == "") {
-				continue;
-			}
-
-			$collect[] = array('code' => $code, 'fullname' => $fullname);
+	for ($i = 0; $i < count($options); $i++) {
+		if ($i === 0) {
+			continue;
 		}
+
+		$value = trim($options[$i]->nodeValue);
+		$value = explode('-', $value, 2);
+
+		$code = isset($value[0]) ? $value[0] : "";
+		$fullname = isset($value[1]) ? $value[1] : "";
+
+		if (is_null($fullname) || $fullname == "") {
+			continue;
+		}
+
+		$collect[] = array('code' => $code, 'fullname' => $fullname);
+	}
 
     return json_encode($collect);
 }
 
-function cleanHTML($html) {
-	$patern = "/<SCRIPT.*?>(.*?)<\/SCRIPT>/si";
-	preg_match_all($patern, $html, $parsed);
-
-	$rm_script = $parsed[0][0];
-
-	$html = str_replace($rm_script, "", $html);
-	
-	return $html;
-}
-
 function icress_getCampus($campus, $faculty) {
+		$form_names = getFormNames();
+
 		$postdata = http_build_query(
 				array(
-						'search_campus' => $campus,
-						'search_faculty' => $faculty
+						$form_names['search_campus'] => $campus,
+						$form_names['search_faculty'] => $faculty
 				)
 		);
 		
@@ -74,11 +65,18 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents('https://' . ICRESS_URL . '/timetable/search.asp', false, $context);
+		$get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp', false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
+		$get = cleanHTML($get);
+
+		// set error level
+		$internalErrors = libxml_use_internal_errors(true);
 		$htmlDoc = new DOMDocument();
 		$htmlDoc->loadHTML($get);
+		// Restore error level
+		libxml_use_internal_errors($internalErrors);
+
 		$tableRows = $htmlDoc->getElementsByTagName('tr');
 		$subjects = [];
 
@@ -133,6 +131,42 @@ function icress_getSubject_wrapper($campus, $faculty, $subject) {
 		}
 
     return $groups;
+}
+
+function cleanHTML($html) {
+	$patern = "/<SCRIPT.*?>(.*?)<\/SCRIPT>/si";
+	preg_match_all($patern, $html, $parsed);
+
+	$rm_script = $parsed[0][0];
+
+	$html = str_replace($rm_script, "", $html);
+	
+	return $html;
+}
+
+function getFormNames() {
+	$get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp');
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+	$get = cleanHTML($get);
+
+	// set error level
+	$internalErrors = libxml_use_internal_errors(true);
+	$htmlDoc = new DOMDocument();
+	$htmlDoc->loadHTML($get);
+	// Restore error level
+	libxml_use_internal_errors($internalErrors);
+
+	$selectCampusElem = $htmlDoc->getElementById('search_campus');
+	$selectCampus = $selectCampusElem->getAttribute('name');
+
+	$searchFacultyElem = $htmlDoc->getElementById('search_faculty');
+	$searchFaculty = $searchFacultyElem->getAttribute('name');
+
+
+	return [
+		'search_campus' => $selectCampus,
+		'search_faculty' => $searchFaculty
+	];
 }
 
 ?>
