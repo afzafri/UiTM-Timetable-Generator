@@ -9,9 +9,12 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 1. Afif Zafri, Mohd Shahril & Syed Muhamad Danial
 2. Created Date : 24/1/16
 3. Contact Us :
-  - http://fb.me/afzafri
-  - http://fb.me/mohdshahril.net
-  - https://www.facebook.com/syedmdanial.sd
+  - Original Devs (No longer active in maintaining this project):
+    - http://fb.me/afzafri
+    - http://fb.me/mohdshahril.net
+    - https://www.facebook.com/syedmdanial.sd
+  - Current Maintainer:
+    - https://twitter.com/adibzter
 
 ## Changelogs
 1. UPDATE 1 : 10/4/16 - Initial design
