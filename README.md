@@ -24,6 +24,7 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 8. UPDATE 8 : 3/9/18 - Added feature to search for subject code inside the select subject box
 9. UPDATE 9 : 26/2/19 - Added feature to export timetable to Excel spreadsheet file, and also import back the Excel spreadsheet file into the system to render timetable
 10. UPDATE 10: 30/9/22 - Fixed day & time parsing, added example of icress table for future debugging in references folder
+11. UPDATE 11: 10/10/22 - Fixed missing Subjects & Groups. Reason: iCress upgraded, and most of the URL changed.
 
 
 ## Credit
