@@ -4,8 +4,8 @@ require_once('./config.php');
 require_once('./modules/http_module.php');
 
 function icress_getJadual() {
-
-    $get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp');
+	
+    $get = file_get_contents(getTimetableURL());
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	$get = cleanHTML($get);
@@ -65,7 +65,7 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp', false, $context);
+		$get = file_get_contents(getTimetableURL(), false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -103,7 +103,7 @@ function icress_getSubject($campus, $faculty, $subject) {
 function icress_getSubject_wrapper($campus, $faculty, $subject) {
 
     # start fetching the icress data
-    $jadual = file_get_contents("https://" . ICRESS_URL . "/timetable_/list/{$campus}/{$faculty}/{$subject}.html");
+    $jadual = file_get_contents(getTimetableURL(true) . "/list/{$campus}/{$faculty}/{$subject}.html");
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 	
     # parse the html to more neat representation about classes
@@ -150,7 +150,7 @@ function cleanHTML($html) {
 }
 
 function getFormNames() {
-	$get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp');
+	$get = file_get_contents(getTimetableURL());
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 	$get = cleanHTML($get);
 
@@ -172,6 +172,58 @@ function getFormNames() {
 		'search_campus' => $selectCampus,
 		'search_faculty' => $searchFaculty
 	];
+}
+
+function extractRedirect($url) {
+	$response = file_get_contents($url);
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+	if (preg_match('/window\.location\.replace\([\s]{0,}[\"\'](.*)[\"\'][\s]{0,}\)/i', $response, $redirect_result['1']) ||
+		preg_match('/\$\(location\)\.attr\([\s]{0,}[\"\'][\s]{0,}href[\s]{0,}[\"\'][\s]{0,}\,[\s]{0,}[\"\'][\s]{0,}(.*)[\s]{0,}[\"\'][\s]{0,}\)/i', $response, $redirect_result['2']) ||
+		preg_match('/window\.location[\s]{0,}\=[\s]{0,}[\"\'](.*)[\"\']/i', $response, $redirect_result['3']) ||
+		preg_match('/window\.location\.href[\s]{0,}\=[\s]{0,}[\"\'](.*)[\"\']/i', $response, $redirect_result['4']) ||
+		preg_match('/window\.href[\s]{0,}\=[\s]{0,}[\"\'](.*)[\"\']/i', $response, $redirect_result['5']) ||
+		preg_match('/<[\s]*meta[\s]*http-equiv="?REFRESH"?' . '[\s]*content="?[0-9]*;[\s]*URL[\s]*=[\s]*([^>"]*)"?' . '[\s]*[\/]?[\s]*>/si', $response, $redirect_result['6'])) {
+		for ($i = 1; $i <= 6; $i++) {
+			if ($redirect_result[$i]) {
+				$window_location_final = $redirect_result[$i];
+				break;
+			}
+		}
+		$window_location_final = end($window_location_final);
+		if (substr($window_location_final, 0, 1) === '/' && trim($redirect_url)) {
+			$window_location_final = rtrim($redirect_url, '/') . $window_location_final;
+		}
+		$window_location_final = trim($window_location_final) ? trim($window_location_final) : '';
+		if ($window_location_final) {
+			$redirect_url = $window_location_final;
+		}    
+
+		return $redirect_url;
+	}
+
+	return '';
+}
+
+function getTimetableURL($directoryOnly = false) {
+	$redirect_url = 'https://' . ICRESS_URL;
+	$redirects = [];
+
+	// if extractRedirect return string, continue to extractRedirect
+	// else, break the loop, return $redirect_url
+	while ($redirect_url = extractRedirect($redirect_url)) {
+		$redirects[] = $redirect_url;
+	}
+	
+	$final = sizeof($redirects) > 0 ? $redirects[sizeof($redirects) - 1] : '';
+
+	// if $directoryOnly is true, return the directory only
+	if ($directoryOnly) {
+		$final = substr($final, 0, strrpos($final, '/') + 1);
+		$final = rtrim($final, '/');
+	}
+
+	return $final;
 }
 
 ?>
