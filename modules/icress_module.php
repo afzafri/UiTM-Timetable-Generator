@@ -5,7 +5,7 @@ require_once('./modules/http_module.php');
 
 function icress_getJadual() {
 
-    $get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp');
+    $get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp');
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	$get = cleanHTML($get);
@@ -65,7 +65,7 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp', false, $context);
+		$get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp', false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -103,7 +103,7 @@ function icress_getSubject($campus, $faculty, $subject) {
 function icress_getSubject_wrapper($campus, $faculty, $subject) {
 
     # start fetching the icress data
-    $jadual = file_get_contents("https://" . ICRESS_URL . "/ttt_timetable_2022/list/{$campus}/{$faculty}/{$subject}.html");
+    $jadual = file_get_contents("https://" . ICRESS_URL . "/timetable_/list/{$campus}/{$faculty}/{$subject}.html");
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 	
     # parse the html to more neat representation about classes
@@ -150,7 +150,7 @@ function cleanHTML($html) {
 }
 
 function getFormNames() {
-	$get = file_get_contents('https://' . ICRESS_URL . '/ttt_timetable_2022/search.asp');
+	$get = file_get_contents('https://' . ICRESS_URL . '/timetable_/search.asp');
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 	$get = cleanHTML($get);
 
