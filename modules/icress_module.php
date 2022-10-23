@@ -206,24 +206,29 @@ function extractRedirect($url) {
 }
 
 function getTimetableURL($directoryOnly = false) {
-	$redirect_url = 'https://' . ICRESS_URL;
-	$redirects = [];
-
-	// if extractRedirect return string, continue to extractRedirect
-	// else, break the loop, return $redirect_url
-	while ($redirect_url = extractRedirect($redirect_url)) {
-		$redirects[] = $redirect_url;
-	}
-	
-	$final = sizeof($redirects) > 0 ? $redirects[sizeof($redirects) - 1] : '';
-
-	// if $directoryOnly is true, return the directory only
 	if ($directoryOnly) {
-		$final = substr($final, 0, strrpos($final, '/') + 1);
-		$final = rtrim($final, '/');
+		return 'https://icress.uitm.edu.my/timetable1';
+	} else {
+		return 'https://icress.uitm.edu.my/timetable1/search.asp';
 	}
+	// $redirect_url = 'https://' . ICRESS_URL;
+	// $redirects = [];
 
-	return $final;
+	// // if extractRedirect return string, continue to extractRedirect
+	// // else, break the loop, return $redirect_url
+	// while ($redirect_url = extractRedirect($redirect_url)) {
+	// 	$redirects[] = $redirect_url;
+	// }
+	
+	// $final = sizeof($redirects) > 0 ? $redirects[sizeof($redirects) - 1] : '';
+
+	// // if $directoryOnly is true, return the directory only
+	// if ($directoryOnly) {
+	// 	$final = substr($final, 0, strrpos($final, '/') + 1);
+	// 	$final = rtrim($final, '/');
+	// }
+
+	// return $final;
 }
 
 ?>
