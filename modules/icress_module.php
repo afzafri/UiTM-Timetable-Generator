@@ -161,10 +161,12 @@ function getFormNames() {
 	// Restore error level
 	libxml_use_internal_errors($internalErrors);
 
-	$selectCampusElem = $htmlDoc->getElementById('search_campus');
+	// $selectCampusElem = $htmlDoc->getElementById('search_campus');
+	$selectCampusElem = $htmlDoc->getElementById('search_cam');
 	$selectCampus = $selectCampusElem->getAttribute('name');
 
-	$searchFacultyElem = $htmlDoc->getElementById('search_faculty');
+	// $searchFacultyElem = $htmlDoc->getElementById('search_faculty');
+	$searchFacultyElem = $htmlDoc->getElementById('eyJ0eXAiOiiiJKV1QiLCJhbGciOiJIUzI1NiJ9');
 	$searchFaculty = $searchFacultyElem->getAttribute('name');
 
 
