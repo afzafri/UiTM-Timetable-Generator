@@ -1,3 +1,4 @@
+const { jsPDF } = window.jspdf;
 
 // js native equivalent of jQuery $(document).ready(function {..});
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -815,6 +816,43 @@ function saveImg() {
 
 }
 
+// Save (download) timetable as PDF file
+function savePDF() {
+    try {
+        // Get the <div> element to convert
+        const divToConvert = document.getElementById('timetable');
+        
+        // Create a new jsPDF instance
+        const doc = new jsPDF({
+            orientation: "landscape",
+            // unit: "in",
+            // format: [4, 2]
+        });
+
+        // Convert the <div> element to PDF using html2canvas library
+        html2canvas(divToConvert).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = doc.internal.pageSize.getWidth();
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+
+            // Add the image to the PDF document
+            doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+            const currentDate = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\//g, '-');
+
+            // Download the PDF file
+            doc.save(`UiTM-Timetable-Generator-${currentDate}.pdf`);
+        });
+    }
+    catch (e) {
+        alertify.delay(10000).error(e);
+        blockLoadingBox(false);
+    }
+}
 // Save (download) timetable as Excel spreadsheet
 function saveExcel() {
 
