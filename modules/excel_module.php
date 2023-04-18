@@ -6,6 +6,9 @@ require_once('uploader_module.php');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+/**
+ * @deprecated
+ */
 class Excel {
 
   private $msg = null;
