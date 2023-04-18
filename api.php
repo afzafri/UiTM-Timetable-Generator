@@ -2,7 +2,8 @@
 
 require_once('./modules/istudent_module.php');
 require_once('./modules/icress_module.php');
-require_once('./modules/excel_module.php');
+/** @deprecated */
+// require_once('./modules/excel_module.php'); 
 
 CACHE_TYPE == 'file' ? require_once('./modules/file_module.php') : require_once('./modules/sqlite_module.php');
 
@@ -49,6 +50,9 @@ if(isset($_GET['fetchDataMatrix'])) {
     }
 }
 
+/**
+ * @deprecated
+ */
 if(isset($_GET['exportexcel'])) {
   if(!empty($_POST['timetableInfo'])) {
     $obj = new Excel();
@@ -57,6 +61,9 @@ if(isset($_GET['exportexcel'])) {
   }
 }
 
+/**
+ * @deprecated
+ */
 if(isset($_GET['importexcel'])) {
   if(!empty($_FILES['excelFile'])) {
     $obj = new Excel();

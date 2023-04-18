@@ -28,6 +28,8 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 9. UPDATE 9 : 26/2/19 - Added feature to export timetable to Excel spreadsheet file, and also import back the Excel spreadsheet file into the system to render timetable
 10. UPDATE 10: 30/9/22 - Fixed day & time parsing, added example of icress table for future debugging in references folder
 11. UPDATE 11: 10/10/22 - Fixed missing Subjects & Groups. Reason: iCress upgraded, and most of the URL changed.
+12. UPDATE 12: 23/3/23 - Added feature to export timetable to PDF file (thanks [Naim](https://github.com/naimhasim))
+13. UPATE 13: 18/4/23 - Fixed export to Excel issue, move write and read Excel file process to client side.
 
 
 ## Credit

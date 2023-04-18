@@ -858,15 +858,40 @@ function saveExcel() {
 
     try {
         var timetableInfo = document.getElementById("exportData").value;
+        timetableInfo = JSON.parse(timetableInfo);
 
-        doRequest("api.php?exportexcel", 'timetableInfo=' + timetableInfo, true, function (data) {
-          if (data.indexOf('Failed to export') !== -1) {
-            alertify.delay(20000).error(data);
-          } else {
-            // ref: https://stackoverflow.com/questions/3749231/download-file-using-javascript-jquer
-            document.getElementById('excel_frame').src = location.protocol + '//' + data;
-          }
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = 'UiTM Timetable';
+        workbook.lastModifiedBy = 'UiTM Timetable';
+        workbook.created = new Date();
+        workbook.modified = new Date();
+        workbook.lastPrinted = new Date();
 
+        const worksheet = workbook.addWorksheet('timetable');
+
+        worksheet.columns = [
+            { header: 'DAY', key: 'day' },
+            { header: 'SUBJECT', key: 'subject' },
+            { header: 'GROUP', key: 'group' },
+            { header: 'PLACE', key: 'classroom' },
+            { header: 'START TIME', key: 'class_start' },
+            { header: 'END TIME', key: 'class_end' },
+        ];
+
+        for (var i = 0; i < timetableInfo.length; i++) {
+            var rowData = timetableInfo[i];
+            worksheet.addRow({id: (i+1), day: ucwords(rowData.day), subject: rowData.subject, group: rowData.group, classroom: rowData.classroom, class_start: rowData.class_start, class_end: rowData.class_end});
+        }
+
+        // Set up the response headers to trigger a download of the Excel file
+        const fileName = 'UiTM-Timetable-' + Date.now() + '.xlsx';
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        workbook.xlsx.writeBuffer().then(function(buffer) {
+            const blob = new Blob([buffer], {type: fileType});
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
         });
     }
     catch (e) {
@@ -886,96 +911,120 @@ function importExcel() {
         if (!excelFile[0].type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
           alertify.delay(10000).error('Invalid file! Only xlsx file are allowed.');
         } else {
-          // Add the file to the request.
-          formData.append('excelFile', excelFile[0], excelFile[0].name);
 
-          doRequest("api.php?importexcel", formData, true, function (data) {
-            var jsonTB = JSON.parse(data);
-            var status = jsonTB.status;
-            var message = jsonTB.message;
+            // Get the uploaded file from the event
+            const file = excelFile[0];
 
-            if(status) {
-              var timetable = jsonTB.timetable;
-              var info = [];
-              var exportData = [];
-              var minTime = 23.59, maxTime = 0.0;
+            // Create a new file reader
+            const reader = new FileReader();
 
-              for(var i=1;i<timetable.length;i++) {
+            // Set up the file reader to read the uploaded file as a binary string
+            reader.readAsBinaryString(file);
 
-                var startTime = convertDate(timetable[i][4]);
-                var endTime = convertDate(timetable[i][5]);
+            // Once the file has been read, convert it to a JSON object
+            reader.onload = function() {
+                // Create a new workbook object from the binary string
+                const workbook = new ExcelJS.Workbook();
+                workbook.xlsx.load(reader.result).then(function() {
+                    // Get the first worksheet from the workbook
+                    const worksheet = workbook.worksheets[0];
 
-                minTime = Math.min(startTime, minTime);
-                maxTime = Math.max(endTime, maxTime);
+                    // Get the data rows
+                    const dataRows = [];
+                    worksheet.eachRow({ includeEmpty: false, skipHeader: true }, function(row, rowNumber) {
+                        // Skip the first row (i.e., the header row)
+                        if (rowNumber > 1) {
+                            // Create a new object to store the row data
+                            const rowData = {};
+                            row.eachCell({ includeEmpty: false }, function(cell, colNumber) {
+                                // Use the column names to set the property names in the object
+                                rowData[colNumber - 1] = cell.value;
+                            });
+                            // Push the row data object into the array
+                            dataRows.push(rowData);
+                        }
+                    });
 
-                var start = startTime.toString().split('.');
-                var end = endTime.toString().split('.');
+                    // generate Timetable
+                    var timetable = dataRows;
+                    var message = "Timetable Imported";
+                    var info = [];
+                    var exportData = [];
+                    var minTime = 23.59, maxTime = 0.0;
 
-                var endFirst = !start[1] ? 0 : parseFloat(start[1]);
-                var endSecon = !end[1] ? 0 : parseFloat(end[1]);
+                    for(var i=0;i<timetable.length;i++) {
+                        var startTime = timetable[i][4]
+                        var endTime = timetable[i][5];
 
-                var subject = timetable[i][1];
-                var classroom = timetable[i][3];
-                var classStart = timetable[i][4];
-                var classEnd = timetable[i][5];
-                var dayName = timetable[i][0];
-                var classGroup = timetable[i][2];
-                var name = '<h5>' + subject + '</h5>' +
-                            '<p><i>' + classroom + '</i></p>' +
-                            '<p>' + classStart + '-' + classEnd + '</p>';
+                        minTime = Math.min(startTime, minTime);
+                        maxTime = Math.max(endTime, maxTime);
 
-                info.push({
-                    name: name,
-                    loc: dayName,
-                    startH: parseFloat(start[0]),
-                    startM: endFirst,
-                    endH: parseFloat(end[0]),
-                    endM: endSecon
+                        var start = startTime.toString().split('.');
+                        var end = endTime.toString().split('.');
+
+                        var endFirst = !start[1] ? 0 : parseFloat(start[1]);
+                        var endSecon = !end[1] ? 0 : parseFloat(end[1]);
+
+                        var subject = timetable[i][1];
+                        var classroom = timetable[i][3];
+                        var classStart = timetable[i][4];
+                        var classEnd = timetable[i][5];
+                        var dayName = ucwords(timetable[i][0]);
+                        var classGroup = timetable[i][2];
+                        var name = '<h5>' + subject + '</h5>' +
+                                    '<p><i>' + classroom + '</i></p>' +
+                                    '<p>' + classStart + '-' + classEnd + '</p>';
+
+                        info.push({
+                            name: name,
+                            loc: dayName,
+                            startH: parseFloat(start[0]),
+                            startM: endFirst,
+                            endH: parseFloat(end[0]),
+                            endM: endSecon
+                        });
+
+                        // Array data for export feature
+                        exportData.push({
+                            day: dayName,
+                            subject: subject,
+                            group: classGroup,
+                            classroom: classroom,
+                            class_start: classStart,
+                            class_end: classEnd
+                        });
+
+                    }
+
+                    // convert array to JSON, append to textarea for fetching later
+                    document.getElementById('exportData').value = JSON.stringify(exportData);
+
+                    var timetable = new Timetable();
+                    timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
+                    timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+
+                    // add event
+                    for (var i = 0; i < Object.keys(info).length; i++) {
+                        timetable.addEvent(info[i].name, info[i].loc,
+                                new Date(0, 0, 0, info[i].startH, info[i].startM),
+                                new Date(0, 0, 0, info[i].endH, info[i].endM), '#');
+                    }
+
+                    var renderer = new Timetable.Renderer(timetable);
+                    // remove previous table before drawing new one
+                    document.querySelector('.timetable').innerHTML = '';
+
+                    renderer.draw('.timetable'); // any css selector
+                    // reset colors input and show the tools section before render new table
+                    resetTableSubject();
+                    changeColours('default');
+                    listSubjectsColour();
+                    document.getElementById("tools").style.display = 'block';
+
+                    alertify.success(message);
+
                 });
-
-                // Array data for export feature
-                exportData.push({
-                    day: dayName,
-                    subject: subject,
-                    group: classGroup,
-                    classroom: classroom,
-                    class_start: classStart,
-                    class_end: classEnd
-                });
-
-              }
-
-              // convert array to JSON, append to textarea for fetching later
-              document.getElementById('exportData').value = JSON.stringify(exportData);
-
-              var timetable = new Timetable();
-              timetable.setScope(Math.floor(minTime), Math.ceil(maxTime));
-              timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-
-              // add event
-              for (var i = 0; i < Object.keys(info).length; i++) {
-                  timetable.addEvent(info[i].name, info[i].loc,
-                          new Date(0, 0, 0, info[i].startH, info[i].startM),
-                          new Date(0, 0, 0, info[i].endH, info[i].endM), '#');
-              }
-
-              var renderer = new Timetable.Renderer(timetable);
-              // remove previous table before drawing new one
-              document.querySelector('.timetable').innerHTML = '';
-
-              renderer.draw('.timetable'); // any css selector
-              // reset colors input and show the tools section before render new table
-              resetTableSubject();
-              changeColours('default');
-              listSubjectsColour();
-              document.getElementById("tools").style.display = 'block';
-
-              alertify.success(message);
-            } else {
-              alertify.delay(10000).error(message);
-            }
-
-          });
+            };
         }
     }
     catch (e) {
@@ -1113,4 +1162,11 @@ function toggleSelect()
 {
   var selects = document.getElementsByClassName('blobselect');
   selects[selects.length-1].click();
+}
+
+// Capitalize first character for every words
+function ucwords(str) {
+  return str.toLowerCase().replace(/\b[a-z]/g, function(char) {
+    return char.toUpperCase();
+  });
 }
