@@ -46,12 +46,23 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 6. PhpSpreadsheet
    - Webpage : https://phpspreadsheet.readthedocs.io
    - GitHub : https://github.com/PHPOffice/PhpSpreadsheet
-7. Muhammad Nabil - For sponsoring domain and hosting, thanks!
+7. jsPDF
+   - Webpage : https://parall.ax/products/jspdf
+   - GitHub : https://github.com/parallax/jsPDF
+8. ExcelJS
+   - GitHub : https://github.com/exceljs/exceljs
+9. Muhammad Nabil - For sponsoring domain and hosting, thanks! (uitmtimetable.com)
+10. Adib Zaini - Current maintainer, sponsored new domain and hosting (uitmtimetable.skrin.xyz)
 
 ## Installation
 
 1) Drag and drop all files into your web server directory. For eq; Apache2 for Ubuntu is located in `/var/www/html`.
-2) Don't forget to set the correct permission as this timetable writes cache file, so do `chmod -R 777 /var/www/html`.
+2) Don't forget to set the correct permission as this timetable writes cache file.
+  ```
+  sudo chown -R apache:apache /path/to/UiTM-Timetable-Generator/
+  sudo find /path/to/UiTM-Timetable-Generator/ -type f -exec chmod 644 {} \;
+  sudo find /path/to/UiTM-Timetable-Generator/ -type d -exec chmod 755 {} \;
+  ```
 3) Install required PHP additional extensions, run `sudo apt install php-curl php-mbstring php-zip php-xml` and you'll be fine.
 4) Adjust `config.php` to suite your need. and Voila!
 
@@ -61,8 +72,6 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 2. Select courses that you want the timetable to generate.
 3. (Optional) Change colour for each subjects.
 4. (Optional) Export the timetable image to your device.
-
-Note! : Automatic iStudent data fetcher is currently on experimental mode, consider manual adjusting if needed.
 
 ## Contributing
 
