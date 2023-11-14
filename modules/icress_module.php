@@ -8,29 +8,21 @@ function icress_getJadual() {
     $get = file_get_contents(getTimetableURL());
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
-	$get = cleanHTML($get);
-		
+    $data = json_decode($get, true);
+
+    $fullid = [];
     $collect = [];
 
-	// set error level
-	$internalErrors = libxml_use_internal_errors(true);
+    foreach ($data['results'] as $result) {
+        $fullid[] = $result['text'];
+    }
 
-    # extract campus name and its code
-	$htmlDoc = new DOMDocument();
-	$htmlDoc->loadHTML($get);
-
-	// Restore error level
-	libxml_use_internal_errors($internalErrors);
-
-	$options = $htmlDoc->getElementsByTagName('option');
-
-	for ($i = 0; $i < count($options); $i++) {
-		if ($i === 0) {
+    for ($i = 0; $i < count($fullid); $i++) {
+		if ($i === 0 || $i === 1 || $i === 2 || $i === 3) {
 			continue;
 		}
 
-		$value = trim($options[$i]->nodeValue);
-		$value = explode('-', $value, 2);
+		$value = explode('-', $fullid[$i], 2);
 
 		$code = isset($value[0]) ? $value[0] : "";
 		$fullname = isset($value[1]) ? $value[1] : "";
@@ -42,6 +34,7 @@ function icress_getJadual() {
 		$collect[] = array('code' => $code, 'fullname' => $fullname);
 	}
 
+    echo $collect;
     return json_encode($collect);
 }
 
@@ -208,29 +201,7 @@ function extractRedirect($url) {
 }
 
 function getTimetableURL($directoryOnly = false) {
-	if ($directoryOnly) {
-		return 'https://icress.uitm.edu.my/timetable1';
-	} else {
-		return 'https://icress.uitm.edu.my/timetable1/search.asp';
-	}
-	// $redirect_url = 'https://' . ICRESS_URL;
-	// $redirects = [];
-
-	// // if extractRedirect return string, continue to extractRedirect
-	// // else, break the loop, return $redirect_url
-	// while ($redirect_url = extractRedirect($redirect_url)) {
-	// 	$redirects[] = $redirect_url;
-	// }
-	
-	// $final = sizeof($redirects) > 0 ? $redirects[sizeof($redirects) - 1] : '';
-
-	// // if $directoryOnly is true, return the directory only
-	// if ($directoryOnly) {
-	// 	$final = substr($final, 0, strrpos($final, '/') + 1);
-	// 	$final = rtrim($final, '/');
-	// }
-
-	// return $final;
+	return 'https://simsweb4.uitm.edu.my/estudent/class_timetable/cfc/select.cfc?method=find_cam_icress_student&key=All&page=1&page_limit=30';
 }
 
 ?>
