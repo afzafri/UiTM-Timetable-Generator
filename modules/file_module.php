@@ -29,13 +29,22 @@ function file_getCampus($campus, $faculty) {
 }
 
 function file_getSubject($campus, $faculty, $subject) {
+    $subjects = file_getCampus($campus, $faculty);
+    $subjects = json_decode($subjects, true);
+    $path = '';
+
+    foreach ($subjects as $s) {
+        if ($s['subject'] == $subject) {
+            $path = $s['path'];
+        }
+    }
 
 		$filename = empty($faculty) ?
     		'./cache/' . $_POST['campus'] . '-' . $_POST['subject'] . '.dat' :
     		'./cache/' . $_POST['campus'] . '-' . $_POST['faculty'] . '-' . $_POST['subject'] . '.dat';
 
     if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
-        file_put_contents($filename, icress_getSubject($campus, $faculty, $subject));
+        file_put_contents($filename, icress_getSubject($path));
 
     return file_get_contents($filename);
 }

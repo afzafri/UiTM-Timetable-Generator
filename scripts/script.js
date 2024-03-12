@@ -98,8 +98,8 @@ var showNewTable = function() {
                 for (var i = 0; i < listsubject.length; i++) {
 
                     var el = document.createElement('option');
-                    el.value = listsubject[i];
-                    el.innerHTML = listsubject[i];
+                    el.value = listsubject[i].subject;
+                    el.innerHTML = listsubject[i].subject;
 
                     elem.appendChild(el);
                 }
@@ -240,8 +240,8 @@ document.querySelector('.newtable').onmousedown = function (e) {
 
             for (var i = 0; i < listsubject.length; i++) {
                 el = document.createElement('option');
-                el.value = listsubject[i];
-                el.innerHTML = listsubject[i];
+                el.value = listsubject[i].subject;
+                el.innerHTML = listsubject[i].subject;
                 e.target.appendChild(el);
             }
 
