@@ -9,32 +9,39 @@ function icress_getJadual() {
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
     $data = json_decode($get, true);
+	$collect = [];
 
-    $fullid = [];
-    $collect = [];
+	foreach ($data['results'] as $result) {
+		$code = $result['id'];
+		$fullname = $result['text'];
 
-    foreach ($data['results'] as $result) {
-        $fullid[] = $result['text'];
-    }
-
-    for ($i = 0; $i < count($fullid); $i++) {
-		if ($i === 0 || $i === 1 || $i === 2 || $i === 3) {
+		if ($result['id'] === 'X') {
 			continue;
-		}
-
-		$value = explode('-', $fullid[$i], 2);
-
-		$code = isset($value[0]) ? $value[0] : "";
-		$fullname = isset($value[1]) ? $value[1] : "";
-
-		if (is_null($fullname) || $fullname == "") {
-			continue;
+		} else if (strpos($fullname, 'SELANGOR') === false) {
+			$fullname = explode('-', $fullname, 2)[1];
 		}
 
 		$collect[] = array('code' => $code, 'fullname' => $fullname);
 	}
 
-    echo $collect;
+    return json_encode($collect);
+}
+
+function icress_getFaculty() {
+	
+    $get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_fac_icress_student&key=All&page=1&page_limit=30');
+    $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+    $data = json_decode($get, true);
+	$collect = [];
+
+	foreach ($data['results'] as $result) {
+		$code = $result['id'];
+		$fullname = explode('-', $result['text'], 2)[1];
+
+		$collect[] = array('code' => $code, 'fullname' => $fullname);
+	}
+
     return json_encode($collect);
 }
 
@@ -46,7 +53,8 @@ function icress_getCampus($campus, $faculty) {
 						// $form_names['search_campus'] => $campus,
 						// $form_names['search_faculty'] => $faculty
 						'search_campus' => $campus,
-						'search_course' => $faculty,
+						'search_faculty' => $faculty,
+						'search_course' => '',
 				)
 		);
 		

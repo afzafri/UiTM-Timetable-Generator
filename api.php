@@ -12,6 +12,10 @@ if(isset($_GET['getlist'])) {
         : db_getJadual());
 }
 
+if(isset($_GET['getfaculty'])) {
+    die(file_getFaculty());
+}
+
 if(isset($_GET['getsubject'])) {
     if(!empty($_POST['campus'])) {
         die(CACHE_TYPE == 'file' ? file_getCampus($_POST['campus'], $_POST['faculty'])

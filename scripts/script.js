@@ -6,24 +6,32 @@ document.addEventListener("DOMContentLoaded", function (event) {
     try {
         doRequest("api.php?getlist", null, true, function (data) {
 
-            var list = JSON.parse(data);
-            var elem = document.querySelector('#listcampus');
+            let campuses = JSON.parse(data);
+            let elListCampus = document.querySelector('#listcampus');
 
-            for (var i = 0; i < list.length; i++) {
-								// Seperate campus & faculty
-								// ARSHAD AYUB GRADUATE BUSINESS SCHOOL
-								if (list[i].code === 'AA') {
-										elem = document.querySelector('#listfaculty');
-								}
-
-                var el = document.createElement('option');
-                el.value = list[i].code;
-                el.innerHTML = list[i].fullname;
-                elem.appendChild(el);
+            for (const campus of campuses) {
+                let option = document.createElement('option');
+                option.value = campus.code;
+                option.innerHTML = campus.fullname;
+                elListCampus.appendChild(option);
             }
 
-						initSelect('select-campus');
-						initSelect('select-faculty');
+            initSelect('select-campus');
+        });
+
+        doRequest("api.php?getfaculty", null, true, function (data) {
+
+            let faculties = JSON.parse(data);
+            let elListFaculty = document.querySelector('#listfaculty');
+
+            for (const faculty of faculties) {
+                let option = document.createElement('option');
+                option.value = faculty.code;
+                option.innerHTML = faculty.fullname;
+                elListFaculty.appendChild(option);
+            }
+
+            initSelect('select-faculty');
         });
 
         vex.defaultOptions.className = 'vex-theme-os';

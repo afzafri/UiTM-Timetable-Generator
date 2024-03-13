@@ -16,6 +16,16 @@ function file_getJadual() {
     return file_get_contents($filename);
 }
 
+function file_getFaculty() {
+
+    $filename = './cache/faculty.dat';
+
+    if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
+        file_put_contents($filename, icress_getFaculty());
+
+    return file_get_contents($filename);
+}
+
 function file_getCampus($campus, $faculty) {
 
 		$filename = empty($faculty) ?
