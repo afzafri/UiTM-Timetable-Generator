@@ -5,60 +5,70 @@ require_once('./modules/http_module.php');
 
 function icress_getJadual() {
 	
-    $get = file_get_contents(getTimetableURL());
+    $get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_cam_icress_student&key=All&page=1&page_limit=30');
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
     $data = json_decode($get, true);
+	$collect = [];
 
-    $fullid = [];
-    $collect = [];
+	foreach ($data['results'] as $result) {
+		$code = $result['id'];
+		$fullname = $result['text'];
 
-    foreach ($data['results'] as $result) {
-        $fullid[] = $result['text'];
-    }
-
-    for ($i = 0; $i < count($fullid); $i++) {
-		if ($i === 0 || $i === 1 || $i === 2 || $i === 3) {
+		if ($result['id'] === 'X') {
 			continue;
-		}
-
-		$value = explode('-', $fullid[$i], 2);
-
-		$code = isset($value[0]) ? $value[0] : "";
-		$fullname = isset($value[1]) ? $value[1] : "";
-
-		if (is_null($fullname) || $fullname == "") {
-			continue;
+		} else if (strpos($fullname, 'SELANGOR') === false) {
+			$fullname = explode('-', $fullname, 2)[1];
 		}
 
 		$collect[] = array('code' => $code, 'fullname' => $fullname);
 	}
 
-    echo $collect;
+    return json_encode($collect);
+}
+
+function icress_getFaculty() {
+	
+    $get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_fac_icress_student&key=All&page=1&page_limit=30');
+    $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+    $data = json_decode($get, true);
+	$collect = [];
+
+	foreach ($data['results'] as $result) {
+		$code = $result['id'];
+		$fullname = explode('-', $result['text'], 2)[1];
+
+		$collect[] = array('code' => $code, 'fullname' => $fullname);
+	}
+
     return json_encode($collect);
 }
 
 function icress_getCampus($campus, $faculty) {
-		$form_names = getFormNames();
+		// $form_names = getFormNames();
 
 		$postdata = http_build_query(
 				array(
-						$form_names['search_campus'] => $campus,
-						$form_names['search_faculty'] => $faculty
+						// $form_names['search_campus'] => $campus,
+						// $form_names['search_faculty'] => $faculty
+						'search_campus' => $campus,
+						'search_faculty' => $faculty,
+						'search_course' => '',
 				)
 		);
 		
 		$options = array('http' =>
 				array(
 						'method'  => 'POST',
-						'header'  => 'Content-Type: application/x-www-form-urlencoded',
+						'header'  => "Content-Type: application/x-www-form-urlencoded\nReferer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm",
 						'content' => $postdata
 				)
 		);
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents(getTimetableURL(), false, $context);
+		$get = file_get_contents(getTimetableURL() . 'index_result.cfm', false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -77,26 +87,30 @@ function icress_getCampus($campus, $faculty) {
 			if ($key === 0) {
 				continue;
 			}
-			$subject = $row->childNodes[3]->nodeValue;
-			$subjects[] = array($subject);
+			$subject = rtrim($row->childNodes[3]->nodeValue);
+			$buttons = $row->getElementsByTagName('button');
+			$onclick = $buttons[0]->getAttribute('onclick');
+			$path = explode("'", $onclick)[1];
+
+			$subjects[] = array('subject' => $subject, 'path' => $path);
 		}
 
 		return json_encode($subjects);
 }
 
-function icress_getSubject($campus, $faculty, $subject) {
+function icress_getSubject($path) {
 	
     $subjects_output = [];
     
-	$subjects_output = icress_getSubject_wrapper($campus, $faculty, $subject);
+	$subjects_output = icress_getSubject_wrapper($path);
 
     return json_encode($subjects_output);
 }
 
-function icress_getSubject_wrapper($campus, $faculty, $subject) {
+function icress_getSubject_wrapper($path) {
 
     # start fetching the icress data
-    $jadual = file_get_contents(getTimetableURL(true) . "/list/{$campus}/{$faculty}/{$subject}.html");
+    $jadual = file_get_contents(getTimetableURL(true) . $path);
     $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 	
     # parse the html to more neat representation about classes
@@ -154,7 +168,6 @@ function getFormNames() {
 	// Restore error level
 	libxml_use_internal_errors($internalErrors);
 
-	// $selectCampusElem = $htmlDoc->getElementById('search_campus');
 	$selectCampusElem = $htmlDoc->getElementById('search_cam');
 	$selectCampus = $selectCampusElem->getAttribute('name');
 
@@ -200,8 +213,8 @@ function extractRedirect($url) {
 	return '';
 }
 
-function getTimetableURL($directoryOnly = false) {
-	return 'https://simsweb4.uitm.edu.my/estudent/class_timetable/cfc/select.cfc?method=find_cam_icress_student&key=All&page=1&page_limit=30';
+function getTimetableURL() {
+	return "https://simsweb4.uitm.edu.my/estudent/class_timetable/";
 }
 
 ?>
