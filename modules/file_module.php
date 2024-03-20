@@ -10,8 +10,12 @@ function file_getJadual() {
 
     $filename = './cache/jadual.dat';
 
-    if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
+    $fileData = file_get_contents($filename);
+    $fileData = json_decode($fileData, true);
+
+    if (!$fileData || getFileOld($filename) > CACHE_TIMELEFT || count($fileData) === 0) {
         file_put_contents($filename, icress_getJadual());
+    }
 
     return file_get_contents($filename);
 }
@@ -20,20 +24,28 @@ function file_getFaculty() {
 
     $filename = './cache/faculty.dat';
 
-    if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
+    $fileData = file_get_contents($filename);
+    $fileData = json_decode($fileData, true);
+
+    if (!$fileData || getFileOld($filename) > CACHE_TIMELEFT || count($fileData) === 0) {
         file_put_contents($filename, icress_getFaculty());
+    }
 
     return file_get_contents($filename);
 }
 
 function file_getCampus($campus, $faculty) {
 
-		$filename = empty($faculty) ?
-				'./cache/' . $campus . '.dat' :
-				'./cache/' . $campus . '-' . $faculty . '.dat';
+    $filename = empty($faculty) ?
+        './cache/' . $campus . '.dat' :
+        './cache/' . $campus . '-' . $faculty . '.dat';
 
-    if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
+    $fileData = file_get_contents($filename);
+    $fileData = json_decode($fileData, true);
+
+    if (!$fileData || getFileOld($filename) > CACHE_TIMELEFT || count($fileData) === 0) {
         file_put_contents($filename, icress_getCampus($campus, $faculty));
+    }
 
     return file_get_contents($filename);
 }
@@ -49,12 +61,16 @@ function file_getSubject($campus, $faculty, $subject) {
         }
     }
 
-		$filename = empty($faculty) ?
-    		'./cache/' . $_POST['campus'] . '-' . $_POST['subject'] . '.dat' :
-    		'./cache/' . $_POST['campus'] . '-' . $_POST['faculty'] . '-' . $_POST['subject'] . '.dat';
+    $filename = empty($faculty) ?
+        './cache/' . $_POST['campus'] . '-' . $_POST['subject'] . '.dat' :
+        './cache/' . $_POST['campus'] . '-' . $_POST['faculty'] . '-' . $_POST['subject'] . '.dat';
 
-    if (!file_exists($filename) || getFileOld($filename) > CACHE_TIMELEFT)
+    $fileData = file_get_contents($filename);
+    $fileData = json_decode($fileData, true);
+
+    if (!$fileData || getFileOld($filename) > CACHE_TIMELEFT || count($fileData) === 0) {
         file_put_contents($filename, icress_getSubject($path));
+    }
 
     return file_get_contents($filename);
 }
