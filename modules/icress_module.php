@@ -127,7 +127,7 @@ function icress_getSubject_wrapper($path) {
 	$groups = [];
 
 	foreach ($tableRows as $key => $row) {
-		if ($key === 0 || $key === 1) {
+		if ($key === 0) {
 			continue;
 		}
 		$tableDatas = [];
