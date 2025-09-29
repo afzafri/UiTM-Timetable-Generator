@@ -4,11 +4,17 @@ require_once('./config.php');
 require_once('./modules/http_module.php');
 
 function icress_getJadual() {
+	$options = array('http' =>
+		array(
+				"header" => "Referer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\r\n"
+		)
+	);
+	$context = stream_context_create($options);
 	
-    $get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_cam_icress_student&key=All&page=1&page_limit=30');
-    $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_cam_icress_student&key=All&page=1&page_limit=30', false, $context);
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
-    $data = json_decode($get, true);
+	$data = json_decode($get, true);
 	$collect = [];
 
 	foreach ($data['results'] as $result) {
@@ -28,11 +34,17 @@ function icress_getJadual() {
 }
 
 function icress_getFaculty() {
-	
-    $get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_fac_icress_student&key=All&page=1&page_limit=30');
-    $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+	$options = array('http' =>
+		array(
+				"header" => "Referer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\r\n"
+		)
+	);
+	$context = stream_context_create($options);
 
-    $data = json_decode($get, true);
+	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_fac_icress_student&key=All&page=1&page_limit=30', false, $context);
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+	$data = json_decode($get, true);
 	$collect = [];
 
 	foreach ($data['results'] as $result) {
@@ -108,13 +120,19 @@ function icress_getSubject($path) {
 }
 
 function icress_getSubject_wrapper($path) {
+	$options = array('http' =>
+		array(
+				"header" => "Referer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\r\n"
+		)
+	);
+	$context = stream_context_create($options);
 
-    # start fetching the icress data
-    $jadual = file_get_contents(getTimetableURL(true) . $path);
-    $http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
-	
-    # parse the html to more neat representation about classes
-    $jadual = str_replace(array("\r", "\n"), '', $jadual);
+	# start fetching the icress data
+	$jadual = file_get_contents(getTimetableURL(true) . $path, false, $context);
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+	# parse the html to more neat representation about classes
+	$jadual = str_replace(array("\r", "\n"), '', $jadual);
 
 	// set error level
 	$internalErrors = libxml_use_internal_errors(true);
