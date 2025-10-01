@@ -98,10 +98,11 @@ function icress_getCampus($campus, $faculty) {
 			}
 			$subject = rtrim($row->childNodes[3]->nodeValue);
 			$subject = str_replace('.', '', $subject);
-			$anchor = $row->getElementsByTagName('a');
-			$href = $anchor[0]->getAttribute('href');
-
-			$subjects[] = array('subject' => $subject, 'path' => $href);
+			$buttons = $row->getElementsByTagName('button');
+			$onclick = $buttons[0]->getAttribute('onclick');
+			$path = explode("'", $onclick)[1];
+			
+			$subjects[] = array('subject' => $subject, 'path' => $path);
 		}
 
 		return json_encode($subjects);

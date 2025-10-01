@@ -2,7 +2,7 @@
 # UiTM Timetable Generator
 Fetch and generate Timetable from iCress UiTM
 
-Official website for this project: https://uitmtimetable.skrin.xyz (thanks [Adib](https://github.com/ADIBzTER))!  
+Official website for this project: https://uitmtimetable.com (thanks [Adib](https://github.com/adibzter))!  
 Alternative Android mobile app: https://play.google.com/store/apps/details?id=com.ajeeq.uitmscheduler (thanks [Haziq](https://github.com/ajeeq))
 
 ## Created By :
@@ -52,7 +52,7 @@ Alternative Android mobile app: https://play.google.com/store/apps/details?id=co
 8. ExcelJS
    - GitHub : https://github.com/exceljs/exceljs
 9. Muhammad Nabil - For sponsoring domain and hosting, thanks! (uitmtimetable.com)
-10. Adib Zaini - Current maintainer, sponsored new domain and hosting (uitmtimetable.skrin.xyz)
+10. Adib Zaini - Current maintainer, sponsored new domain and hosting (uitmtimetable.com)
 
 ## Installation
 
