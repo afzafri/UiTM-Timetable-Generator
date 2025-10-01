@@ -11,7 +11,7 @@ function icress_getJadual() {
 	);
 	$context = stream_context_create($options);
 	
-	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_cam_icrees_student&key=All&page=1&page_limit=30', false, $context);
+	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=CAM_lII1II11I1lIIII11IIl1I111I&key=All&page=1&page_limit=30', false, $context);
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	$data = json_decode($get, true);
@@ -41,7 +41,7 @@ function icress_getFaculty() {
 	);
 	$context = stream_context_create($options);
 
-	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=find_fac_icress_students&key=All&page=1&page_limit=30', false, $context);
+	$get = file_get_contents(getTimetableURL() . 'cfc/select.cfc?method=FAC_lII1II11I1lIIII11IIl1I111I&key=All&page=1&page_limit=30', false, $context);
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	$data = json_decode($get, true);
@@ -77,7 +77,7 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents(getTimetableURL() . 'index_result111.cfm', false, $context);
+		$get = file_get_contents(getTimetableURL() . 'INDEX_RESULT_lII1II11I1lIIII11IIl1I111I.cfm', false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -98,11 +98,10 @@ function icress_getCampus($campus, $faculty) {
 			}
 			$subject = rtrim($row->childNodes[3]->nodeValue);
 			$subject = str_replace('.', '', $subject);
-			$buttons = $row->getElementsByTagName('button');
-			$onclick = $buttons[0]->getAttribute('onclick');
-			$path = explode("'", $onclick)[1];
+			$anchors = $row->getElementsByTagName('a');
+			$href = $anchors[0]->getAttribute('href');
 			
-			$subjects[] = array('subject' => $subject, 'path' => $path);
+			$subjects[] = array('subject' => $subject, 'path' => $href);
 		}
 
 		return json_encode($subjects);
