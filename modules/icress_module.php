@@ -59,11 +59,20 @@ function icress_getFaculty() {
 
 function icress_getCampus($campus, $faculty) {
 		$formData = [
-			'search_campus'  => $campus,
+			'search_campus' => $campus,
 			'search_faculty' => $faculty,
-			'search_course'  => '',
+			'search_course' => '',
+			'captcha_no_type' => '',
+			'captcha1' => '',
+			'captcha2' => '',
+			'captcha3' => '',
+			'token1' => 'lIIlllIlIIlIllIIIIIlIlllllIlIll',
+			'token2' => 'lIIlllIlIllIlIIlIllIIIIlllIlIll',
+			'token3' => 'lIIlllIlIIlIllIIIIlllIlIlI',
+			'llIlllIlIIllIlIIIIlllIlIll' => 'lIIlllIlIllIlIIlIllIIIIlllIlIll',
+			'llIlllIlIIlllllIIIlllIlIll' => 'lIIllIlIlllIlIIlIllIIIIlllIlIll',
+			'lIIlllIlIIlIllIIIIlllIlIll' => 'lIIlllIlIIlIllIIIIlIllIlllIlIll'
 		];
-		$formData = array_merge(getHiddenInputs(), $formData);
 
 		$postdata = http_build_query($formData);
 		
@@ -77,7 +86,7 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents(getTimetableURL() . 'INDEX_RESULT_lII1II11I1lIIII11IIl1I111I.cfm', false, $context);
+		$get = file_get_contents(getTimetableURL() . 'INDEX_RESULT_lII1II11I1lIIII11II1lI111I.cfm', false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -230,37 +239,6 @@ function extractRedirect($url) {
 
 function getTimetableURL() {
 	return "https://simsweb4.uitm.edu.my/estudent/class_timetable/";
-}
-
-function getHiddenInputs(){
-	$icressMainPage= file_get_contents(getTimetableURL() . 'index.htm');
-	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
-
-	// set error level
-	$internalErrors = libxml_use_internal_errors(true);
-	$htmlDoc = new DOMDocument();
-	$htmlDoc->loadHTML($icressMainPage);
-
-	// Restore error level
-	libxml_use_internal_errors($internalErrors);
-
-	$inputs = $htmlDoc->getElementsByTagName('input');
-	$hiddenInputs = [];
-
-	foreach ($inputs as $input) {
-		if (strtolower($input->getAttribute('type')) === 'hidden') {
-			$hiddenInputs[$input->getAttribute('name')] = $input->getAttribute('value');
-		}
-	}
-
-	$captchaNumber = $htmlDoc->getElementById('captcha_no');
-
-	$hiddenInputs['captcha_no_type'] = $captchaNumber->textContent;
-	$hiddenInputs['captcha1'] = $captchaNumber->textContent;
-	$hiddenInputs['captcha2'] = $captchaNumber->textContent;
-	$hiddenInputs['captcha3'] = $captchaNumber->textContent;
-
-	return $hiddenInputs;
 }
 
 ?>
