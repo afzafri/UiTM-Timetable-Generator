@@ -64,7 +64,8 @@ function icress_getCampus($campus, $faculty) {
 			'search_course' => '',
 		];
 
-		$formData = array_merge(getHiddenInputs(), $formData);
+		$formInfo = getHiddenInputsAndSubmissionPath();
+		$formData = array_merge($formInfo['hiddenInputs'], $formData);
 		$postdata = http_build_query($formData);
 		
 		$options = array('http' =>
@@ -77,7 +78,7 @@ function icress_getCampus($campus, $faculty) {
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents(getTimetableURL() . 'INDEX_RESULT_lII1II11I1lIIII11II1lI111I.cfm', false, $context);
+		$get = file_get_contents(getTimetableURL() . $formInfo['submissionPath'], false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -96,7 +97,7 @@ function icress_getCampus($campus, $faculty) {
 			if ($key === 0) {
 				continue;
 			}
-			$subject = rtrim($row->childNodes[3]->nodeValue);
+			$subject = trim($row->childNodes[3]->nodeValue);
 			$subject = str_replace('.', '', $subject);
 			$anchors = $row->getElementsByTagName('a');
 			$href = $anchors[0]->getAttribute('href');
@@ -232,8 +233,8 @@ function getTimetableURL() {
 	return "https://simsweb4.uitm.edu.my/estudent/class_timetable/";
 }
 
-function getHiddenInputs(){
-	$icressMainPage= file_get_contents(getTimetableURL() . 'index.htm');
+function getHiddenInputsAndSubmissionPath(){
+	$icressMainPage = file_get_contents(getTimetableURL() . 'index.html');
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	// set error level
@@ -246,6 +247,7 @@ function getHiddenInputs(){
 
 	$inputs = $htmlDoc->getElementsByTagName('input');
 	$hiddenInputs = [];
+	$submissionPath = '';
 
 	foreach ($inputs as $input) {
 		if (strtolower($input->getAttribute('type')) === 'hidden') {
@@ -259,6 +261,11 @@ function getHiddenInputs(){
 	$scripts = $htmlDoc->getElementsByTagName('script');
 	foreach ($scripts as $script) {
 		$js = $script->textContent;
+
+		if (strpos($js, 'check_form_before_submit') === false) {
+			continue;
+		}
+
 		preg_match_all(
 			"/document\.getElementById\(['\"]([^'\"]+)['\"]\)\.value\s*=\s*['\"]([^'\"]+)['\"]/",
 			$js,
@@ -269,9 +276,17 @@ function getHiddenInputs(){
 		foreach ($matches as $m) {
 			$hiddenInputs[$m[1]] = $m[2];
 		}
+		
+		if (preg_match("/['\"]([^'\"]+\.cfm)['\"]/", $js, $match)) {
+			$submissionPath = $match[1];
+		}
 	}
+		error_log(print_r($submissionPath, true));
 	
-	return $hiddenInputs;
+	return [
+		'hiddenInputs' => $hiddenInputs,
+		'submissionPath' => $submissionPath,
+	];
 }
 
 ?>
