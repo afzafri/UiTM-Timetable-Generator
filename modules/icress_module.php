@@ -97,7 +97,7 @@ function icress_getCampus($campus, $faculty) {
 			if ($key === 0) {
 				continue;
 			}
-			$subject = rtrim($row->childNodes[3]->nodeValue);
+			$subject = trim($row->childNodes[3]->nodeValue);
 			$subject = str_replace('.', '', $subject);
 			$anchors = $row->getElementsByTagName('a');
 			$href = $anchors[0]->getAttribute('href');
