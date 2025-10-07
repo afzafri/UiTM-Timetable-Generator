@@ -62,18 +62,9 @@ function icress_getCampus($campus, $faculty) {
 			'search_campus' => $campus,
 			'search_faculty' => $faculty,
 			'search_course' => '',
-			'captcha_no_type' => '',
-			// 'captcha1' => '',
-			// 'captcha2' => '',
-			// 'captcha3' => '',
-			'token1' => 'lIIlllIlIIlIllIIIIIlIlllllIlIll',
-			'token2' => 'lIIlllIlIllIlIIlIllIIIIlllIlIll',
-			'token3' => 'lIIlllIlIIlIllIIIIlllIlIlI',
-			'llIlllIlIIllIlIIIIlllIlIll' => 'lIIlllIlIllIlIIlIllIIIIlllIlIll',
-			'llIlllIlIIlllllIIIlllIlIll' => 'lIIllIlIlllIlIIlIllIIIIlllIlIll',
-			'lIIlllIlIIlIllIIIIlllIlIll' => 'lIIlllIlIIlIllIIIIlIllIlllIlIll'
 		];
 
+		$formData = array_merge(getHiddenInputs(), $formData);
 		$postdata = http_build_query($formData);
 		
 		$options = array('http' =>
@@ -239,6 +230,48 @@ function extractRedirect($url) {
 
 function getTimetableURL() {
 	return "https://simsweb4.uitm.edu.my/estudent/class_timetable/";
+}
+
+function getHiddenInputs(){
+	$icressMainPage= file_get_contents(getTimetableURL() . 'index.htm');
+	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+
+	// set error level
+	$internalErrors = libxml_use_internal_errors(true);
+	$htmlDoc = new DOMDocument();
+	$htmlDoc->loadHTML($icressMainPage);
+
+	// Restore error level
+	libxml_use_internal_errors($internalErrors);
+
+	$inputs = $htmlDoc->getElementsByTagName('input');
+	$hiddenInputs = [];
+
+	foreach ($inputs as $input) {
+		if (strtolower($input->getAttribute('type')) === 'hidden') {
+			$hiddenInputs[$input->getAttribute('name')] = $input->getAttribute('value');
+		}
+	}
+
+	$captchaNumber = $htmlDoc->getElementById('captcha_no');
+	$hiddenInputs['captcha_no_type'] = $captchaNumber->textContent;
+	
+	$scripts = $htmlDoc->getElementsByTagName('script');
+	foreach ($scripts as $script) {
+		$js = $script->textContent;
+		preg_match_all(
+			"/document\.getElementById\(['\"]([^'\"]+)['\"]\)\.value\s*=\s*['\"]([^'\"]+)['\"]/",
+			$js,
+			$matches,
+			PREG_SET_ORDER
+		);
+		
+		foreach ($matches as $m) {
+			$hiddenInputs[$m[1]] = $m[2];
+		}
+	}
+	
+	return $hiddenInputs;
 }
 
 ?>
