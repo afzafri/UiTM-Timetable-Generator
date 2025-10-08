@@ -64,21 +64,21 @@ function icress_getCampus($campus, $faculty) {
 			'search_course' => '',
 		];
 
-		$formInfo = getHiddenInputsAndSubmissionPath();
-		$formData = array_merge($formInfo['hiddenInputs'], $formData);
+		$mainPageInfo = getIcressMainPageInfo();
+		$formData = array_merge($mainPageInfo['hiddenInputs'], $formData);
 		$postdata = http_build_query($formData);
 		
 		$options = array('http' =>
 				array(
 						'method'  => 'POST',
-						'header'  => "Content-Type: application/x-www-form-urlencoded\nReferer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm",
+						'header'  => "Content-Type: application/x-www-form-urlencoded\nReferer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\nCookie: {$mainPageInfo['cookieHeader']}",
 						'content' => $postdata
 				)
 		);
 		
 		$context  = stream_context_create($options);
 		
-		$get = file_get_contents(getTimetableURL() . $formInfo['submissionPath'], false, $context);
+		$get = file_get_contents(getTimetableURL() . $mainPageInfo['submissionPath'], false, $context);
 		$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 		$get = cleanHTML($get);
@@ -118,9 +118,11 @@ function icress_getSubject($path) {
 }
 
 function icress_getSubject_wrapper($path) {
+	$mainPageInfo = getIcressMainPageInfo();
+
 	$options = array('http' =>
 		array(
-				"header" => "Referer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\r\n"
+				"header" => "Referer: https://simsweb4.uitm.edu.my/estudent/class_timetable/index.htm\nCookie: {$mainPageInfo['cookieHeader']}"
 		)
 	);
 	$context = stream_context_create($options);
@@ -233,13 +235,18 @@ function getTimetableURL() {
 	return "https://simsweb4.uitm.edu.my/estudent/class_timetable/";
 }
 
-function getHiddenInputsAndSubmissionPath(){
-	$url = getTimetableURL() . extractRedirect(getTimetableURL() . 'index.htm');
+function getIcressMainPageInfo() {
+	$url = getTimetableURL() . 'index.cfm';
 	$hiddenInputs = [];
 	$submissionPath = '';
 
 	$icressMainPage = file_get_contents($url);
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
+	
+	$receivedCookies = parse_set_cookies($http_response_header);
+	$cookieHeader = implode('; ', array_map(
+		fn($k,$v) => "$k=$v", array_keys($receivedCookies), $receivedCookies
+	));
 
 	// set error level
 	$internalErrors = libxml_use_internal_errors(true);
@@ -257,9 +264,6 @@ function getHiddenInputsAndSubmissionPath(){
 		}
 	}
 
-	$captchaNumber = $htmlDoc->getElementById('captcha_no');
-	$hiddenInputs['captcha_no_type'] = $captchaNumber->textContent;
-	
 	$scripts = $htmlDoc->getElementsByTagName('script');
 	foreach ($scripts as $script) {
 		$js = $script->textContent;
@@ -283,12 +287,24 @@ function getHiddenInputsAndSubmissionPath(){
 			$submissionPath = $match[1];
 		}
 	}
-		error_log(print_r($submissionPath, true));
 	
 	return [
 		'hiddenInputs' => $hiddenInputs,
 		'submissionPath' => $submissionPath,
+		'cookieHeader' => $cookieHeader
 	];
+}
+
+function parse_set_cookies(array $headers): array {
+	$cookies = [];
+	foreach ($headers as $h) {
+		if (stripos($h, 'Set-Cookie:') === 0) {
+			if (preg_match('/^Set-Cookie:\s*([^=]+)=([^;]+)/i', $h, $m)) {
+				$cookies[trim($m[1])] = trim($m[2]);
+			}
+		}
+	}
+	return $cookies;
 }
 
 ?>
