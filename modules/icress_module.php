@@ -234,7 +234,11 @@ function getTimetableURL() {
 }
 
 function getHiddenInputsAndSubmissionPath(){
-	$icressMainPage = file_get_contents(getTimetableURL() . 'index.html');
+	$url = getTimetableURL() . extractRedirect(getTimetableURL() . 'index.htm');
+	$hiddenInputs = [];
+	$submissionPath = '';
+
+	$icressMainPage = file_get_contents($url);
 	$http_response_header or die("Alert_Error: Icress timeout! Please try again later."); 
 
 	// set error level
@@ -246,8 +250,6 @@ function getHiddenInputsAndSubmissionPath(){
 	libxml_use_internal_errors($internalErrors);
 
 	$inputs = $htmlDoc->getElementsByTagName('input');
-	$hiddenInputs = [];
-	$submissionPath = '';
 
 	foreach ($inputs as $input) {
 		if (strtolower($input->getAttribute('type')) === 'hidden') {
