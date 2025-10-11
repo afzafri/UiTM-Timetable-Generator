@@ -257,11 +257,15 @@ function getIcressMainPageInfo() {
 	libxml_use_internal_errors($internalErrors);
 
 	$inputs = $htmlDoc->getElementsByTagName('input');
-
 	foreach ($inputs as $input) {
 		if (strtolower($input->getAttribute('type')) === 'hidden') {
 			$hiddenInputs[$input->getAttribute('name')] = $input->getAttribute('value');
 		}
+	}
+
+	$selects = $htmlDoc->getElementsByTagName('select');
+	foreach ($selects as $select) {
+		$hiddenInputs[$select->getAttribute('name')] = $select->getAttribute('value');
 	}
 
 	$scripts = $htmlDoc->getElementsByTagName('script');
